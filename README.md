@@ -12,3 +12,5 @@ or follow a discussion there on whether a feature should be implemented.
 
 While holding a pickaxe, swaps the left-click option to "Deposit-pickaxe"
 on the statue in the mirror puzzle room.
+
+![](docs/deposit-pickaxe.gif)
