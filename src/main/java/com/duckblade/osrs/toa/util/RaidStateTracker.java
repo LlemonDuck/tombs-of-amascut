@@ -18,11 +18,15 @@ import net.runelite.client.eventbus.Subscribe;
 public class RaidStateTracker implements PluginLifecycleComponent
 {
 
+	private static final int REGION_LOBBY = 13454;
 	private static final int WIDGET_PARENT_ID = 481;
 	private static final int WIDGET_CHILD_ID = 40;
 
 	private final Client client;
 	private final EventBus eventBus;
+
+	@Getter
+	private boolean inLobby;
 
 	@Getter
 	private boolean inRaid;
@@ -44,9 +48,13 @@ public class RaidStateTracker implements PluginLifecycleComponent
 		eventBus.unregister(this);
 	}
 
-	@Subscribe
+	@Subscribe(priority = 5)
 	public void onGameTick(GameTick e)
 	{
+		LocalPoint lp = client.getLocalPlayer().getLocalLocation();
+		int region = lp == null ? -1 : WorldPoint.fromLocalInstance(client, lp).getRegionID();
+		this.inLobby = region == REGION_LOBBY;
+
 		Widget w = client.getWidget(WIDGET_PARENT_ID, WIDGET_CHILD_ID);
 		this.inRaid = w != null && !w.isHidden();
 
@@ -57,15 +65,6 @@ public class RaidStateTracker implements PluginLifecycleComponent
 			return;
 		}
 
-		LocalPoint lp = client.getLocalPlayer().getLocalLocation();
-		if (lp == null || !client.isInInstancedRegion())
-		{
-			this.lastRegion = -1;
-			this.currentRoom = null;
-			return;
-		}
-
-		int region = WorldPoint.fromLocalInstance(client, lp).getRegionID();
 		if (this.lastRegion != (this.lastRegion = region))
 		{
 			this.currentRoom = RaidRoom.forRegionId(region);
