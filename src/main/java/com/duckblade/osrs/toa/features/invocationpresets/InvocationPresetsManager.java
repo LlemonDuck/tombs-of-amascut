@@ -7,6 +7,20 @@ import com.duckblade.osrs.toa.util.RaidMode;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.Runnables;
+import java.awt.Color;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.function.Consumer;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,25 +36,12 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetSizeMode;
 import net.runelite.api.widgets.WidgetTextAlignment;
 import net.runelite.api.widgets.WidgetType;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.util.ColorUtil;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.awt.Color;
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.function.Consumer;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
@@ -53,12 +54,14 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	private static final int WIDGET_ID_RAID_LEVEL_METER_CHILD = 82;
 	private static final int WIDGET_ID_REWARD_PANEL_BOX_CHILD = 75;
 	public static final int SCRIPT_ID_BUILD_TOA_PARTY_INTERFACE = 6729;
+	public static final int SCRIPT_ID_TOA_PARTY_TOGGLE_REWARD_PANEL = 6732;
 	private static final String CONFIG_KEY_PRESETS = "presets";
 
 	private final EventBus eventBus;
 	private final ConfigManager configManager;
 
 	private final Client client;
+	private final ClientThread clientThread;
 	private final ChatboxPanelManager chatboxPanelManager;
 	private final RaidStateTracker raidStateTracker;
 
@@ -92,9 +95,8 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	@Subscribe
 	public void onScriptPostFired(ScriptPostFired event)
 	{
-		// This is run when the party screen is brought up, whenever a tab is changed, and whenever an invocation is
-		// clicked.
-		if (event.getScriptId() == SCRIPT_ID_BUILD_TOA_PARTY_INTERFACE)
+		// This is run when the party screen is brought up, whenever a tab is changed, and whenever an invocation is clicked
+		if (event.getScriptId() == SCRIPT_ID_BUILD_TOA_PARTY_INTERFACE || event.getScriptId() == SCRIPT_ID_TOA_PARTY_TOGGLE_REWARD_PANEL)
 		{
 			updateCurrentActiveInvocations();
 			displayPresetInvocations();
@@ -164,7 +166,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	private void confirmDeletePreset(InvocationPreset preset)
 	{
 		chatboxPanelManager.openTextMenuInput("Are you sure you want to delete your preset called \"" + preset.getName() + "\"?")
-			.option("Yes", () -> deletePreset(preset))
+			.option("Yes", () -> clientThread.invoke(() -> deletePreset(preset)))
 			.option("No", Runnables::doNothing)
 			.build();
 	}
@@ -174,6 +176,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		log.debug("Deleting preset {}", preset.getName());
 		configManager.unsetConfiguration(TombsOfAmascutConfig.CONFIG_GROUP, CONFIG_KEY_PRESETS + "." + preset.getName());
 		presets.remove(preset.getName());
+		currentPreset = null;
 		removePresetDisplay();
 	}
 
@@ -182,7 +185,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		chatboxPanelManager.openTextInput("Enter new preset name (or existing name to overwrite):")
 			.onDone(name ->
 			{
-				addPreset(new InvocationPreset(name, activeInvocations));
+				clientThread.invoke(() -> addPreset(new InvocationPreset(name, activeInvocations)));
 			})
 			.build();
 	}
@@ -235,8 +238,9 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		try
 		{
 			InvocationPreset preset = InvocationPreset.parse(clipboardText);
-			chatboxPanelManager.openTextMenuInput("Import preset \"" + preset.getName() + "\" with " + preset.getInvocations().size() + " invocations?")
-				.option("Yes", () -> addPreset(preset))
+			int presetCount = preset.getInvocations().size();
+			chatboxPanelManager.openTextMenuInput("Import preset \"" + preset.getName() + "\" with " + presetCount + " invocations?")
+				.option("Yes", () -> clientThread.invoke(() -> addPreset(preset)))
 				.option("No", Runnables::doNothing)
 				.build();
 		}
@@ -308,13 +312,18 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 			return;
 		}
 
-		for (int i = 0; i < parent.getChildren().length; i += 3)
+		for (Invocation invoc : Invocation.values())
 		{
-			Widget clickbox = parent.getChild(i);
-			updateInvocationWidget(clickbox, preset,
-				Invocation.values()[i / 3],
-				// Pull whether the invocation is enabled out of the onClick callback args
-				((Integer) clickbox.getOnOpListener()[3]) == 1);
+			Widget invocW = parent.getChild(invoc.getWidgetIx());
+			boolean targetState = preset.getInvocations().contains(invoc);
+			boolean currentState = (Integer) invocW.getOnOpListener()[3] == 1;
+			if (targetState != currentState)
+			{
+				Color targetColor = targetState ? Color.green : Color.red;
+				invocW.setFilled(false);
+				invocW.setTextColor(targetColor.getRGB());
+				invocW.setOpacity(0);
+			}
 		}
 	}
 
@@ -333,7 +342,8 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		if (parent.getChild(0) != null)
 		{
 			text = parent.getChild(0);
-		} else
+		}
+		else
 		{
 			text = parent.createChild(WidgetType.TEXT);
 		}
@@ -354,39 +364,11 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 			.setTextShadowed(true)
 			.setFontId(FontID.PLAIN_11)
 			.setXTextAlignment(WidgetTextAlignment.CENTER)
-			.setYTextAlignment(WidgetTextAlignment.CENTER);
-
-		text.setPos(0, levelMeter.getOriginalY() + levelMeter.getHeight())
+			.setYTextAlignment(WidgetTextAlignment.CENTER)
+			.setPos(0, levelMeter.getOriginalY() + levelMeter.getHeight())
 			.setSize(0, 16, WidgetSizeMode.MINUS, WidgetSizeMode.ABSOLUTE);
 
 		text.revalidate();
-	}
-
-	private void updateInvocationWidget(Widget widget, InvocationPreset preset, Invocation invocation, boolean enable)
-	{
-		if (widget == null || preset == null || invocation == null)
-		{
-			return;
-		}
-
-		boolean shouldEnable = preset.getInvocations().contains(invocation);
-		widget.setFilled(false);
-
-		if (enable && !shouldEnable)
-		{
-			widget.setTextColor(Color.RED.getRGB());
-			widget.setOpacity(0);
-		}
-		else if (!enable && shouldEnable)
-		{
-			widget.setTextColor(Color.GREEN.getRGB());
-			widget.setOpacity(0);
-		}
-		else
-		{
-			// Hide the clickbox entirely
-			widget.setOpacity(255);
-		}
 	}
 
 	private void removePresetDisplay()
@@ -406,7 +388,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 
 		// Remove the preset name text
 		parent = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_REWARD_PANEL_BOX_CHILD);
-		if (parent != null && parent.isHidden())
+		if (parent != null && !parent.isHidden())
 		{
 			parent.deleteAllChildren();
 		}
