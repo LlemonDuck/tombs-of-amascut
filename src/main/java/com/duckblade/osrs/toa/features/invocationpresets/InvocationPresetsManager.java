@@ -53,6 +53,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	private static final int WIDGET_ID_RAID_LEVEL_METER_CHILD = 82;
 	private static final int WIDGET_ID_REWARD_PANEL_BOX_CHILD = 75;
 	public static final int SCRIPT_ID_BUILD_TOA_PARTY_INTERFACE = 6729;
+	public static final int SCRIPT_ID_TOA_PARTY_TOGGLE_REWARD_PANEL = 6732;
 	private static final String CONFIG_KEY_PRESETS = "presets";
 
 	private final EventBus eventBus;
@@ -94,7 +95,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	{
 		// This is run when the party screen is brought up, whenever a tab is changed, and whenever an invocation is
 		// clicked.
-		if (event.getScriptId() == SCRIPT_ID_BUILD_TOA_PARTY_INTERFACE)
+		if (event.getScriptId() == SCRIPT_ID_BUILD_TOA_PARTY_INTERFACE || event.getScriptId() == SCRIPT_ID_TOA_PARTY_TOGGLE_REWARD_PANEL)
 		{
 			updateCurrentActiveInvocations();
 			displayPresetInvocations();
