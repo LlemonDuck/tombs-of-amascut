@@ -1,7 +1,6 @@
 package com.duckblade.osrs.toa.module;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
-import com.duckblade.osrs.toa.TombsOfAmascutConfigCache;
 import com.duckblade.osrs.toa.features.DepositPickaxeSwap;
 import com.duckblade.osrs.toa.features.invocationpresets.InvocationPresetsManager;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
@@ -22,7 +21,6 @@ public class TombsOfAmascutModule extends AbstractModule
 		Multibinder<PluginLifecycleComponent> lifecycleComponents = Multibinder.newSetBinder(binder(), PluginLifecycleComponent.class);
 		lifecycleComponents.addBinding().to(DepositPickaxeSwap.class);
 		lifecycleComponents.addBinding().to(InvocationPresetsManager.class);
-		lifecycleComponents.addBinding().to(TombsOfAmascutConfigCache.class);
 		lifecycleComponents.addBinding().to(RaidStateTracker.class);
 	}
 
