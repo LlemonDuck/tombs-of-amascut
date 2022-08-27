@@ -22,7 +22,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.duckblade.osrs.toa.features;
+package com.duckblade.osrs.toa.features.chestaudio;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
@@ -65,7 +65,7 @@ public class ChestAudio implements PluginLifecycleComponent
 	@Override
 	public boolean isConfigEnabled(TombsOfAmascutConfig config)
 	{
-		return config.chestAudioEnable();
+		return config.chestAudioEnable() != ChestAudioType.DISABLED;
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class ChestAudio implements PluginLifecycleComponent
 			return;
 		}
 
-		if (c.getKey().equals("chestAudioVolume"))
+		if (c.getKey().equals(TombsOfAmascutConfig.CHEST_AUDIO_VOLUME_KEY))
 		{
 			// Play clip when changing audio config so they can preview the change
 			playClip();

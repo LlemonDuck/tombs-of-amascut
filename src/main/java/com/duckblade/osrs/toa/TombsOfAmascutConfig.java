@@ -1,5 +1,6 @@
 package com.duckblade.osrs.toa;
 
+import com.duckblade.osrs.toa.features.chestaudio.ChestAudioType;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -11,6 +12,15 @@ public interface TombsOfAmascutConfig extends Config
 {
 
 	String CONFIG_GROUP = "tombsofamascut";
+	String CHEST_AUDIO_VOLUME_KEY = "chestAudioVolume";
+
+	@ConfigSection(
+		name = "Chest Audio",
+		description = "All config options related to the Chest Audio functionality",
+		position = 3,
+		closedByDefault = true
+	)
+	String chestAudioSection = "chestAudioSection";
 
 	@ConfigItem(
 		keyName = "contextualSwapPickaxe",
@@ -36,24 +46,26 @@ public interface TombsOfAmascutConfig extends Config
 
 	@ConfigItem(
 		keyName = "chestAudioEnable",
-		name = "Enable Chest Audio",
-		description = "Plays the audio file `toa-chest.wav` from the .runelite folder whenever a purple chest is opened",
-		position = 3
+		name = "Audio Type",
+		description = "<html>Either disables the feature or plays an audio file whenever the purple chest is opened." +
+			"<br/>The custom audio file should be named `toa-chest.wav` inside the `.runelite` folder</html>",
+		section = chestAudioSection,
+		position = 1
 	)
-	default boolean chestAudioEnable()
+	default ChestAudioType chestAudioEnable()
 	{
-		return true;
+		return ChestAudioType.DISABLED;
 	}
 
 	@Range(
-		min = 0,
 		max = 200
 	)
 	@ConfigItem(
-		keyName = "chestAudioVolume",
-		name = "Chest Audio Volume",
+		keyName = CHEST_AUDIO_VOLUME_KEY,
+		name = "Audio Volume",
 		description = "Adjusts how loud the chest audio is when played",
-		position = 4
+		section = chestAudioSection,
+		position = 2
 	)
 	default int chestAudioVolume()
 	{
