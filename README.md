@@ -30,3 +30,18 @@ This image will also include the rewards section if it's enabled via the config 
 ![](docs/screenshot-button.png)
 
 [Click here to see an example of the screenshot that will be created](docs/screenshot-example)
+
+#### Chest Audio
+This will play a `.wav` audio file from your local machine whenever the Tombs of Amascut Sarcophagus is opened (also known as the purple chest).
+
+##### Setup
+1. Locate your `.runelite` folder
+    * On windows this should be located at  `C:\Users\<pcname>\.runelite` or `%USERPROFILE%/.runelite`
+    * On linux this should be located at `~/.runelite`
+2. Add your sound file to this folder
+    * The file should be named `toa-chest.wav` and only `.wav` files are supported.
+    * The entirety of the file will be played, it is recommend to limit this file to 30 seconds.
+    
+[We recommend this tool for converting youtube videos to `WAV` format](https://youtubeto.org/en/youtube-wav.html) and [we recommend this video to use with the tool](https://www.youtube.com/watch?v=SvODpHnV9o4)
+
+*Note: Usage of the recommended tool may break certain Terms of Conditions and Local Laws, you are responsible for double checking these before using the tool*
