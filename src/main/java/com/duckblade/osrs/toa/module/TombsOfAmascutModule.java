@@ -1,6 +1,7 @@
 package com.duckblade.osrs.toa.module;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
+import com.duckblade.osrs.toa.features.ChestAudio;
 import com.duckblade.osrs.toa.features.DepositPickaxeSwap;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.invocationpresets.InvocationPresetsManager;
@@ -24,6 +25,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(InvocationPresetsManager.class);
 		lifecycleComponents.addBinding().to(InvocationScreenshot.class);
 		lifecycleComponents.addBinding().to(RaidStateTracker.class);
+		lifecycleComponents.addBinding().to(ChestAudio.class);
 	}
 
 	@Provides

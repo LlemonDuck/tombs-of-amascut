@@ -4,6 +4,7 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
+import net.runelite.client.config.Range;
 
 @ConfigGroup(TombsOfAmascutConfig.CONFIG_GROUP)
 public interface TombsOfAmascutConfig extends Config
@@ -31,6 +32,32 @@ public interface TombsOfAmascutConfig extends Config
 	default boolean invocationPresetsEnable()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = "chestAudioEnable",
+		name = "Enable Chest Audio",
+		description = "Plays the audio file `toa-chest.wav` from the .runelite folder whenever a purple chest is opened",
+		position = 3
+	)
+	default boolean chestAudioEnable()
+	{
+		return true;
+	}
+
+	@Range(
+		min = 0,
+		max = 200
+	)
+	@ConfigItem(
+		keyName = "chestAudioVolume",
+		name = "Chest Audio Volume",
+		description = "Adjusts how loud the chest audio is when played",
+		position = 4
+	)
+	default int chestAudioVolume()
+	{
+		return 100;
 	}
 
 	@ConfigSection(
