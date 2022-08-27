@@ -16,7 +16,6 @@ import net.runelite.api.FontID;
 import net.runelite.api.KeyCode;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
-import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.widgets.Widget;
@@ -69,7 +68,6 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	@Getter
 	private InvocationPreset currentPreset = null;
 
-	private Widget invocationsWidget;
 	private final SortedMap<String, InvocationPreset> presets = new TreeMap<>(Comparator.reverseOrder());
 
 	@Override
@@ -92,59 +90,13 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	}
 
 	@Subscribe
-	public void onGameTick(GameTick e)
-	{
-		if (!raidStateTracker.isInLobby())
-		{
-			this.invocationsWidget = null;
-			return;
-		}
-
-		Widget invocationsWidget = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_INVOCATIONS_CHILD);
-		this.invocationsWidget = invocationsWidget != null && !invocationsWidget.isHidden() ? invocationsWidget : null;
-		if (this.invocationsWidget == null)
-		{
-			this.activeInvocations = EnumSet.noneOf(Invocation.class);
-			return;
-		}
-
-		EnumSet<Invocation> activeCurrent = EnumSet.noneOf(Invocation.class);
-		for (Invocation invoc : Invocation.values())
-		{
-			Widget invocW = getInvocationWidget(invoc);
-			if (invocW == null)
-			{
-				continue;
-			}
-
-			Object[] ops = invocW.getOnOpListener();
-			if (ops == null || ops.length < 4 || !(ops[3] instanceof Integer))
-			{
-				continue;
-			}
-
-			if ((Integer) ops[3] == 1)
-			{
-				activeCurrent.add(invoc);
-			}
-		}
-
-		if (log.isDebugEnabled() && !activeCurrent.equals(activeInvocations))
-		{
-			Sets.SetView<Invocation> adds = Sets.difference(activeCurrent, activeInvocations);
-			Sets.SetView<Invocation> removes = Sets.difference(activeInvocations, activeCurrent);
-			log.debug("Invocations changed! Add: {}, Remove: {}", adds, removes);
-		}
-		this.activeInvocations = activeCurrent;
-	}
-
-	@Subscribe
 	public void onScriptPostFired(ScriptPostFired event)
 	{
 		// This is run when the party screen is brought up, whenever a tab is changed, and whenever an invocation is
 		// clicked.
 		if (event.getScriptId() == SCRIPT_ID_BUILD_TOA_PARTY_INTERFACE)
 		{
+			updateCurrentActiveInvocations();
 			displayPresetInvocations();
 			displayPresetName();
 		}
@@ -199,22 +151,6 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		currentPreset = preset;
 		displayPresetInvocations();
 		displayPresetName();
-	}
-
-	public Widget getInvocationWidget(Invocation invocation)
-	{
-		if (invocationsWidget == null)
-		{
-			return null;
-		}
-
-		Widget[] children = invocationsWidget.getChildren();
-		if (children != null && invocation.getWidgetIx() < children.length)
-		{
-			return children[invocation.getWidgetIx()];
-		}
-
-		return null;
 	}
 
 	public void addPreset(InvocationPreset preset)
@@ -322,6 +258,45 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 			.getSystemClipboard()
 			.setContents(new StringSelection(currentPreset.serialize()), null);
 		client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Copied preset \"" + currentPreset.getName() + "\" to clipboard.", "", false);
+	}
+
+	private void updateCurrentActiveInvocations()
+	{
+		Widget parent = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_INVOCATIONS_CHILD);
+		if (parent == null || parent.isHidden() || parent.getChildren() == null)
+		{
+			this.activeInvocations = EnumSet.noneOf(Invocation.class);
+			return;
+		}
+
+		EnumSet<Invocation> activeCurrent = EnumSet.noneOf(Invocation.class);
+		for (Invocation invoc : Invocation.values())
+		{
+			Widget invocW = parent.getChild(invoc.getWidgetIx());
+			if (invocW == null)
+			{
+				continue;
+			}
+
+			Object[] ops = invocW.getOnOpListener();
+			if (ops == null || ops.length < 4 || !(ops[3] instanceof Integer))
+			{
+				continue;
+			}
+
+			if ((Integer) ops[3] == 1)
+			{
+				activeCurrent.add(invoc);
+			}
+		}
+
+		if (log.isDebugEnabled() && !activeCurrent.equals(activeInvocations))
+		{
+			Sets.SetView<Invocation> adds = Sets.difference(activeCurrent, activeInvocations);
+			Sets.SetView<Invocation> removes = Sets.difference(activeInvocations, activeCurrent);
+			log.debug("Invocations changed! Add: {}, Remove: {}", adds, removes);
+		}
+		this.activeInvocations = activeCurrent;
 	}
 
 	private void displayPresetInvocations()
