@@ -7,6 +7,29 @@ import com.duckblade.osrs.toa.util.RaidMode;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.Runnables;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
+import net.runelite.api.Client;
+import net.runelite.api.FontID;
+import net.runelite.api.KeyCode;
+import net.runelite.api.MenuAction;
+import net.runelite.api.MenuEntry;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuEntryAdded;
+import net.runelite.api.events.ScriptPostFired;
+import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetSizeMode;
+import net.runelite.api.widgets.WidgetTextAlignment;
+import net.runelite.api.widgets.WidgetType;
+import net.runelite.client.config.ConfigManager;
+import net.runelite.client.eventbus.EventBus;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.game.chatbox.ChatboxPanelManager;
+import net.runelite.client.util.ColorUtil;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -19,25 +42,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Consumer;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.ChatMessageType;
-import net.runelite.api.Client;
-import net.runelite.api.KeyCode;
-import net.runelite.api.MenuAction;
-import net.runelite.api.MenuEntry;
-import net.runelite.api.events.GameTick;
-import net.runelite.api.events.MenuEntryAdded;
-import net.runelite.api.widgets.Widget;
-import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.EventBus;
-import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.game.chatbox.ChatboxPanelManager;
-import net.runelite.client.util.ColorUtil;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
@@ -47,6 +51,9 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 
 	public static final int WIDGET_ID_INVOCATIONS_PARENT = 774;
 	public static final int WIDGET_ID_INVOCATIONS_CHILD = 52;
+	private static final int WIDGET_ID_RAID_LEVEL_METER_CHILD = 82;
+	private static final int WIDGET_ID_REWARD_PANEL_BOX_CHILD = 75;
+	public static final int SCRIPT_ID_BUILD_TOA_PARTY_INTERFACE = 6729;
 	private static final String CONFIG_KEY_PRESETS = "presets";
 
 	private final EventBus eventBus;
@@ -60,7 +67,6 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	private Set<Invocation> activeInvocations = EnumSet.noneOf(Invocation.class);
 
 	@Getter
-	@Setter
 	private InvocationPreset currentPreset = null;
 
 	private Widget invocationsWidget;
@@ -133,6 +139,18 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	}
 
 	@Subscribe
+	public void onScriptPostFired(ScriptPostFired event)
+	{
+		// This is run when the party screen is brought up, whenever a tab is changed, and whenever an invocation is
+		// clicked.
+		if (event.getScriptId() == SCRIPT_ID_BUILD_TOA_PARTY_INTERFACE)
+		{
+			displayPresetInvocations();
+			displayPresetName();
+		}
+	}
+
+	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded e)
 	{
 		if (!raidStateTracker.isInLobby() || !e.getOption().equals("Preset"))
@@ -176,6 +194,13 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 			.onClick(ignored -> savePreset());
 	}
 
+	private void setCurrentPreset(InvocationPreset preset)
+	{
+		currentPreset = preset;
+		displayPresetInvocations();
+		displayPresetName();
+	}
+
 	public Widget getInvocationWidget(Invocation invocation)
 	{
 		if (invocationsWidget == null)
@@ -213,6 +238,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		log.debug("Deleting preset {}", preset.getName());
 		configManager.unsetConfiguration(TombsOfAmascutConfig.CONFIG_GROUP, CONFIG_KEY_PRESETS + "." + preset.getName());
 		presets.remove(preset.getName());
+		removePresetDisplay();
 	}
 
 	private void savePreset()
@@ -298,4 +324,116 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Copied preset \"" + currentPreset.getName() + "\" to clipboard.", "", false);
 	}
 
+	private void displayPresetInvocations()
+	{
+		Widget parent = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_INVOCATIONS_CHILD);
+		InvocationPreset preset = getCurrentPreset();
+		if (parent == null || parent.isHidden() || parent.getChildren() == null || preset == null)
+		{
+			return;
+		}
+
+		for (int i = 0; i < parent.getChildren().length; i += 3)
+		{
+			Widget clickbox = parent.getChild(i);
+			updateInvocationWidget(clickbox, preset,
+				Invocation.values()[i / 3],
+				// Pull whether the invocation is enabled out of the onClick callback args
+				((Integer) clickbox.getOnOpListener()[3]) == 1);
+		}
+	}
+
+	private void displayPresetName()
+	{
+		Widget parent = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_REWARD_PANEL_BOX_CHILD);
+		Widget levelMeter = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_RAID_LEVEL_METER_CHILD);
+
+		if (parent == null || parent.isHidden() || levelMeter == null || levelMeter.isHidden())
+		{
+			return;
+		}
+
+		Widget text;
+		// Let's re-use the preset name widget if we've already made it.
+		if (parent.getChild(0) != null)
+		{
+			text = parent.getChild(0);
+		} else
+		{
+			text = parent.createChild(WidgetType.TEXT);
+		}
+
+		InvocationPreset preset = getCurrentPreset();
+		// Hide the text if there's no selected preset
+		if (preset == null)
+		{
+			text.setText("");
+			text.revalidate();
+			return;
+		}
+
+		boolean matching = preset.getInvocations().equals(getActiveInvocations());
+
+		text.setText("Preset: " + preset.getName() + (matching ? "" : " !!!"))
+			.setTextColor(matching ? Color.green.getRGB() : Color.red.getRGB())
+			.setTextShadowed(true)
+			.setFontId(FontID.PLAIN_11)
+			.setXTextAlignment(WidgetTextAlignment.CENTER)
+			.setYTextAlignment(WidgetTextAlignment.CENTER);
+
+		text.setPos(0, levelMeter.getOriginalY() + levelMeter.getHeight())
+			.setSize(0, 16, WidgetSizeMode.MINUS, WidgetSizeMode.ABSOLUTE);
+
+		text.revalidate();
+	}
+
+	private void updateInvocationWidget(Widget widget, InvocationPreset preset, Invocation invocation, boolean enable)
+	{
+		if (widget == null || preset == null || invocation == null)
+		{
+			return;
+		}
+
+		boolean shouldEnable = preset.getInvocations().contains(invocation);
+		widget.setFilled(false);
+
+		if (enable && !shouldEnable)
+		{
+			widget.setTextColor(Color.RED.getRGB());
+			widget.setOpacity(0);
+		}
+		else if (!enable && shouldEnable)
+		{
+			widget.setTextColor(Color.GREEN.getRGB());
+			widget.setOpacity(0);
+		}
+		else
+		{
+			// Hide the clickbox entirely
+			widget.setOpacity(255);
+		}
+	}
+
+	private void removePresetDisplay()
+	{
+		// Remove the invocation highlights
+		Widget parent = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_INVOCATIONS_CHILD);
+		if (parent != null && parent.isHidden() && parent.getChildren() != null)
+		{
+			for (int i = 0; i < parent.getChildren().length; i += 3)
+			{
+				parent.getChild(i)
+					.setOpacity(255)
+					.setTextColor(Color.WHITE.getRGB())
+					.revalidate();
+			}
+		}
+
+		// Remove the preset name text
+		parent = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_REWARD_PANEL_BOX_CHILD);
+		if (parent != null && parent.isHidden())
+		{
+			parent.deleteAllChildren();
+		}
+	}
 }
