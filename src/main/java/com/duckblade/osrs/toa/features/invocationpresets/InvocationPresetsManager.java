@@ -151,6 +151,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	private void setCurrentPreset(InvocationPreset preset)
 	{
 		currentPreset = preset;
+		removePresetDisplay();
 		displayPresetInvocations();
 		displayPresetName();
 	}
