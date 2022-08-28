@@ -33,6 +33,17 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "leftClickProceedEnable",
+		name = "Proceed/Begin/Leave Swap",
+		description = "Left click proceed/begin/leave on Osmumten after completing rooms and before the Wardens fight.",
+		position = 3
+	)
+	default boolean leftClickProceedEnable()
+	{
+		return true;
+	}
+
 	@ConfigSection(
 		name = "Invocation Screenshot",
 		description = "All config options related to the Invocation Screenshot functionality",
