@@ -26,6 +26,7 @@ package com.duckblade.osrs.toa.features.chestaudio;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.IOException;
 import javax.inject.Inject;
@@ -38,12 +39,17 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Client;
 import net.runelite.api.DynamicObject;
 import net.runelite.api.GameObject;
+import net.runelite.api.GameState;
+import net.runelite.api.Tile;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameTick;
 import net.runelite.client.RuneLite;
+import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 
@@ -52,15 +58,16 @@ import net.runelite.client.events.ConfigChanged;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class ChestAudio implements PluginLifecycleComponent
 {
-	private static final int SARCOPHAGUS_OBJECT_ID = 46220;
-	private static final int SARCOPHAGUS_OBJECT_ID_2 = 46221;
+	private static final ImmutableSet<Integer> SARCOPHAGUS_IDS = ImmutableSet.of(46220, 46221);
 	private static final int OPENING_ANIMATION = 9505;
 
-	private Clip clip = null;
-	private GameObject chest =  null;
+	private final EventBus eventBus;
+	private final Client client;
+	private final TombsOfAmascutConfig config;
 
-	@Inject
-	private TombsOfAmascutConfig config;
+	private Clip clip = null;
+	private DynamicObject chest = null;
+	private int chestObjectId = -1;
 
 	@Override
 	public boolean isConfigEnabled(TombsOfAmascutConfig config)
@@ -71,17 +78,53 @@ public class ChestAudio implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		// Nothing to do on startUp but its required for `PluginLifecycleComponent`
+		eventBus.register(this);
+
+		clip = null;
+		chest = null;
+		chestObjectId = -1;
+
+		if (client.getGameState() != GameState.LOGGED_IN)
+		{
+			return;
+		}
+
+		// Check for sarcophagus in case they turned this on while inside the loot room
+		final Tile[][] planeTiles = client.getScene().getTiles()[client.getPlane()];
+		final LocalPoint localPoint = client.getLocalPlayer().getLocalLocation();
+		for (int x = 0; x < localPoint.getSceneX(); x++)
+		{
+			for (int y = 0; y < localPoint.getSceneY(); y++)
+			{
+				final Tile t = planeTiles[x][y];
+				for (GameObject obj : t.getGameObjects())
+				{
+					if (obj == null)
+					{
+						continue;
+					}
+
+					if (checkGameObjectIsSarcophagus(obj))
+					{
+						return;
+					}
+				}
+			}
+		}
 	}
 
 	@Override
 	public void shutDown()
 	{
+		eventBus.unregister(this);
+
 		if (clip != null)
 		{
 			clip.close();
 		}
 		clip = null;
+		chest = null;
+		chestObjectId = -1;
 	}
 
 	@Subscribe
@@ -102,19 +145,16 @@ public class ChestAudio implements PluginLifecycleComponent
 	@Subscribe
 	private void onGameObjectSpawned(GameObjectSpawned e)
 	{
-		// Check both IDs as we still aren't sure which is correct for the purple.
-		if (e.getGameObject().getId() == SARCOPHAGUS_OBJECT_ID || e.getGameObject().getId() == SARCOPHAGUS_OBJECT_ID_2)
-		{
-			chest = e.getGameObject();
-		}
+		checkGameObjectIsSarcophagus(e.getGameObject());
 	}
 
 	@Subscribe
 	private void onGameObjectDespawned(GameObjectDespawned e)
 	{
-		if (chest != null && chest.getId() == e.getGameObject().getId())
+		if (chest != null && e.getGameObject().getId() == chestObjectId)
 		{
 			chest = null;
+			chestObjectId = -1;
 		}
 	}
 
@@ -126,9 +166,10 @@ public class ChestAudio implements PluginLifecycleComponent
 			return;
 		}
 
-		if (((DynamicObject) chest.getRenderable()).getAnimation().getId() == OPENING_ANIMATION)
+		if (chest.getAnimation().getId() == OPENING_ANIMATION)
 		{
 			chest = null;
+			chestObjectId = -1;
 			playClip();
 		}
 	}
@@ -150,12 +191,18 @@ public class ChestAudio implements PluginLifecycleComponent
 		}
 		catch (UnsupportedAudioFileException | IOException | LineUnavailableException e)
 		{
+			clip = null;
 			log.warn("Failed to load toa chest audio");
 		}
 		return false;
 	}
 
 	public void playClip() {
+		if (config.chestAudioEnable() != ChestAudioType.CUSTOM)
+		{
+			return;
+		}
+
 		if (clip == null || !clip.isOpen())
 		{
 			if (!loadClip())
@@ -177,5 +224,22 @@ public class ChestAudio implements PluginLifecycleComponent
 		// From RuneLite base client Notifier class:
 		// Using loop prevents the clip from not being played sometimes, presumably from a race condition in the underlying line driver
 		clip.loop(0);
+	}
+
+	private boolean checkGameObjectIsSarcophagus(GameObject obj)
+	{
+		if (SARCOPHAGUS_IDS.contains(obj.getId()))
+		{
+			if (obj instanceof DynamicObject)
+			{
+				chestObjectId = obj.getId();
+				chest = (DynamicObject) obj;
+				return true;
+			}
+
+			log.debug("Found sarcophagus but it's not a DynamicObject");
+		}
+
+		return false;
 	}
 }
