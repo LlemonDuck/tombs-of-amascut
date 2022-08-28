@@ -12,11 +12,9 @@ or follow a discussion there on whether a feature should be implemented.
 
 Right-click the Preset button to create/load/import/export presets.
 Invocations that need to be changed will be highlighted green/red.
+Shift+right-click to delete presets.
 
 ![](docs/invocation-presets.gif)
-
-*Flicker is a known issue due to the panel redrawing itself after being clicked.
-I am working on an alternative solution.*
 
 #### Deposit-pickaxe Swap
 
