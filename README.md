@@ -24,3 +24,11 @@ While holding a pickaxe, swaps the left-click option to "Deposit-pickaxe"
 on the statue in the mirror puzzle room.
 
 ![](docs/deposit-pickaxe.gif)
+
+#### Invocation Screenshot
+Adds a button to ToA Invocation Interface that when clicked will copy all of your invocations as a picture to your system clipboard.
+This image will also include the rewards section if it's enabled via the config options and the button is selected within the in-game interface.
+
+![](docs/screenshot-button.png)
+
+[Click here to see an example of the screenshot that will be created](docs/screenshot-example)
