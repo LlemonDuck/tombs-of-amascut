@@ -79,7 +79,7 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigSection(
-		name = "Custom Purple Sarcophagus Sound",
+		name = "Purple Chest Jingle",
 		description = "<html>Can play a custom sound file when the purple loot sarcophagus is opened." +
 			"<br/>Custom sound must be provided at ~/.runelite/tombs-of-amascut/toa-chest.wav</html>",
 		position = 200,
