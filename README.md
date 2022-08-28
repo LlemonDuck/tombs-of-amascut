@@ -41,7 +41,3 @@ This will play a `.wav` audio file from your local machine whenever the Tombs of
 2. Add your sound file to this folder
     * The file should be named `toa-chest.wav` and only `.wav` files are supported.
     * The entirety of the file will be played, it is recommend to limit this file to 30 seconds.
-    
-[We recommend this tool for converting youtube videos to `WAV` format](https://youtubeto.org/en/youtube-wav.html) and [we recommend this video to use with the tool](https://www.youtube.com/watch?v=SvODpHnV9o4)
-
-*Note: Usage of the recommended tool may break certain Terms of Conditions and Local Laws, you are responsible for double checking these before using the tool*
