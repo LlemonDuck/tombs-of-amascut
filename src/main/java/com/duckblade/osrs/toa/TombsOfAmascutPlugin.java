@@ -12,7 +12,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 @PluginDescriptor(
 	name = "Tombs of Amascut",
 	description = "Utilities and information for raiding the Tombs of Amascut.",
-	tags = {"toa", "raid", "3"}
+	tags = {"toa", "raid", "3", "invocation", "preset"}
 )
 public class TombsOfAmascutPlugin extends Plugin
 {
