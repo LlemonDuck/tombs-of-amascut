@@ -74,13 +74,9 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 
 	private static final int TOA_PARTY_WIDGET_SCRIPT_ID = 6617;
 
-	private static final BufferedImage CAMERA_IMG;
+	private static final BufferedImage CAMERA_IMG = ImageUtil.loadImageResource(InvocationScreenshot.class, "camera.png");
 	private static final int CAMERA_OVERRIDE_SPRITE_IDX = -420;
 	private static final int CAMERA_HOVER_OVERRIDE_SPRITE_IDX = -421;
-	static
-	{
-		CAMERA_IMG = ImageUtil.loadImageResource(InvocationScreenshot.class, "camera.png");
-	}
 
 	private final EventBus eventBus;
 	private final Client client;
@@ -129,12 +125,13 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	{
 		client.getWidgetSpriteCache().reset();
 		// Add images to a sprite background so it works with resource packs
-		spriteManager.getSpriteAsync(SpriteID.EQUIPMENT_SLOT_TILE, 0, (img) -> {
+		spriteManager.getSpriteAsync(SpriteID.EQUIPMENT_SLOT_TILE, 0, (img) ->
+		{
 			final BufferedImage cameraImg = overlapImages(CAMERA_IMG, img);
 			client.getSpriteOverrides().put(CAMERA_OVERRIDE_SPRITE_IDX, ImageUtil.getImageSpritePixels(cameraImg, client));
-
 		});
-		spriteManager.getSpriteAsync(SpriteID.EQUIPMENT_SLOT_SELECTED, 0, (img) -> {
+		spriteManager.getSpriteAsync(SpriteID.EQUIPMENT_SLOT_SELECTED, 0, (img) ->
+		{
 			final BufferedImage cameraImg = overlapImages(CAMERA_IMG, img);
 			client.getSpriteOverrides().put(CAMERA_HOVER_OVERRIDE_SPRITE_IDX, ImageUtil.getImageSpritePixels(cameraImg, client));
 		});
@@ -169,7 +166,7 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 				return;
 			}
 		}
-		// Recall this in case the sprite used as the background of the button changed with a recent ResourcePack change
+		// Call this again in case the sprite used as the background of the button changed with a recent ResourcePack change
 		addCameraIconOverride();
 
 		button = parent.createChild(-1, WidgetType.GRAPHIC);
@@ -178,12 +175,12 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 		button.setOriginalX(430);
 		button.setOriginalY(8);
 		button.setSpriteId(CAMERA_OVERRIDE_SPRITE_IDX);
-		button.setAction(0, "Invocation Screenshot");
+		button.setAction(0, "Screenshot Invocations");
 		button.setOnOpListener((JavaScriptCallback) (e) -> clientThread.invokeLater(this::screenshot));
 		button.setHasListener(true);
 		button.revalidate();
 
-		button.setOnMouseOverListener((JavaScriptCallback) (e) ->  button.setSpriteId(CAMERA_HOVER_OVERRIDE_SPRITE_IDX));
+		button.setOnMouseOverListener((JavaScriptCallback) (e) -> button.setSpriteId(CAMERA_HOVER_OVERRIDE_SPRITE_IDX));
 		button.setOnMouseLeaveListener((JavaScriptCallback) (e) -> button.setSpriteId(CAMERA_OVERRIDE_SPRITE_IDX));
 	}
 
@@ -265,7 +262,12 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 			if (rewardsContainer != null && rewardsContainer.getStaticChildren().length > 0)
 			{
 				// Move the reward container closer since we don't draw the scrollbar
-				Graphics layer = graphics.create(rightSideContainer.getRelativeX() - 30, rightSideContainer.getRelativeY() - 60, rightSideContainer.getWidth(), rightSideContainer.getHeight());
+				Graphics layer = graphics.create(
+					rightSideContainer.getRelativeX() - 30,
+					rightSideContainer.getRelativeY() - 60,
+					rightSideContainer.getWidth(),
+					rightSideContainer.getHeight()
+				);
 				drawWidgets(layer, rewardsContainer.getStaticChildren());
 				layer.dispose();
 			}

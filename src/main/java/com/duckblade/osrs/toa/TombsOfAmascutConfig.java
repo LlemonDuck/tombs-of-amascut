@@ -11,14 +11,6 @@ public interface TombsOfAmascutConfig extends Config
 
 	String CONFIG_GROUP = "tombsofamascut";
 
-	@ConfigSection(
-		name = "Invocation Screenshot",
-		description = "All config options related to the Invocation Screenshot functionality",
-		closedByDefault = true,
-		position = 3
-	)
-	String invocationScreenshotSection = "invocationScreenshotSection";
-
 	@ConfigItem(
 		keyName = "contextualSwapPickaxe",
 		name = "Swap Deposit-Pickaxe",
@@ -41,12 +33,20 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
+	@ConfigSection(
+		name = "Invocation Screenshot",
+		description = "All config options related to the Invocation Screenshot functionality",
+		closedByDefault = true,
+		position = 200
+	)
+	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
+
 	@ConfigItem(
 		keyName = "invocationScreenshotEnable",
 		name = "Enable Screenshot button",
 		description = "Adds a button to the ToA Invocation interface that will copy all invocations as an image to your system clipboard",
-		section = invocationScreenshotSection,
-		position = 1
+		section = SECTION_INVOCATION_SCREENSHOT,
+		position = 201
 	)
 	default boolean invocationScreenshotEnable()
 	{
@@ -57,8 +57,8 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "showRewardsSection",
 		name = "Show Rewards Section",
 		description = "<html>Should the rewards section be included<br/>(requires the Reward button to be selected within the interface)</html>",
-		section = invocationScreenshotSection,
-		position = 2
+		section = SECTION_INVOCATION_SCREENSHOT,
+		position = 202
 	)
 	default boolean showRewardsSection()
 	{
@@ -69,8 +69,8 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "useResourcePack",
 		name = "Use Resource Pack",
 		description = "Use Resource Pack Theme for screenshot background",
-		section = invocationScreenshotSection,
-		position = 3
+		section = SECTION_INVOCATION_SCREENSHOT,
+		position = 203
 	)
 	default boolean useResourcePack()
 	{
