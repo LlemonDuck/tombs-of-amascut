@@ -1,6 +1,5 @@
 package com.duckblade.osrs.toa;
 
-import com.duckblade.osrs.toa.features.chestaudio.ChestAudioType;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -12,15 +11,6 @@ public interface TombsOfAmascutConfig extends Config
 {
 
 	String CONFIG_GROUP = "tombsofamascut";
-	String CHEST_AUDIO_VOLUME_KEY = "chestAudioVolume";
-
-	@ConfigSection(
-		name = "Chest Audio",
-		description = "All config options related to the Chest Audio functionality",
-		position = 3,
-		closedByDefault = true
-	)
-	String chestAudioSection = "chestAudioSection";
 
 	@ConfigItem(
 		keyName = "contextualSwapPickaxe",
@@ -44,28 +34,38 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
+	@ConfigSection(
+		name = "Chest Audio",
+		description = "<html>Can play a custom sound file when the purple loot sarcophagus is opened." +
+			"<br/>Custom sound must be provided at ~/.runelite/tombs-of-amascut/toa-chest.wav</html>",
+		position = 100,
+		closedByDefault = true
+	)
+	String SECTION_SARCOPHAGUS_SOUND = "sectionSarcophagusSound";
+
 	@ConfigItem(
 		keyName = "chestAudioEnable",
-		name = "Audio Type",
+		name = "Enable",
 		description = "<html>Either disables the feature or plays an audio file whenever the purple chest is opened." +
-			"<br/>The custom audio file should be named `toa-chest.wav` inside the `.runelite` folder</html>",
-		section = chestAudioSection,
-		position = 1
+			"<br/>The custom audio file should be named toa-chest.wav inside the .runelite/tombs-of-amascut folder</html>",
+		section = SECTION_SARCOPHAGUS_SOUND,
+		position = 101
 	)
-	default ChestAudioType chestAudioEnable()
+	default boolean chestAudioEnable()
 	{
-		return ChestAudioType.DISABLED;
+		return false;
 	}
 
+	String CHEST_AUDIO_VOLUME_KEY = "chestAudioVolume";
 	@Range(
 		max = 200
 	)
 	@ConfigItem(
 		keyName = CHEST_AUDIO_VOLUME_KEY,
 		name = "Audio Volume",
-		description = "Adjusts how loud the chest audio is when played",
-		section = chestAudioSection,
-		position = 2
+		description = "Adjusts how loud the chest audio is when played. 100 is no change to file volume.",
+		section = SECTION_SARCOPHAGUS_SOUND,
+		position = 102
 	)
 	default int chestAudioVolume()
 	{

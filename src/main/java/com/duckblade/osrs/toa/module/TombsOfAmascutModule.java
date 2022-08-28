@@ -3,7 +3,7 @@ package com.duckblade.osrs.toa.module;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.features.DepositPickaxeSwap;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
-import com.duckblade.osrs.toa.features.chestaudio.ChestAudio;
+import com.duckblade.osrs.toa.features.SarcophagusOpeningSoundPlayer;
 import com.duckblade.osrs.toa.features.invocationpresets.InvocationPresetsManager;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
 import com.google.inject.AbstractModule;
@@ -21,11 +21,11 @@ public class TombsOfAmascutModule extends AbstractModule
 	protected void configure()
 	{
 		Multibinder<PluginLifecycleComponent> lifecycleComponents = Multibinder.newSetBinder(binder(), PluginLifecycleComponent.class);
-		lifecycleComponents.addBinding().to(ChestAudio.class);
 		lifecycleComponents.addBinding().to(DepositPickaxeSwap.class);
 		lifecycleComponents.addBinding().to(InvocationPresetsManager.class);
 		lifecycleComponents.addBinding().to(InvocationScreenshot.class);
 		lifecycleComponents.addBinding().to(RaidStateTracker.class);
+		lifecycleComponents.addBinding().to(SarcophagusOpeningSoundPlayer.class);
 	}
 
 	@Provides

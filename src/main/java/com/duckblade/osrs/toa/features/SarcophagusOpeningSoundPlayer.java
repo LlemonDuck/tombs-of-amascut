@@ -22,13 +22,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.duckblade.osrs.toa.features.chestaudio;
+package com.duckblade.osrs.toa.features;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.sound.sampled.AudioInputStream;
@@ -56,23 +57,22 @@ import net.runelite.client.events.ConfigChanged;
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class ChestAudio implements PluginLifecycleComponent
+public class SarcophagusOpeningSoundPlayer implements PluginLifecycleComponent
 {
-	private static final ImmutableSet<Integer> SARCOPHAGUS_IDS = ImmutableSet.of(46220, 46221);
-	private static final int OPENING_ANIMATION = 9505;
+	private static final Set<Integer> SARCOPHAGUS_IDS = ImmutableSet.of(46220, 46221);
+	private static final int CHEST_OPENING_ANIMATION_ID = 9505;
 
 	private final EventBus eventBus;
 	private final Client client;
 	private final TombsOfAmascutConfig config;
 
 	private Clip clip = null;
-	private DynamicObject chest = null;
-	private int chestObjectId = -1;
+	private GameObject chest = null;
 
 	@Override
 	public boolean isConfigEnabled(TombsOfAmascutConfig config)
 	{
-		return config.chestAudioEnable() != ChestAudioType.DISABLED;
+		return config.chestAudioEnable();
 	}
 
 	@Override
@@ -82,7 +82,6 @@ public class ChestAudio implements PluginLifecycleComponent
 
 		clip = null;
 		chest = null;
-		chestObjectId = -1;
 
 		if (client.getGameState() != GameState.LOGGED_IN)
 		{
@@ -124,7 +123,6 @@ public class ChestAudio implements PluginLifecycleComponent
 		}
 		clip = null;
 		chest = null;
-		chestObjectId = -1;
 	}
 
 	@Subscribe
@@ -151,10 +149,9 @@ public class ChestAudio implements PluginLifecycleComponent
 	@Subscribe
 	private void onGameObjectDespawned(GameObjectDespawned e)
 	{
-		if (chest != null && e.getGameObject().getId() == chestObjectId)
+		if (chest != null && e.getGameObject().getId() == chest.getId())
 		{
 			chest = null;
-			chestObjectId = -1;
 		}
 	}
 
@@ -166,10 +163,9 @@ public class ChestAudio implements PluginLifecycleComponent
 			return;
 		}
 
-		if (chest.getAnimation().getId() == OPENING_ANIMATION)
+		if (((DynamicObject) chest).getAnimation().getId() == CHEST_OPENING_ANIMATION_ID)
 		{
 			chest = null;
-			chestObjectId = -1;
 			playClip();
 		}
 	}
@@ -179,7 +175,7 @@ public class ChestAudio implements PluginLifecycleComponent
 		final File f = new File(RuneLite.RUNELITE_DIR, "toa-chest.wav");
 		if (!f.exists())
 		{
-			log.warn("Sound file does not exist");
+			log.warn("ToA chest opening sound file does not exist, expected " + f.getAbsolutePath());
 			return false;
 		}
 
@@ -191,18 +187,18 @@ public class ChestAudio implements PluginLifecycleComponent
 		}
 		catch (UnsupportedAudioFileException | IOException | LineUnavailableException e)
 		{
+			if (clip.isOpen())
+			{
+				clip.close();
+			}
 			clip = null;
 			log.warn("Failed to load toa chest audio");
 		}
 		return false;
 	}
 
-	public void playClip() {
-		if (config.chestAudioEnable() != ChestAudioType.CUSTOM)
-		{
-			return;
-		}
-
+	public void playClip()
+	{
 		if (clip == null || !clip.isOpen())
 		{
 			if (!loadClip())
@@ -214,6 +210,7 @@ public class ChestAudio implements PluginLifecycleComponent
 
 		FloatControl volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 		float gain = 20f * (float) Math.log10(config.chestAudioVolume() / 100f);
+
 		// Ensure the value we pass is between the clips maximum and minimum value to prevent an IllegalArgumentException
 		gain = Math.max(Math.min(gain, volume.getMaximum()), volume.getMinimum());
 		volume.setValue(gain);
@@ -230,14 +227,15 @@ public class ChestAudio implements PluginLifecycleComponent
 	{
 		if (SARCOPHAGUS_IDS.contains(obj.getId()))
 		{
-			if (obj instanceof DynamicObject)
+			if (!(obj instanceof DynamicObject))
 			{
-				chestObjectId = obj.getId();
-				chest = (DynamicObject) obj;
-				return true;
+				log.warn("Found object with sarcophagus id {} but it's not a DynamicObject", obj.getId());
+				return false;
 			}
 
-			log.debug("Found sarcophagus but it's not a DynamicObject");
+			chest = obj;
+			return true;
+
 		}
 
 		return false;

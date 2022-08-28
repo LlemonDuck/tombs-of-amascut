@@ -3,8 +3,10 @@ package com.duckblade.osrs.toa;
 import com.duckblade.osrs.toa.module.ComponentManager;
 import com.duckblade.osrs.toa.module.TombsOfAmascutModule;
 import com.google.inject.Binder;
+import java.io.File;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.client.RuneLite;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
@@ -16,6 +18,8 @@ import net.runelite.client.plugins.PluginDescriptor;
 )
 public class TombsOfAmascutPlugin extends Plugin
 {
+
+	public static final File TOA_FOLDER = new File(RuneLite.RUNELITE_DIR, "tombs-of-amascut");
 
 	@Inject
 	private ComponentManager componentManager;
@@ -29,6 +33,10 @@ public class TombsOfAmascutPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
+		if (!TOA_FOLDER.exists() && !TOA_FOLDER.mkdirs())
+		{
+			log.warn("Failed to create ToA folder {}", TOA_FOLDER.getAbsolutePath());
+		}
 		componentManager.onPluginStart();
 	}
 
