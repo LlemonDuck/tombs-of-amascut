@@ -45,7 +45,6 @@ import net.runelite.api.DynamicObject;
 import net.runelite.api.GameObject;
 import net.runelite.api.GameState;
 import net.runelite.api.Tile;
-import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameTick;
@@ -90,12 +89,10 @@ public class SarcophagusOpeningSoundPlayer implements PluginLifecycleComponent
 
 		// Check for sarcophagus in case they turned this on while inside the loot room
 		final Tile[][] planeTiles = client.getScene().getTiles()[client.getPlane()];
-		final LocalPoint localPoint = client.getLocalPlayer().getLocalLocation();
-		for (int x = 0; x < localPoint.getSceneX(); x++)
+		for (Tile[] planeTiles1d : planeTiles)
 		{
-			for (int y = 0; y < localPoint.getSceneY(); y++)
+			for (final Tile t : planeTiles1d)
 			{
-				final Tile t = planeTiles[x][y];
 				for (GameObject obj : t.getGameObjects())
 				{
 					if (obj == null)
