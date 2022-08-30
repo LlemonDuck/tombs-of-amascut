@@ -197,12 +197,12 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		{
 			try
 			{
-				String keySuffix = key.split("\\.", 2)[1];
-				String configValue = configManager.getConfiguration(TombsOfAmascutConfig.CONFIG_GROUP, keySuffix);
+				String keySuffix = key.split("\\.", 3)[2];
+				String configValue = configManager.getConfiguration(TombsOfAmascutConfig.CONFIG_GROUP, CONFIG_KEY_PRESETS + "." + keySuffix);
 				log.debug("Parsing preset config key = {} value = {}", keySuffix, configValue);
 
 				InvocationPreset preset = InvocationPreset.parse(configValue);
-				if (!preset.getName().equals(key))
+				if (!preset.getName().equals(keySuffix))
 				{
 					log.warn("Mismatched key name from preset name key = {}, name = {}", key, preset.getName());
 				}
