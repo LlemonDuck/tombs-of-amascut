@@ -29,4 +29,4 @@ This image will also include the rewards section if it's enabled via the config 
 
 ![](docs/screenshot-button.png)
 
-[Click here to see an example of the screenshot that will be created](docs/screenshot-example)
+[Click here to see an example of the screenshot that will be created](docs/screenshot-example.png)
