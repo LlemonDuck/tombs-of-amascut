@@ -29,6 +29,7 @@ import net.runelite.api.FontID;
 import net.runelite.api.KeyCode;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
+import net.runelite.api.ScriptID;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.widgets.Widget;
@@ -48,6 +49,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 {
 
 	public static final int WIDGET_ID_INVOCATIONS_PARENT = 774;
+	public static final int WIDGET_ID_INVOCATIONS_SCROLLBAR = 51;
 	public static final int WIDGET_ID_INVOCATIONS_CHILD = 52;
 	private static final int WIDGET_ID_RAID_LEVEL_METER_CHILD = 82;
 	private static final int WIDGET_ID_REWARD_PANEL_BOX_CHILD = 75;
@@ -59,6 +61,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	private final ConfigManager configManager;
 
 	private final Client client;
+	private final TombsOfAmascutConfig config;
 	private final ClientThread clientThread;
 	private final ChatboxPanelManager chatboxPanelManager;
 	private final RaidStateTracker raidStateTracker;
@@ -312,6 +315,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 			return;
 		}
 
+		boolean scrolled = false;
 		for (Invocation invoc : Invocation.values())
 		{
 			Widget invocW = parent.getChild(invoc.getWidgetIx());
@@ -319,6 +323,11 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 			boolean currentState = (Integer) invocW.getOnOpListener()[3] == 1;
 			if (targetState != currentState)
 			{
+				if (!scrolled)
+				{
+					scrollToInvocation(invoc);
+					scrolled = true;
+				}
 				Color targetColor = targetState ? Color.green : Color.red;
 				invocW.setFilled(false);
 				invocW.setTextColor(targetColor.getRGB());
@@ -392,5 +401,44 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		{
 			parent.deleteAllChildren();
 		}
+	}
+
+	private void scrollToInvocation(Invocation invocation)
+	{
+		if (!config.invocationPresetsScroll())
+		{
+			return;
+		}
+
+		clientThread.invokeLater(() ->
+		{
+			Widget invocationContainer = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_INVOCATIONS_CHILD);
+			Widget scrollbar = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_INVOCATIONS_SCROLLBAR);
+			if (invocationContainer == null || scrollbar == null)
+			{
+				return;
+			}
+
+			Widget invocW = invocationContainer.getChild(invocation.getWidgetIx());
+			if (invocationContainer.getBounds().contains(invocW.getBounds()))
+			{
+				log.debug("{} already on screen ({} contains {})", invocation, invocationContainer.getBounds(), invocW.getBounds());
+				return;
+			}
+			int newScroll = Math.max(
+				0,
+				Math.min(
+					invocationContainer.getScrollHeight(),
+					invocW.getRelativeY() + invocW.getHeight() / 2 - invocationContainer.getHeight() / 2
+				)
+			);
+
+			client.runScript(
+				ScriptID.UPDATE_SCROLLBAR,
+				scrollbar.getId(),
+				invocationContainer.getId(),
+				newScroll
+			);
+		});
 	}
 }

@@ -22,13 +22,33 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
+	@ConfigSection(
+		name = "Invocation Presets",
+		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
+		position = 100
+	)
+	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
+
 	@ConfigItem(
 		keyName = "invocationPresetsEnable",
 		name = "Enable Presets",
 		description = "Allows for saving and restoring of invocation presets. Right-click \"Preset\" button to save/load.",
-		position = 2
+		section = SECTION_INVOCATION_PRESETS,
+		position = 101
 	)
 	default boolean invocationPresetsEnable()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "invocationPresetsScroll",
+		name = "Auto-Scroll",
+		description = "Automatically scroll to invocations which need to be changed for the current preset.",
+		section = SECTION_INVOCATION_PRESETS,
+		position = 102
+	)
+	default boolean invocationPresetsScroll()
 	{
 		return true;
 	}
