@@ -1,11 +1,14 @@
 package com.duckblade.osrs.toa.features.invocationpresets;
 
 import com.duckblade.osrs.toa.util.Invocation;
+import com.duckblade.osrs.toa.util.RaidMode;
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Value;
+import net.runelite.client.util.ColorUtil;
 
 @Value
 public class InvocationPreset
@@ -45,6 +48,13 @@ public class InvocationPreset
 		return invocations.stream()
 			.mapToInt(Invocation::getRaidLevel)
 			.sum();
+	}
+
+	public String toStringDecorated()
+	{
+		String nameColorTag = ColorUtil.colorTag(new Color(255, 152, 31));
+		String modeTag = ColorUtil.colorTag(RaidMode.forRaidLevel(getRaidLevel()).getColor());
+		return nameColorTag + name + " " + modeTag + "(Lvl " + getRaidLevel() + ")" + ColorUtil.CLOSING_COLOR_TAG;
 	}
 
 }

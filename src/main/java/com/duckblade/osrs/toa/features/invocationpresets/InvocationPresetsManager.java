@@ -3,7 +3,6 @@ package com.duckblade.osrs.toa.features.invocationpresets;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.Invocation;
-import com.duckblade.osrs.toa.util.RaidMode;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.Runnables;
@@ -41,7 +40,6 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
-import net.runelite.client.util.ColorUtil;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
@@ -112,16 +110,14 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 			return;
 		}
 
-		String nameColorTag = ColorUtil.colorTag(new Color(255, 152, 31));
 		boolean deleteMode = client.isKeyPressed(KeyCode.KC_SHIFT);
 		presets.values().forEach(preset ->
 			{
-				String modeTag = ColorUtil.colorTag(RaidMode.forRaidLevel(preset.getRaidLevel()).getColor());
 				Consumer<MenuEntry> onClick = deleteMode ? ignored -> confirmDeletePreset(preset) : ignored -> setCurrentPreset(preset);
 				client.createMenuEntry(-1)
 					.setType(MenuAction.RUNELITE)
 					.setOption(deleteMode ? "<col=ff0000>Delete" : "Load")
-					.setTarget(nameColorTag + preset.getName() + " " + modeTag + "(Lvl " + preset.getRaidLevel() + ")")
+					.setTarget(preset.toStringDecorated())
 					.onClick(onClick);
 			}
 		);
@@ -131,7 +127,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 			client.createMenuEntry(-1)
 				.setType(MenuAction.RUNELITE)
 				.setOption("Export")
-				.setTarget(nameColorTag + currentPreset.getName())
+				.setTarget(currentPreset.toStringDecorated())
 				.onClick(ignored -> exportCurrentPreset());
 		}
 
@@ -158,10 +154,13 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 
 	public void addPreset(InvocationPreset preset)
 	{
-		log.debug("Saving new preset {}" + preset.serialize());
+		log.debug("Saving new preset {}", preset.serialize());
 		presets.put(preset.getName(), preset);
 		setCurrentPreset(preset);
 		configManager.setConfiguration(TombsOfAmascutConfig.CONFIG_GROUP, CONFIG_KEY_PRESETS + "." + preset.getName(), preset.serialize());
+
+		String message = "Saved preset as " + preset.toStringDecorated() + ". Use Shift+Right-click to delete.";
+		client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", message, "", false);
 	}
 
 	private void confirmDeletePreset(InvocationPreset preset)
@@ -231,7 +230,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		}
 		catch (IOException | UnsupportedFlavorException ex)
 		{
-			client.addChatMessage(ChatMessageType.GAMEMESSAGE, null, "Unable to read system clipboard.", null, false);
+			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Unable to read system clipboard.", "", false);
 			log.warn("error reading clipboard", ex);
 			return;
 		}
