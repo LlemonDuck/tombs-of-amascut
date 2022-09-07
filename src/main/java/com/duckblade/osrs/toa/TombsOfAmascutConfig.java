@@ -44,6 +44,17 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "targetTimeDisplay",
+		name = "Target Time in Timer",
+		description = "Expand the in-raid timer to also show the target time to beat.",
+		position = 4
+	)
+	default boolean targetTimeDisplay()
+	{
+		return true;
+	}
+
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
