@@ -51,6 +51,8 @@ public class RaidStateTracker implements PluginLifecycleComponent
 	@Subscribe(priority = 5)
 	public void onGameTick(GameTick e)
 	{
+		RaidRoom prevRoom = this.currentRoom;
+
 		LocalPoint lp = client.getLocalPlayer().getLocalLocation();
 		int region = lp == null ? -1 : WorldPoint.fromLocalInstance(client, lp).getRegionID();
 		this.inLobby = region == REGION_LOBBY;
@@ -62,12 +64,14 @@ public class RaidStateTracker implements PluginLifecycleComponent
 		{
 			this.lastRegion = -1;
 			this.currentRoom = null;
+			eventBus.post(new RaidRoomChanged(prevRoom, null));
 			return;
 		}
 
 		if (this.lastRegion != (this.lastRegion = region))
 		{
 			this.currentRoom = RaidRoom.forRegionId(region);
+			eventBus.post(new RaidRoomChanged(prevRoom, this.currentRoom));
 		}
 	}
 }
