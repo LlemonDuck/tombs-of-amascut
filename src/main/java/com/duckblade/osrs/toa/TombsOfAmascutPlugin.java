@@ -3,7 +3,8 @@ package com.duckblade.osrs.toa;
 import com.duckblade.osrs.toa.module.ComponentManager;
 import com.duckblade.osrs.toa.module.TombsOfAmascutModule;
 import com.google.inject.Binder;
-import javax.inject.Inject;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -18,7 +19,9 @@ public class TombsOfAmascutPlugin extends Plugin
 {
 
 	@Inject
-	private ComponentManager componentManager;
+	private Injector injector;
+
+	private ComponentManager componentManager = null;
 
 	@Override
 	public void configure(Binder binder)
@@ -29,6 +32,11 @@ public class TombsOfAmascutPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
+		if (componentManager == null)
+		{
+			componentManager = injector.getInstance(ComponentManager.class);
+		}
+
 		componentManager.onPluginStart();
 	}
 

@@ -22,6 +22,17 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "scabarasTileHelper",
+		name = "Scabaras Tile Helper",
+		description = "When entering the Path of Scabaras, displays a tile puzzle helper in the RuneLite side panel.",
+		position = 2
+	)
+	default boolean scabarasTileHelper()
+	{
+		return true;
+	}
+
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
