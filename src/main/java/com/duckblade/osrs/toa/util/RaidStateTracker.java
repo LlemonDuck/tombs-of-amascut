@@ -62,9 +62,12 @@ public class RaidStateTracker implements PluginLifecycleComponent
 
 		if (!inRaid)
 		{
-			this.lastRegion = -1;
-			this.currentRoom = null;
-			eventBus.post(new RaidRoomChanged(prevRoom, null));
+			if (this.lastRegion != -1)
+			{
+				this.lastRegion = -1;
+				this.currentRoom = null;
+				eventBus.post(new RaidRoomChanged(prevRoom, null));
+			}
 			return;
 		}
 
