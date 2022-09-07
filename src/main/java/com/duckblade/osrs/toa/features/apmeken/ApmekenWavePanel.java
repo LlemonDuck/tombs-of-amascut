@@ -38,6 +38,7 @@ public class ApmekenWavePanel extends PluginPanel
 		setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel headerLabel = new JLabel("Apmeken Waves");
+		headerLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 		headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		headerLabel.setAlignmentX(CENTER_ALIGNMENT);
 		headerLabel.setFont(FontManager.getRunescapeFont().deriveFont(24f));

@@ -45,6 +45,7 @@ public class ScabarasHelperInstaller implements PluginLifecycleComponent
 				.icon(PANEL_ICON)
 				.panel(scabarasHelperPanel)
 				.priority(999)
+				.tooltip("Scabaras Tile Puzzle Helper")
 				.build();
 		}
 

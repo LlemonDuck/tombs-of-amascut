@@ -45,6 +45,7 @@ public class ApmekenWaveInstaller implements PluginLifecycleComponent
 				.icon(PANEL_ICON)
 				.panel(apmekenWavePanel)
 				.priority(999)
+				.tooltip("Apmeken Waves")
 				.build();
 		}
 
