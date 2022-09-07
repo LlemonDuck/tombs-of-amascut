@@ -30,3 +30,17 @@ This image will also include the rewards section if it's enabled via the config 
 ![](docs/screenshot-button.png)
 
 [Click here to see an example of the screenshot that will be created](docs/screenshot-example.png)
+
+#### Scabaras Tile Puzzle Helper
+
+When entering the Path of Scabaras, opens a side panel
+with solutions for the numbered tiles puzzle.
+
+![img.png](docs/scabaras-tile-puzzle-helper.png)
+
+#### Apmeken Wave Helper
+
+When entering the Path of Apmeken, opens a side panel
+with a list of the baboon wave spawns.
+
+![](docs/apmeken-wave-helper.png)

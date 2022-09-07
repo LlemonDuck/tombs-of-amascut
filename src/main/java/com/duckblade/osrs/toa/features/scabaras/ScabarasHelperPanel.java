@@ -7,6 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.util.ImageUtil;
 
@@ -26,6 +27,7 @@ public class ScabarasHelperPanel extends PluginPanel
 		header.setAlignmentX(CENTER_ALIGNMENT);
 		header.setHorizontalAlignment(SwingConstants.CENTER);
 		header.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+		header.setFont(FontManager.getRunescapeFont().deriveFont(24f));
 		add(header);
 
 		JLabel tilesImgLabel = new JLabel(new ImageIcon(TILE_PUZZLE_IMAGE));
