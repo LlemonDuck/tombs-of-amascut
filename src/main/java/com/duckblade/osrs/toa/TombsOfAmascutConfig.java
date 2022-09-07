@@ -33,6 +33,17 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "apmekenWaveHelper",
+		name = "Apmeken Wave Helper",
+		description = "When entering the Path of Apmeken, displays a list of the waves in the RuneLite side panel.",
+		position = 3
+	)
+	default boolean apmekenWaveHelper()
+	{
+		return true;
+	}
+
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",

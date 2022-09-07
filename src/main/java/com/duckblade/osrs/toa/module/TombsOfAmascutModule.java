@@ -4,6 +4,7 @@ import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.features.DepositPickaxeSwap;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
+import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
 import com.duckblade.osrs.toa.features.invocationpresets.InvocationPresetsManager;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperInstaller;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
@@ -22,6 +23,7 @@ public class TombsOfAmascutModule extends AbstractModule
 	protected void configure()
 	{
 		Multibinder<PluginLifecycleComponent> lifecycleComponents = Multibinder.newSetBinder(binder(), PluginLifecycleComponent.class);
+		lifecycleComponents.addBinding().to(ApmekenWaveInstaller.class);
 		lifecycleComponents.addBinding().to(DepositPickaxeSwap.class);
 		lifecycleComponents.addBinding().to(InvocationPresetsManager.class);
 		lifecycleComponents.addBinding().to(InvocationScreenshot.class);
