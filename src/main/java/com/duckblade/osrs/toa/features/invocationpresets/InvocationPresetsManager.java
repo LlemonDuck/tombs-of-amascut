@@ -25,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
-import net.runelite.api.FontID;
 import net.runelite.api.KeyCode;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
@@ -33,9 +32,6 @@ import net.runelite.api.ScriptID;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetSizeMode;
-import net.runelite.api.widgets.WidgetTextAlignment;
-import net.runelite.api.widgets.WidgetType;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
@@ -51,7 +47,6 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	public static final int WIDGET_ID_INVOCATIONS_PARENT = 774;
 	public static final int WIDGET_ID_INVOCATIONS_SCROLLBAR = 51;
 	public static final int WIDGET_ID_INVOCATIONS_CHILD = 52;
-	private static final int WIDGET_ID_RAID_LEVEL_METER_CHILD = 82;
 	private static final int WIDGET_ID_REWARD_PANEL_BOX_CHILD = 75;
 	public static final int SCRIPT_ID_BUILD_TOA_PARTY_INTERFACE = 6729;
 	public static final int SCRIPT_ID_TOA_PARTY_TOGGLE_REWARD_PANEL = 6732;
@@ -73,6 +68,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	private InvocationPreset currentPreset = null;
 
 	private final SortedMap<String, InvocationPreset> presets = new TreeMap<>(Comparator.reverseOrder());
+	private String originalHeaderText = null;
 
 	@Override
 	public boolean isConfigEnabled(TombsOfAmascutConfig config)
@@ -179,8 +175,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		log.debug("Deleting preset {}", preset.getName());
 		configManager.unsetConfiguration(TombsOfAmascutConfig.CONFIG_GROUP, CONFIG_KEY_PRESETS + "." + preset.getName());
 		presets.remove(preset.getName());
-		currentPreset = null;
-		removePresetDisplay();
+		setCurrentPreset(null);
 	}
 
 	private void savePreset()
@@ -338,53 +333,43 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 
 	private void displayPresetName()
 	{
-		Widget parent = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_REWARD_PANEL_BOX_CHILD);
-		Widget levelMeter = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_RAID_LEVEL_METER_CHILD);
-
-		if (parent == null || parent.isHidden() || levelMeter == null || levelMeter.isHidden())
+		Widget container = client.getWidget(774, 3);
+		if (container == null || container.isHidden() || container.getChildren() == null || container.getChildren().length < 2)
 		{
 			return;
 		}
 
-		Widget text;
-		// Let's re-use the preset name widget if we've already made it.
-		if (parent.getChild(0) != null)
+		Widget title = container.getChild(1);
+		if (title == null)
 		{
-			text = parent.getChild(0);
+			return;
 		}
-		else
+
+		if (title.getText().startsWith("Party of "))
 		{
-			text = parent.createChild(WidgetType.TEXT);
+			originalHeaderText = title.getText();
 		}
 
 		InvocationPreset preset = getCurrentPreset();
-		// Hide the text if there's no selected preset
 		if (preset == null)
 		{
-			text.setText("");
-			text.revalidate();
+			title.setText(originalHeaderText)
+				.setTextColor(0xff981f)
+				.revalidate();
 			return;
 		}
 
 		boolean matching = preset.getInvocations().equals(getActiveInvocations());
-
-		text.setText("Preset: " + preset.getName() + (matching ? "" : " !!!"))
+		title.setText(preset.getName() + (matching ? "" : " !!!"))
 			.setTextColor(matching ? Color.green.getRGB() : Color.red.getRGB())
-			.setTextShadowed(true)
-			.setFontId(FontID.PLAIN_11)
-			.setXTextAlignment(WidgetTextAlignment.CENTER)
-			.setYTextAlignment(WidgetTextAlignment.CENTER)
-			.setPos(0, levelMeter.getOriginalY() + levelMeter.getHeight())
-			.setSize(0, 16, WidgetSizeMode.MINUS, WidgetSizeMode.ABSOLUTE);
-
-		text.revalidate();
+			.revalidate();
 	}
 
 	private void removePresetDisplay()
 	{
 		// Remove the invocation highlights
 		Widget parent = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_INVOCATIONS_CHILD);
-		if (parent != null && parent.isHidden() && parent.getChildren() != null)
+		if (parent != null && !parent.isHidden() && parent.getChildren() != null)
 		{
 			for (int i = 0; i < parent.getChildren().length; i += 3)
 			{
@@ -393,13 +378,6 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 					.setTextColor(Color.WHITE.getRGB())
 					.revalidate();
 			}
-		}
-
-		// Remove the preset name text
-		parent = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_REWARD_PANEL_BOX_CHILD);
-		if (parent != null && !parent.isHidden())
-		{
-			parent.deleteAllChildren();
 		}
 	}
 
