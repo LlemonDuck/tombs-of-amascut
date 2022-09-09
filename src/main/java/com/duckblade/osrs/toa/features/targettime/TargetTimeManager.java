@@ -2,6 +2,7 @@ package com.duckblade.osrs.toa.features.targettime;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.RaidRoomChanged;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -27,6 +28,7 @@ public class TargetTimeManager implements PluginLifecycleComponent
 	private static final int WIDGET_TIMER_PARENT_ID = 481;
 	private static final int WIDGET_TIMER_CHILD_ID = 46;
 
+	private static final String NO_TARGET_TIME_PREFIX = "You enter the Tombs of Amascut";
 	private static final String TARGET_TIME_PREFIX = "Overall time to beat:";
 	private static final Pattern TARGET_TIME_PATTERN = Pattern.compile(TARGET_TIME_PREFIX + " (\\d\\d:\\d\\d\\.\\d\\d)");
 
@@ -53,6 +55,11 @@ public class TargetTimeManager implements PluginLifecycleComponent
 			for (int i = 0; i < gameMessages.getLength(); i++)
 			{
 				MessageNode line = gameMessages.getLines()[i];
+				if (NO_TARGET_TIME_PREFIX.equals(Text.removeTags(line.getValue())))
+				{
+					return;
+				}
+
 				if (checkMessage(Text.removeTags(line.getValue())))
 				{
 					return;
@@ -79,9 +86,18 @@ public class TargetTimeManager implements PluginLifecycleComponent
 	}
 
 	@Subscribe
+	public void onRaidRoomChanged(RaidRoomChanged e)
+	{
+		if (e.getCurrent() == null)
+		{
+			targetTime = null;
+		}
+	}
+
+	@Subscribe
 	public void onScriptPostFired(ScriptPostFired e)
 	{
-		if (e.getScriptId() == SCRIPT_TOA_TIME_UPDATE_TIMER)
+		if (e.getScriptId() == SCRIPT_TOA_TIME_UPDATE_TIMER && targetTime != null)
 		{
 			Widget timer = client.getWidget(WIDGET_TIMER_PARENT_ID, WIDGET_TIMER_CHILD_ID);
 			if (timer == null || timer.getText().contains("/"))
