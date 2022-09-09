@@ -48,12 +48,15 @@ public class TargetTimeManager implements PluginLifecycleComponent
 
 		// scan for target time in history
 		ChatLineBuffer gameMessages = client.getChatLineMap().get(ChatMessageType.GAMEMESSAGE.getType());
-		for (int i = 0; i < gameMessages.getLength(); i++)
+		if (gameMessages != null)
 		{
-			MessageNode line = gameMessages.getLines()[i];
-			if (checkMessage(Text.removeTags(line.getValue())))
+			for (int i = 0; i < gameMessages.getLength(); i++)
 			{
-				return;
+				MessageNode line = gameMessages.getLines()[i];
+				if (checkMessage(Text.removeTags(line.getValue())))
+				{
+					return;
+				}
 			}
 		}
 	}
