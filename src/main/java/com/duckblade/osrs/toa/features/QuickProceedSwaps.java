@@ -8,10 +8,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Client;
-import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.NpcID;
+import net.runelite.api.ObjectID;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -22,14 +21,30 @@ import net.runelite.client.eventbus.Subscribe;
 public class QuickProceedSwaps implements PluginLifecycleComponent
 {
 
-	private static final Set<Integer> OSMUMTEN_IDS = ImmutableSet.of(
+	private static final Set<Integer> NPC_IDS = ImmutableSet.of(
 		NpcID.OSMUMTEN, // post-demi-boss
 		NpcID.OSMUMTEN_11690, // pre-warden
 		NpcID.OSMUMTEN_11693 // loot room
 	);
 
+	private static final Set<Integer> OBJECT_IDS = ImmutableSet.of(
+		ObjectID.PATH_OF_CRONDIS,
+		ObjectID.PATH_OF_SCABARAS,
+		ObjectID.PATH_OF_HET,
+		ObjectID.PATH_OF_APMEKEN,
+		ObjectID.BARRIER_45135,
+		ObjectID.TELEPORT_CRYSTAL_45505, // kephri
+		ObjectID.TELEPORT_CRYSTAL_45506, // zebak
+		ObjectID.TELEPORT_CRYSTAL_45866, // akkha
+		ObjectID.TELEPORT_CRYSTAL_45754, // ba-ba // Quick-Use
+		ObjectID.ENTRY_45131, // het
+		ObjectID.ENTRY_45337, // scabaras
+		ObjectID.ENTRY_45397, // crondis
+		ObjectID.ENTRY_45500, // apmeken
+		ObjectID.ENTRY_46168 // wardens
+	);
+
 	private final EventBus eventBus;
-	private final Client client;
 
 	@Override
 	public boolean isConfigEnabled(TombsOfAmascutConfig config)
@@ -54,16 +69,27 @@ public class QuickProceedSwaps implements PluginLifecycleComponent
 	{
 		// easier to just deprioritize talk-to rather than prioritizing the other options
 		MenuEntry me = e.getMenuEntry();
-
-		if (me.getType() != MenuAction.NPC_FIRST_OPTION || !me.getOption().equals("Talk-to"))
+		if (shouldDeprioritize(me))
 		{
-			return;
+			me.setDeprioritized(true);
 		}
+	}
 
-		int npcId = client.getCachedNPCs()[me.getIdentifier()].getId();
-		if (OSMUMTEN_IDS.contains(npcId))
+	private boolean shouldDeprioritize(MenuEntry me)
+	{
+		switch (me.getType())
 		{
-			e.getMenuEntry().setDeprioritized(true);
+			case NPC_FIRST_OPTION:
+				return me.getOption().equals("Talk-to") &&
+					me.getNpc() != null &&
+					NPC_IDS.contains(me.getNpc().getId());
+
+			case GAME_OBJECT_FIRST_OPTION:
+				return (me.getOption().equals("Enter") || me.getOption().equals("Use") || me.getOption().equals("Pass")) &&
+					OBJECT_IDS.contains(me.getIdentifier());
+
+			default:
+				return false;
 		}
 	}
 }
