@@ -39,7 +39,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.DynamicObject;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -51,7 +50,6 @@ import net.runelite.client.events.ConfigChanged;
 public class SarcophagusOpeningSoundPlayer implements PluginLifecycleComponent
 {
 	private static final int SARCOPHAGUS_ID = 44934;
-	private static final int CHEST_OPENING_ANIMATION_ID = 9505;
 
 	private final EventBus eventBus;
 	private final TombsOfAmascutConfig config;
@@ -106,18 +104,8 @@ public class SarcophagusOpeningSoundPlayer implements PluginLifecycleComponent
 			return;
 		}
 
-		if (!(e.getGameObject().getRenderable() instanceof DynamicObject))
-		{
-			log.debug("Sarcophagus found but not a DynamicObject");
-			return;
-		}
-
-		DynamicObject obj = (DynamicObject) e.getGameObject().getRenderable();
-		log.debug("Sarcophagus animation: {}", obj.getAnimation().getId());
-		if (obj.getAnimation().getId() == CHEST_OPENING_ANIMATION_ID)
-		{
-			playClip();
-		}
+		// The sarcophagus spawns as the player starts looting the chest
+		playClip();
 	}
 
 	private boolean loadClip()
