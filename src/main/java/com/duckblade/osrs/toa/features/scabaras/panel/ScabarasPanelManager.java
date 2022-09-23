@@ -1,6 +1,7 @@
-package com.duckblade.osrs.toa.features.scabaras;
+package com.duckblade.osrs.toa.features.scabaras.panel;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
+import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
@@ -15,20 +16,20 @@ import net.runelite.client.util.ImageUtil;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class ScabarasHelperInstaller implements PluginLifecycleComponent
+public class ScabarasPanelManager implements PluginLifecycleComponent
 {
 
-	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(ScabarasHelperInstaller.class, "icon.png");
+	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(ScabarasPanelManager.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
-	private final ScabarasHelperPanel scabarasHelperPanel;
+	private final ScabarasPanel scabarasPanel;
 
 	private NavigationButton navButton;
 
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState currentState)
 	{
-		return config.scabarasTileHelper() &&
+		return config.scabarasHelperMode() == ScabarasHelperMode.SIDE_PANEL &&
 			currentState.getCurrentRoom() == RaidRoom.SCABARAS;
 	}
 
@@ -39,7 +40,7 @@ public class ScabarasHelperInstaller implements PluginLifecycleComponent
 		{
 			navButton = NavigationButton.builder()
 				.icon(PANEL_ICON)
-				.panel(scabarasHelperPanel)
+				.panel(scabarasPanel)
 				.priority(999)
 				.tooltip("Scabaras Tile Puzzle Helper")
 				.build();
