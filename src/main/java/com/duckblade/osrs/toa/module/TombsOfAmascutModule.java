@@ -7,6 +7,7 @@ import com.duckblade.osrs.toa.features.QuickProceedSwaps;
 import com.duckblade.osrs.toa.features.SarcophagusOpeningSoundPlayer;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
 import com.duckblade.osrs.toa.features.invocationpresets.InvocationPresetsManager;
+import com.duckblade.osrs.toa.features.scabaras.overlay.AdditionPuzzleSolver;
 import com.duckblade.osrs.toa.features.scabaras.overlay.LightPuzzleSolver;
 import com.duckblade.osrs.toa.features.scabaras.overlay.ScabarasOverlayManager;
 import com.duckblade.osrs.toa.features.scabaras.panel.ScabarasPanelManager;
@@ -27,6 +28,7 @@ public class TombsOfAmascutModule extends AbstractModule
 	protected void configure()
 	{
 		Multibinder<PluginLifecycleComponent> lifecycleComponents = Multibinder.newSetBinder(binder(), PluginLifecycleComponent.class);
+		lifecycleComponents.addBinding().to(AdditionPuzzleSolver.class);
 		lifecycleComponents.addBinding().to(ApmekenWaveInstaller.class);
 		lifecycleComponents.addBinding().to(DepositPickaxeSwap.class);
 		lifecycleComponents.addBinding().to(InvocationPresetsManager.class);
