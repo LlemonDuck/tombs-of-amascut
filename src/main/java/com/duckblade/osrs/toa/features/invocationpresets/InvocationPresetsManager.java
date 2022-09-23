@@ -3,6 +3,7 @@ package com.duckblade.osrs.toa.features.invocationpresets;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.Invocation;
+import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.Runnables;
@@ -71,9 +72,9 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	private String originalHeaderText = null;
 
 	@Override
-	public boolean isConfigEnabled(TombsOfAmascutConfig config)
+	public boolean isEnabled(TombsOfAmascutConfig config, RaidState currentState)
 	{
-		return config.invocationPresetsEnable();
+		return false; // broken by jagex presets, but may be re-enabled at some point
 	}
 
 	@Override

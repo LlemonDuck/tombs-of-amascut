@@ -13,7 +13,7 @@ public enum RaidRoom
 	KEPHRI(new int[]{14164}),
 	APMEKEN(new int[]{15186}),
 	BABA(new int[]{15188}),
-	MIRRORS(new int[]{14674}),
+	HET(new int[]{14674}),
 	AKKHA(new int[]{14676}),
 	WARDENS(new int[]{15184, 15696}),
 	;

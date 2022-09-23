@@ -3,7 +3,6 @@ package com.duckblade.osrs.toa.util;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;
 import net.runelite.api.coords.LocalPoint;
@@ -25,16 +24,7 @@ public class RaidStateTracker implements PluginLifecycleComponent
 	private final Client client;
 	private final EventBus eventBus;
 
-	@Getter
-	private boolean inLobby;
-
-	@Getter
-	private boolean inRaid;
-
-	@Getter
-	private RaidRoom currentRoom;
-
-	private int lastRegion = -1;
+	private RaidState currentState = new RaidState(false, false, null);
 
 	@Override
 	public void startUp()
@@ -51,30 +41,41 @@ public class RaidStateTracker implements PluginLifecycleComponent
 	@Subscribe(priority = 5)
 	public void onGameTick(GameTick e)
 	{
-		RaidRoom prevRoom = this.currentRoom;
-
 		LocalPoint lp = client.getLocalPlayer().getLocalLocation();
 		int region = lp == null ? -1 : WorldPoint.fromLocalInstance(client, lp).getRegionID();
-		this.inLobby = region == REGION_LOBBY;
 
 		Widget w = client.getWidget(WIDGET_PARENT_ID, WIDGET_CHILD_ID);
-		this.inRaid = w != null && !w.isHidden();
 
-		if (!inRaid)
-		{
-			if (this.lastRegion != -1)
-			{
-				this.lastRegion = -1;
-				this.currentRoom = null;
-				eventBus.post(new RaidRoomChanged(prevRoom, null));
-			}
-			return;
-		}
+		boolean inLobby = region == REGION_LOBBY;
+		RaidRoom currentRoom = RaidRoom.forRegionId(region);
+		boolean inRaid = currentRoom != null || (w != null && !w.isHidden());
 
-		if (this.lastRegion != (this.lastRegion = region))
+		RaidState previousState = this.currentState;
+		RaidState newState = new RaidState(inLobby, inRaid, currentRoom);
+		if (!previousState.equals(newState))
 		{
-			this.currentRoom = RaidRoom.forRegionId(region);
-			eventBus.post(new RaidRoomChanged(prevRoom, this.currentRoom));
+			this.currentState = newState;
+			eventBus.post(new RaidStateChanged(previousState, newState));
 		}
+	}
+
+	public boolean isInLobby()
+	{
+		return this.currentState.isInLobby();
+	}
+
+	public boolean isInRaid()
+	{
+		return this.currentState.isInRaid();
+	}
+
+	public RaidRoom getCurrentRoom()
+	{
+		return this.currentState.getCurrentRoom();
+	}
+
+	public RaidState getCurrentState()
+	{
+		return this.currentState;
 	}
 }

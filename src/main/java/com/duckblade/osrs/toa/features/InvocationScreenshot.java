@@ -26,6 +26,7 @@ package com.duckblade.osrs.toa.features;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.RaidState;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
@@ -89,7 +90,7 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	private Widget button = null;
 
 	@Override
-	public boolean isConfigEnabled(TombsOfAmascutConfig config)
+	public boolean isEnabled(TombsOfAmascutConfig config, RaidState currentState)
 	{
 		return config.invocationScreenshotEnable();
 	}

@@ -3,15 +3,12 @@ package com.duckblade.osrs.toa.features.apmeken;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidRoom;
-import com.duckblade.osrs.toa.util.RaidRoomChanged;
-import com.duckblade.osrs.toa.util.RaidStateTracker;
+import com.duckblade.osrs.toa.util.RaidState;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.SwingUtilities;
 import lombok.RequiredArgsConstructor;
-import net.runelite.client.eventbus.EventBus;
-import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.util.ImageUtil;
@@ -23,17 +20,16 @@ public class ApmekenWaveInstaller implements PluginLifecycleComponent
 
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(ApmekenWaveInstaller.class, "icon.png");
 
-	private final EventBus eventBus;
 	private final ClientToolbar clientToolbar;
-	private final RaidStateTracker raidStateTracker;
 	private final ApmekenWavePanel apmekenWavePanel;
 
 	private NavigationButton navButton;
 
 	@Override
-	public boolean isConfigEnabled(TombsOfAmascutConfig config)
+	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
-		return config.apmekenWaveHelper();
+		return config.apmekenWaveHelper() &&
+			raidState.getCurrentRoom() == RaidRoom.APMEKEN;
 	}
 
 	@Override
@@ -49,31 +45,13 @@ public class ApmekenWaveInstaller implements PluginLifecycleComponent
 				.build();
 		}
 
-		eventBus.register(this);
-		if (raidStateTracker.isInRaid() && raidStateTracker.getCurrentRoom() == RaidRoom.APMEKEN)
-		{
-			openPanel();
-		}
+		openPanel();
 	}
 
 	@Override
 	public void shutDown()
 	{
-		eventBus.unregister(this);
 		removePanel();
-	}
-
-	@Subscribe
-	public void onRaidRoomChanged(RaidRoomChanged e)
-	{
-		if (e.getCurrent() == RaidRoom.APMEKEN)
-		{
-			openPanel();
-		}
-		else
-		{
-			removePanel();
-		}
 	}
 
 	private void openPanel()
