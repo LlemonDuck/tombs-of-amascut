@@ -1,6 +1,9 @@
 package com.duckblade.osrs.toa.module;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
+import com.duckblade.osrs.toa.util.RaidState;
+import com.duckblade.osrs.toa.util.RaidStateChanged;
+import com.duckblade.osrs.toa.util.RaidStateTracker;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +29,7 @@ public class ComponentManager
 
 	private final EventBus eventBus;
 	private final TombsOfAmascutConfig config;
+	private final RaidStateTracker raidStateTracker;
 	private final Set<PluginLifecycleComponent> components;
 
 	private final Map<PluginLifecycleComponent, Boolean> states = new HashMap<>();
@@ -34,9 +38,7 @@ public class ComponentManager
 	{
 		eventBus.register(this);
 		components.forEach(c -> states.put(c, false));
-		components.stream()
-			.filter(c -> c.isConfigEnabled(config))
-			.forEach(this::tryStartUp);
+		revalidateComponentStates();
 	}
 
 	public void onPluginStop()
@@ -55,9 +57,21 @@ public class ComponentManager
 			return;
 		}
 
+		revalidateComponentStates();
+	}
+
+	@Subscribe
+	public void onRaidStateChanged(RaidStateChanged e)
+	{
+		revalidateComponentStates();
+	}
+
+	private void revalidateComponentStates()
+	{
+		RaidState raidState = raidStateTracker.getCurrentState();
 		components.forEach(c ->
 		{
-			boolean shouldBeEnabled = c.isConfigEnabled(config);
+			boolean shouldBeEnabled = c.isEnabled(config, raidState);
 			boolean isEnabled = states.get(c);
 			if (shouldBeEnabled == isEnabled)
 			{
@@ -82,6 +96,11 @@ public class ComponentManager
 			return;
 		}
 
+		if (log.isDebugEnabled())
+		{
+			log.debug("Enabling ToA plugin component [{}]", component.getClass().getName());
+		}
+
 		try
 		{
 			component.startUp();
@@ -98,6 +117,11 @@ public class ComponentManager
 		if (!states.get(component))
 		{
 			return;
+		}
+
+		if (log.isDebugEnabled())
+		{
+			log.debug("Disabling ToA plugin component [{}]", component.getClass().getName());
 		}
 
 		try

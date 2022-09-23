@@ -4,7 +4,7 @@ import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.InventoryUtil;
 import com.duckblade.osrs.toa.util.RaidRoom;
-import com.duckblade.osrs.toa.util.RaidStateTracker;
+import com.duckblade.osrs.toa.util.RaidState;
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import javax.inject.Inject;
@@ -47,12 +47,12 @@ public class DepositPickaxeSwap implements PluginLifecycleComponent
 	private final EventBus eventBus;
 
 	private final Client client;
-	private final RaidStateTracker raidStateTracker;
 
 	@Override
-	public boolean isConfigEnabled(TombsOfAmascutConfig config)
+	public boolean isEnabled(TombsOfAmascutConfig config, RaidState currentState)
 	{
-		return config.contextualSwapPickaxe();
+		return config.contextualSwapPickaxe() &&
+			currentState.getCurrentRoom() == RaidRoom.HET;
 	}
 
 	@Override
@@ -70,11 +70,6 @@ public class DepositPickaxeSwap implements PluginLifecycleComponent
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded e)
 	{
-		if (!raidStateTracker.isInRaid() || raidStateTracker.getCurrentRoom() != RaidRoom.MIRRORS)
-		{
-			return;
-		}
-
 		if (isTakePickaxe(e.getMenuEntry()) && InventoryUtil.containsAny(client, PICKAXE_IDS))
 		{
 			e.getMenuEntry().setDeprioritized(true);

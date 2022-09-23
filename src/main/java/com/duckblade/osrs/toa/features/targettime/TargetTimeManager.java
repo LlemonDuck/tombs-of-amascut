@@ -2,7 +2,8 @@ package com.duckblade.osrs.toa.features.targettime;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
-import com.duckblade.osrs.toa.util.RaidRoomChanged;
+import com.duckblade.osrs.toa.util.RaidState;
+import com.duckblade.osrs.toa.util.RaidStateChanged;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -38,7 +39,7 @@ public class TargetTimeManager implements PluginLifecycleComponent
 	private String targetTime;
 
 	@Override
-	public boolean isConfigEnabled(TombsOfAmascutConfig config)
+	public boolean isEnabled(TombsOfAmascutConfig config, RaidState currentState)
 	{
 		return config.targetTimeDisplay();
 	}
@@ -86,9 +87,9 @@ public class TargetTimeManager implements PluginLifecycleComponent
 	}
 
 	@Subscribe
-	public void onRaidRoomChanged(RaidRoomChanged e)
+	public void onRaidStateChanged(RaidStateChanged e)
 	{
-		if (e.getCurrent() == null)
+		if (!e.getNewState().isInRaid())
 		{
 			targetTime = null;
 		}

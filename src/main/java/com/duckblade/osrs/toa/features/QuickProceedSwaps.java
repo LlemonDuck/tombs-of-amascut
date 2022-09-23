@@ -2,6 +2,7 @@ package com.duckblade.osrs.toa.features;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.RaidState;
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import javax.inject.Inject;
@@ -47,9 +48,10 @@ public class QuickProceedSwaps implements PluginLifecycleComponent
 	private final EventBus eventBus;
 
 	@Override
-	public boolean isConfigEnabled(TombsOfAmascutConfig config)
+	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
-		return config.leftClickProceedEnable();
+		return config.leftClickProceedEnable() &&
+			raidState.isInRaid();
 	}
 
 	@Override

@@ -27,6 +27,7 @@ package com.duckblade.osrs.toa.features;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.TombsOfAmascutPlugin;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.RaidState;
 import java.io.File;
 import java.io.IOException;
 import javax.inject.Inject;
@@ -57,7 +58,7 @@ public class SarcophagusOpeningSoundPlayer implements PluginLifecycleComponent
 	private Clip clip = null;
 
 	@Override
-	public boolean isConfigEnabled(TombsOfAmascutConfig config)
+	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
 		return config.chestAudioEnable();
 	}
