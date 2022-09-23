@@ -10,6 +10,7 @@ import com.duckblade.osrs.toa.features.invocationpresets.InvocationPresetsManage
 import com.duckblade.osrs.toa.features.scabaras.overlay.AdditionPuzzleSolver;
 import com.duckblade.osrs.toa.features.scabaras.overlay.LightPuzzleSolver;
 import com.duckblade.osrs.toa.features.scabaras.overlay.ScabarasOverlayManager;
+import com.duckblade.osrs.toa.features.scabaras.overlay.SequencePuzzleSolver;
 import com.duckblade.osrs.toa.features.scabaras.panel.ScabarasPanelManager;
 import com.duckblade.osrs.toa.features.targettime.TargetTimeManager;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
@@ -39,6 +40,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(SarcophagusOpeningSoundPlayer.class);
 		lifecycleComponents.addBinding().to(ScabarasOverlayManager.class);
 		lifecycleComponents.addBinding().to(ScabarasPanelManager.class);
+		lifecycleComponents.addBinding().to(SequencePuzzleSolver.class);
 		lifecycleComponents.addBinding().to(TargetTimeManager.class);
 	}
 
