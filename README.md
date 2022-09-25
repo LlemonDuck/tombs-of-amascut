@@ -44,3 +44,14 @@ When entering the Path of Apmeken, opens a side panel
 with a list of the baboon wave spawns.
 
 ![](docs/apmeken-wave-helper.png)
+
+#### Chest Audio
+This will play a `.wav` audio file from your local machine whenever the Tombs of Amascut Sarcophagus is opened(the purple chest).
+
+##### Setup
+1. Open your `.runelite/tombs-of-amascut` folder
+    * On Windows, `C:\Users\<pcname>\.runelite\tombs-of-amascut` or `%USERPROFILE%\.runelite\tombs-of-amascut`
+    * On macOS and Linux, `~/.runelite/tombs-of-amascut`
+2. Add your sound file
+    * The file should be named `toa-chest.wav` and only `.wav` files are supported.
+    * The entirety of the file will be played, it is recommended to limit this file to 30 seconds.
