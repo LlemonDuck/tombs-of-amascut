@@ -7,11 +7,9 @@ import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.IntStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.Getter;
@@ -45,11 +43,22 @@ public class LightPuzzleSolver implements PluginLifecycleComponent
 		new Point(53, 44),
 	};
 
+	private static final int[] LIGHTS_PUZZLE_XOR_ARRAY = {
+		0B01110101,
+		0B10111010,
+		0B11001101,
+		0B11001110,
+		0B01110011,
+		0B10110011,
+		0B01011101,
+		0B10101110,
+	};
+
 	private final EventBus eventBus;
 	private final Client client;
 
 	private boolean solved;
-	private boolean[] tileStates = new boolean[9]; // we'll just ignore the middle tile but keep the math simple
+	private int tileStates = -1; // bitmask northwest to southeast
 
 	@Getter
 	private Set<LocalPoint> flips = Collections.emptySet();
@@ -134,28 +143,27 @@ public class LightPuzzleSolver implements PluginLifecycleComponent
 		return null;
 	}
 
-	private boolean[] readTileStates(Tile[][] sceneTiles, Point topLeft)
+	private int readTileStates(Tile[][] sceneTiles, Point topLeft)
 	{
-		boolean[] tileStates = new boolean[8];
-		int ix = 0;
-		for (int y = 0; y < 3; y++)
+		int tileStates = 0;
+		for (int i = 0; i < 8; i++)
 		{
-			for (int x = 0; x < 3; x++)
+			// middle of puzzle has no light
+			// skip middle tile
+			int tileIx = i > 3 ? i + 1 : i;
+			int x = tileIx % 3;
+			int y = tileIx / 3;
+			Tile lightTile = sceneTiles[topLeft.getX() + (x * 2)][topLeft.getY() - (y * 2)];
+
+			boolean active = Arrays.stream(lightTile.getGameObjects())
+				.filter(Objects::nonNull)
+				.mapToInt(GameObject::getId)
+				.anyMatch(id -> id == GAME_OBJECT_LIGHT_ENABLED);
+
+			log.debug("Read light ({}, {}) as active={}", x, y, active);
+			if (active)
 			{
-				// middle of puzzle has no light
-				if (x == 1 && y == 1)
-				{
-					continue;
-				}
-
-				Tile lightTile = sceneTiles[topLeft.getX() + (x * 2)][topLeft.getY() - (y * 2)];
-				boolean active = Arrays.stream(lightTile.getGameObjects())
-					.filter(Objects::nonNull)
-					.mapToInt(GameObject::getId)
-					.anyMatch(id -> id == GAME_OBJECT_LIGHT_ENABLED);
-
-				log.debug("Read light ({}, {}) as active={}", x, y, active);
-				tileStates[ix++] = active;
+				tileStates |= 1 << i;
 			}
 		}
 
@@ -164,129 +172,32 @@ public class LightPuzzleSolver implements PluginLifecycleComponent
 
 	private Set<LocalPoint> findSolution(Point topLeft)
 	{
-		// find the solution
-		//noinspection OptionalGetWithoutIsPresent
-		boolean[] solutionFlips = IntStream.range(0, 256)
-			.mapToObj(LightPuzzleSolver::createBitField)
-			.sorted(Comparator.comparingInt(LightPuzzleSolver::countFlips))
-			.filter(flips -> validateSolution(tileStates, flips))
-			.findFirst()
-			.get();
+		int xor = 0;
+		for (int i = 0; i < 8; i++)
+		{
+			// invert the state for xor (consider lights out as a 1)
+			int mask = 1 << i;
+			if ((tileStates & mask) != mask)
+			{
+				xor ^= LIGHTS_PUZZLE_XOR_ARRAY[i];
+			}
+		}
 
 		// convert to scene points
 		Set<LocalPoint> points = new HashSet<>();
-		int ix = 0;
-		for (int y = 0; y < 3; y++)
+		for (int i = 0; i < 8; i++)
 		{
-			for (int x = 0; x < 3; x++)
+			int mask = 1 << i;
+			if ((xor & mask) == mask)
 			{
-				if (x == 1 && y == 1)
-				{
-					continue;
-				}
-
-				if (solutionFlips[ix++])
-				{
-					points.add(LocalPoint.fromScene(topLeft.getX() + (x * 2), topLeft.getY() - (y * 2)));
-				}
+				// skip middle tile
+				int tileIx = i > 3 ? i + 1 : i;
+				int x = tileIx % 3;
+				int y = tileIx / 3;
+				points.add(LocalPoint.fromScene(topLeft.getX() + (x * 2), topLeft.getY() - (y * 2)));
 			}
 		}
 
 		return points;
-	}
-
-	private static boolean[] createBitField(int i)
-	{
-		return new boolean[]{
-			(i & 0x80) == 0x80,
-			(i & 0x40) == 0x40,
-			(i & 0x20) == 0x20,
-			(i & 0x10) == 0x10,
-			(i & 0x08) == 0x08,
-			(i & 0x04) == 0x04,
-			(i & 0x02) == 0x02,
-			(i & 0x01) == 0x01
-		};
-	}
-
-	private static int countFlips(boolean[] flips)
-	{
-		int c = 0;
-		for (boolean flip : flips)
-		{
-			c += flip ? 1 : 0;
-		}
-
-		return c;
-	}
-
-	private static boolean validateSolution(boolean[] tileStates, boolean[] flips)
-	{
-		log.debug("Testing state {} with solution {}", tileStates, flips);
-		boolean[] mutStates = Arrays.copyOf(tileStates, 8);
-
-		// perform the flips
-		for (int i = 0; i < 8; i++)
-		{
-			if (!flips[i])
-			{
-				continue;
-			}
-
-			mutStates[i] = !mutStates[i];
-			switch (i)
-			{
-				case 0:
-					mutStates[1] = !mutStates[1];
-					mutStates[3] = !mutStates[3];
-					break;
-
-				case 1:
-					mutStates[0] = !mutStates[0];
-					mutStates[2] = !mutStates[2];
-					break;
-
-				case 2:
-					mutStates[1] = !mutStates[1];
-					mutStates[4] = !mutStates[4];
-					break;
-
-				case 3:
-					mutStates[0] = !mutStates[0];
-					mutStates[5] = !mutStates[5];
-					break;
-
-				case 4:
-					mutStates[2] = !mutStates[2];
-					mutStates[7] = !mutStates[7];
-					break;
-
-				case 5:
-					mutStates[3] = !mutStates[3];
-					mutStates[6] = !mutStates[6];
-					break;
-
-				case 6:
-					mutStates[5] = !mutStates[5];
-					mutStates[7] = !mutStates[7];
-					break;
-
-				case 7:
-					mutStates[4] = !mutStates[4];
-					mutStates[6] = !mutStates[6];
-					break;
-			}
-		}
-
-		// ensure all tiles are lit
-		for (boolean mutState : mutStates)
-		{
-			if (!mutState)
-			{
-				return false;
-			}
-		}
-
-		return true;
 	}
 }
