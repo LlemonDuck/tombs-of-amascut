@@ -1,4 +1,4 @@
-package com.duckblade.osrs.toa.features.scabaras;
+package com.duckblade.osrs.toa.features.scabaras.panel;
 
 import java.awt.image.BufferedImage;
 import javax.inject.Singleton;
@@ -12,12 +12,12 @@ import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.util.ImageUtil;
 
 @Singleton
-public class ScabarasHelperPanel extends PluginPanel
+public class ScabarasPanel extends PluginPanel
 {
 
-	private static final BufferedImage TILE_PUZZLE_IMAGE = ImageUtil.loadImageResource(ScabarasHelperPanel.class, "tile-puzzle.png");
+	private static final BufferedImage TILE_PUZZLE_IMAGE = ImageUtil.loadImageResource(ScabarasPanel.class, "tile-puzzle.png");
 
-	public ScabarasHelperPanel()
+	public ScabarasPanel()
 	{
 		setBorder(BorderFactory.createEmptyBorder());
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

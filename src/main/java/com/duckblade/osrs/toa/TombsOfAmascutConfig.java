@@ -1,5 +1,6 @@
 package com.duckblade.osrs.toa;
 
+import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -24,14 +25,14 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "scabarasTileHelper",
-		name = "Scabaras Tile Helper",
-		description = "When entering the Path of Scabaras, displays a tile puzzle helper in the RuneLite side panel.",
+		keyName = "scabarasHelperMode",
+		name = "Scabaras Helpers",
+		description = "Puzzle helpers for the Path of Scabaras (leading to Kephri).",
 		position = 2
 	)
-	default boolean scabarasTileHelper()
+	default ScabarasHelperMode scabarasHelperMode()
 	{
-		return true;
+		return ScabarasHelperMode.OVERLAY;
 	}
 
 	@ConfigItem(
