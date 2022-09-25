@@ -1,4 +1,4 @@
-package com.duckblade.osrs.toa.features;
+package com.duckblade.osrs.toa.features.het;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
@@ -11,6 +11,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;
+import net.runelite.api.InventoryID;
+import net.runelite.api.ItemContainer;
 import net.runelite.api.ItemID;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.events.MenuEntryAdded;
@@ -45,13 +47,15 @@ public class DepositPickaxeSwap implements PluginLifecycleComponent
 	);
 
 	private final EventBus eventBus;
-
 	private final Client client;
+
+	private DepositPickaxeMode mode;
 
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState currentState)
 	{
-		return config.contextualSwapPickaxe() &&
+		this.mode = config.contextualSwapPickaxe();
+		return mode != DepositPickaxeMode.OFF &&
 			currentState.getCurrentRoom() == RaidRoom.HET;
 	}
 
@@ -70,7 +74,22 @@ public class DepositPickaxeSwap implements PluginLifecycleComponent
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded e)
 	{
-		if (isTakePickaxe(e.getMenuEntry()) && InventoryUtil.containsAny(client, PICKAXE_IDS))
+		ItemContainer inv = client.getItemContainer(InventoryID.INVENTORY);
+		ItemContainer equip = client.getItemContainer(InventoryID.EQUIPMENT);
+		if (inv == null || equip == null)
+		{
+			return;
+		}
+
+		boolean hasPickaxe = InventoryUtil.containsAny(inv, PICKAXE_IDS) || InventoryUtil.containsAny(equip, PICKAXE_IDS);
+		if (!hasPickaxe)
+		{
+			return;
+		}
+
+		boolean statueSwap = mode.isSwapStatue() && isTakePickaxe(e.getMenuEntry());
+		boolean exitSwap = mode.isSwapExit() && isExitRoom(e.getMenuEntry());
+		if (statueSwap || exitSwap)
 		{
 			e.getMenuEntry().setDeprioritized(true);
 		}
@@ -80,5 +99,11 @@ public class DepositPickaxeSwap implements PluginLifecycleComponent
 	{
 		return menuEntry.getOption().equals("Take-pickaxe") &&
 			menuEntry.getTarget().contains("Statue");
+	}
+
+	private static boolean isExitRoom(MenuEntry menuEntry)
+	{
+		return menuEntry.getOption().contains("Enter") &&
+			menuEntry.getTarget().contains("Entry");
 	}
 }

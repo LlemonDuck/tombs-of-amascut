@@ -1,5 +1,6 @@
 package com.duckblade.osrs.toa;
 
+import com.duckblade.osrs.toa.features.het.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
@@ -19,9 +20,9 @@ public interface TombsOfAmascutConfig extends Config
 		description = "Automatically swap to Deposit-pickaxe when a pickaxe is in your inventory.",
 		position = 1
 	)
-	default boolean contextualSwapPickaxe()
+	default DepositPickaxeMode contextualSwapPickaxe()
 	{
-		return true;
+		return DepositPickaxeMode.STATUE_SWAP;
 	}
 
 	@ConfigItem(

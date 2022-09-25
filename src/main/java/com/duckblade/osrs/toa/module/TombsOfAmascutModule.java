@@ -1,11 +1,11 @@
 package com.duckblade.osrs.toa.module;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
-import com.duckblade.osrs.toa.features.DepositPickaxeSwap;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
 import com.duckblade.osrs.toa.features.SarcophagusOpeningSoundPlayer;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
+import com.duckblade.osrs.toa.features.het.DepositPickaxeSwap;
 import com.duckblade.osrs.toa.features.invocationpresets.InvocationPresetsManager;
 import com.duckblade.osrs.toa.features.scabaras.overlay.AdditionPuzzleSolver;
 import com.duckblade.osrs.toa.features.scabaras.overlay.LightPuzzleSolver;
