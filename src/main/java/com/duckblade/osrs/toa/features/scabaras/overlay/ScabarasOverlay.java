@@ -75,9 +75,19 @@ public class ScabarasOverlay extends Overlay
 		int ix = 0;
 		for (LocalPoint tile : points)
 		{
-			Color c = ix < progress
-				? Color.gray
-				: ColorUtil.colorLerp(Color.cyan, Color.blue, (double) ix / (points.size() - 1));
+			Color c;
+			if (points.size() == 1)
+			{
+				c = Color.cyan;
+			}
+			else if (ix < progress)
+			{
+				c = Color.gray;
+			}
+			else
+			{
+				c = ColorUtil.colorLerp(Color.cyan, Color.blue, (double) ix / (points.size() - 1));
+			}
 
 			Polygon canvasTilePoly = Perspective.getCanvasTilePoly(client, tile);
 			OverlayUtil.renderPolygon(graphics, canvasTilePoly, c);
