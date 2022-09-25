@@ -8,6 +8,7 @@ or follow a discussion there on whether a feature should be implemented.
 
 ### Current Features
 
+<!--
 #### Invocation Presets
 
 Right-click the Preset button to create/load/import/export presets.
@@ -15,6 +16,7 @@ Invocations that need to be changed will be highlighted green/red.
 Shift+right-click to delete presets.
 
 ![](docs/invocation-presets.gif)
+-->
 
 #### Deposit-pickaxe Swap
 
@@ -31,12 +33,50 @@ This image will also include the rewards section if it's enabled via the config 
 
 [Click here to see an example of the screenshot that will be created](docs/screenshot-example.png)
 
-#### Scabaras Tile Puzzle Helper
+#### Scabaras Puzzle Helpers
+
+<details>
+<summary>Overlay Puzzle Solvers</summary>
+
+#### Addition Puzzle
+
+Highlights a path through the tiles that will add up to the target number.
+
+![](docs/scabaras/addition.gif)
+
+#### Lights
+
+Shows the tiles that need to be flipped to solve the puzzle.
+
+![](docs/scabaras/lights.gif)
+
+#### Obelisks
+
+Highlights the correct obelisk pattern as it is discovered by the player.
+
+![](docs/scabaras/obelisks.gif)
+
+#### Sequence
+
+Shows the tile sequence after the pattern is shown.
+
+![](docs/scabaras/sequence.gif)
+
+#### Matching
+
+Highlights each tile image a unique colour after it has been flipped once.
+
+![](docs/scabaras/matching.gif)
+</details>
+
+<details>
+<summary>Side Panel Addition Helper</summary>
 
 When entering the Path of Scabaras, opens a side panel
 with solutions for the numbered tiles puzzle.
 
 ![img.png](docs/scabaras-tile-puzzle-helper.png)
+</details>
 
 #### Apmeken Wave Helper
 
