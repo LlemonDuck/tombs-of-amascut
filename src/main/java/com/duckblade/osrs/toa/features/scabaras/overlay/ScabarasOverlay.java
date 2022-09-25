@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
-import java.util.Queue;
+import java.util.Collection;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -26,14 +26,20 @@ public class ScabarasOverlay extends Overlay
 	private final Client client;
 	private final AdditionPuzzleSolver additionPuzzleSolver;
 	private final LightPuzzleSolver lightPuzzleSolver;
+	private final ObeliskPuzzleSolver obeliskPuzzleSolver;
 	private final SequencePuzzleSolver sequencePuzzleSolver;
 
 	@Inject
-	public ScabarasOverlay(Client client, AdditionPuzzleSolver additionPuzzleSolver, LightPuzzleSolver lightPuzzleSolver, SequencePuzzleSolver sequencePuzzleSolver)
+	public ScabarasOverlay(
+		Client client,
+		AdditionPuzzleSolver additionPuzzleSolver, LightPuzzleSolver lightPuzzleSolver,
+		ObeliskPuzzleSolver obeliskPuzzleSolver, SequencePuzzleSolver sequencePuzzleSolver
+	)
 	{
 		this.client = client;
 		this.additionPuzzleSolver = additionPuzzleSolver;
 		this.lightPuzzleSolver = lightPuzzleSolver;
+		this.obeliskPuzzleSolver = obeliskPuzzleSolver;
 		this.sequencePuzzleSolver = sequencePuzzleSolver;
 
 		setLayer(OverlayLayer.ABOVE_SCENE);
@@ -43,9 +49,10 @@ public class ScabarasOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		renderLocalPoints(graphics, lightPuzzleSolver.getFlips());
 		renderLocalPoints(graphics, additionPuzzleSolver.getFlips());
+		renderLocalPoints(graphics, lightPuzzleSolver.getFlips());
 
+		renderLocalSequence(graphics, obeliskPuzzleSolver.getObeliskOrder(), obeliskPuzzleSolver.getActiveObelisks());
 		renderLocalSequence(graphics, sequencePuzzleSolver.getPoints(), sequencePuzzleSolver.getCompletedTiles());
 
 		return null;
@@ -60,7 +67,7 @@ public class ScabarasOverlay extends Overlay
 		}
 	}
 
-	private void renderLocalSequence(Graphics2D graphics, Queue<LocalPoint> points, int progress)
+	private void renderLocalSequence(Graphics2D graphics, Collection<LocalPoint> points, int progress)
 	{
 		int ix = 0;
 		for (LocalPoint tile : points)
