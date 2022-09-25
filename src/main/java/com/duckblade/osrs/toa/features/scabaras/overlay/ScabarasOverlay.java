@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -26,19 +27,20 @@ public class ScabarasOverlay extends Overlay
 	private final Client client;
 	private final AdditionPuzzleSolver additionPuzzleSolver;
 	private final LightPuzzleSolver lightPuzzleSolver;
+	private final MatchingPuzzleSolver matchingPuzzleSolver;
 	private final ObeliskPuzzleSolver obeliskPuzzleSolver;
 	private final SequencePuzzleSolver sequencePuzzleSolver;
 
 	@Inject
 	public ScabarasOverlay(
-		Client client,
-		AdditionPuzzleSolver additionPuzzleSolver, LightPuzzleSolver lightPuzzleSolver,
-		ObeliskPuzzleSolver obeliskPuzzleSolver, SequencePuzzleSolver sequencePuzzleSolver
+		Client client, AdditionPuzzleSolver additionPuzzleSolver, LightPuzzleSolver lightPuzzleSolver,
+		MatchingPuzzleSolver matchingPuzzleSolver, ObeliskPuzzleSolver obeliskPuzzleSolver, SequencePuzzleSolver sequencePuzzleSolver
 	)
 	{
 		this.client = client;
 		this.additionPuzzleSolver = additionPuzzleSolver;
 		this.lightPuzzleSolver = lightPuzzleSolver;
+		this.matchingPuzzleSolver = matchingPuzzleSolver;
 		this.obeliskPuzzleSolver = obeliskPuzzleSolver;
 		this.sequencePuzzleSolver = sequencePuzzleSolver;
 
@@ -55,6 +57,7 @@ public class ScabarasOverlay extends Overlay
 		renderLocalSequence(graphics, obeliskPuzzleSolver.getObeliskOrder(), obeliskPuzzleSolver.getActiveObelisks());
 		renderLocalSequence(graphics, sequencePuzzleSolver.getPoints(), sequencePuzzleSolver.getCompletedTiles());
 
+		renderLocalMap(graphics, matchingPuzzleSolver.getDiscoveredTiles());
 		return null;
 	}
 
@@ -82,6 +85,15 @@ public class ScabarasOverlay extends Overlay
 			Rectangle bounds = canvasTilePoly.getBounds();
 			OverlayUtil.renderTextLocation(graphics, new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2), String.valueOf(++ix), c);
 		}
+	}
+
+	private void renderLocalMap(Graphics2D graphics, Map<LocalPoint, Color> points)
+	{
+		points.forEach((point, color) ->
+		{
+			Polygon canvasTilePoly = Perspective.getCanvasTilePoly(client, point);
+			OverlayUtil.renderPolygon(graphics, canvasTilePoly, color);
+		});
 	}
 
 }
