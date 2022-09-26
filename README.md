@@ -8,7 +8,6 @@ or follow a discussion there on whether a feature should be implemented.
 
 ### Current Features
 
-<!--
 #### Invocation Presets
 
 Right-click the Preset button to create/load/import/export presets.
@@ -16,7 +15,6 @@ Invocations that need to be changed will be highlighted green/red.
 Shift+right-click to delete presets.
 
 ![](docs/invocation-presets.gif)
--->
 
 #### Deposit-pickaxe Swap
 
