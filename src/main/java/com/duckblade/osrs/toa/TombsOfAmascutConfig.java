@@ -72,7 +72,7 @@ public interface TombsOfAmascutConfig extends Config
 	)
 	default boolean invocationPresetsEnable()
 	{
-		return true;
+		return false;
 	}
 
 	@ConfigItem(

@@ -47,7 +47,6 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	public static final int WIDGET_ID_INVOCATIONS_PARENT = 774;
 	public static final int WIDGET_ID_INVOCATIONS_SCROLLBAR = 51;
 	public static final int WIDGET_ID_INVOCATIONS_CHILD = 52;
-	private static final int WIDGET_ID_REWARD_PANEL_BOX_CHILD = 75;
 	public static final int SCRIPT_ID_BUILD_TOA_PARTY_INTERFACE = 6729;
 	public static final int SCRIPT_ID_TOA_PARTY_TOGGLE_REWARD_PANEL = 6732;
 	private static final String CONFIG_KEY_PRESETS = "presets";
@@ -104,7 +103,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded e)
 	{
-		if (!raidStateTracker.isInLobby() || !e.getOption().equals("Preset"))
+		if (!raidStateTracker.isInLobby() || !e.getOption().equals("Presets"))
 		{
 			return;
 		}
