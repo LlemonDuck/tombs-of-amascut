@@ -180,4 +180,23 @@ public interface TombsOfAmascutConfig extends Config
 	{
 		return 100;
 	}
+
+	@ConfigItem(
+		keyName = "updateNotifierLastVersion",
+		name = "",
+		description = "",
+		hidden = true
+	)
+	default int updateNotifierLastVersion()
+	{
+		return 0;
+	}
+
+	@ConfigItem(
+		keyName = "updateNotifierLastVersion",
+		name = "",
+		description = "",
+		hidden = true
+	)
+	void updateNotifierLastVersion(int newVersion);
 }

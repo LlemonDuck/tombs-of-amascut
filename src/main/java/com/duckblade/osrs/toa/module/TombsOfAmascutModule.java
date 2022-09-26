@@ -15,6 +15,7 @@ import com.duckblade.osrs.toa.features.scabaras.overlay.ScabarasOverlayManager;
 import com.duckblade.osrs.toa.features.scabaras.overlay.SequencePuzzleSolver;
 import com.duckblade.osrs.toa.features.scabaras.panel.ScabarasPanelManager;
 import com.duckblade.osrs.toa.features.targettime.TargetTimeManager;
+import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -46,6 +47,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(ScabarasPanelManager.class);
 		lifecycleComponents.addBinding().to(SequencePuzzleSolver.class);
 		lifecycleComponents.addBinding().to(TargetTimeManager.class);
+		lifecycleComponents.addBinding().to(UpdateNotifier.class);
 	}
 
 	@Provides
