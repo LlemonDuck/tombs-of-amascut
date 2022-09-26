@@ -45,17 +45,6 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
-	@ConfigItem(
-		keyName = "targetTimeDisplay",
-		name = "Target Time in Timer",
-		description = "Expand the in-raid timer to also show the target time to beat.",
-		position = 4
-	)
-	default boolean targetTimeDisplay()
-	{
-		return true;
-	}
-
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
@@ -179,4 +168,25 @@ public interface TombsOfAmascutConfig extends Config
 	{
 		return 100;
 	}
+
+	@ConfigSection(
+		name = "Timers",
+		description = "Splits and target time displays",
+		position = 300,
+		closedByDefault = true
+	)
+	String SECTION_TIMERS = "timers";
+
+	@ConfigItem(
+		keyName = "targetTimeDisplay",
+		name = "Target Time in Raid Timer",
+		description = "Expand the in-raid timer widget to also show the target time to beat.",
+		section = SECTION_TIMERS,
+		position = 301
+	)
+	default boolean targetTimeDisplay()
+	{
+		return true;
+	}
+
 }

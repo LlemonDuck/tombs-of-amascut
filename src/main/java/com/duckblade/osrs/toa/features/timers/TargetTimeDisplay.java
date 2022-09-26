@@ -1,4 +1,4 @@
-package com.duckblade.osrs.toa.features.targettime;
+package com.duckblade.osrs.toa.features.timers;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
@@ -22,7 +22,7 @@ import net.runelite.client.util.Text;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class TargetTimeManager implements PluginLifecycleComponent
+public class TargetTimeDisplay implements PluginLifecycleComponent
 {
 
 	private static final int SCRIPT_TOA_TIME_UPDATE_TIMER = 6581;
@@ -41,7 +41,8 @@ public class TargetTimeManager implements PluginLifecycleComponent
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState currentState)
 	{
-		return config.targetTimeDisplay();
+		return config.targetTimeDisplay() &&
+			currentState.isInRaid();
 	}
 
 	@Override
