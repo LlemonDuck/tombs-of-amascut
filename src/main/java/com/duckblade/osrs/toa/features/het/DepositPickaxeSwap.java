@@ -54,7 +54,7 @@ public class DepositPickaxeSwap implements PluginLifecycleComponent
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState currentState)
 	{
-		this.mode = config.contextualSwapPickaxe();
+		this.mode = config.depositPickaxeMode();
 		return mode != DepositPickaxeMode.OFF &&
 			currentState.getCurrentRoom() == RaidRoom.HET;
 	}

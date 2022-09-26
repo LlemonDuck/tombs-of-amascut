@@ -15,12 +15,12 @@ public interface TombsOfAmascutConfig extends Config
 	String CONFIG_GROUP = "tombsofamascut";
 
 	@ConfigItem(
-		keyName = "contextualSwapPickaxe",
-		name = "Swap Deposit-Pickaxe",
+		keyName = "depositPickaxeMode",
+		name = "Deposit-Pickaxe",
 		description = "Automatically swap to Deposit-pickaxe when a pickaxe is in your inventory.",
 		position = 1
 	)
-	default DepositPickaxeMode contextualSwapPickaxe()
+	default DepositPickaxeMode depositPickaxeMode()
 	{
 		return DepositPickaxeMode.STATUE_SWAP;
 	}
