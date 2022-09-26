@@ -58,6 +58,28 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "leftClickProceedEnable",
+		name = "Quick Proceed Swaps",
+		description = "Left click proceed/begin/leave on Osmumten and quick-enter/quick-use entryways and teleport crystals.",
+		position = 5
+	)
+	default boolean leftClickProceedEnable()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showUpdateMessages",
+		name = "Show Updates",
+		description = "Opens a panel describing plugin updates after new features are added to the plugin.",
+		position = 6
+	)
+	default boolean showUpdateMessages()
+	{
+		return true;
+	}
+
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
@@ -85,17 +107,6 @@ public interface TombsOfAmascutConfig extends Config
 		position = 102
 	)
 	default boolean invocationPresetsScroll()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "leftClickProceedEnable",
-		name = "Quick Proceed Swaps",
-		description = "Left click proceed/begin/leave on Osmumten and quick-enter/quick-use entryways and teleport crystals.",
-		position = 3
-	)
-	default boolean leftClickProceedEnable()
 	{
 		return true;
 	}
