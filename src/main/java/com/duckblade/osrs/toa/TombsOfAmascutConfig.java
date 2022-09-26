@@ -89,8 +89,8 @@ public interface TombsOfAmascutConfig extends Config
 
 	@ConfigItem(
 		keyName = "leftClickProceedEnable",
-		name = "Proceed/Begin/Leave Swap",
-		description = "Left click proceed/begin/leave on Osmumten after completing rooms and before the Wardens fight.",
+		name = "Quick Proceed Swaps",
+		description = "Left click proceed/begin/leave on Osmumten and quick-enter/quick-use entryways and teleport crystals.",
 		position = 3
 	)
 	default boolean leftClickProceedEnable()
