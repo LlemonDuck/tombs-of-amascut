@@ -66,7 +66,10 @@ public class ScabarasOverlay extends Overlay
 		for (LocalPoint tile : points)
 		{
 			Polygon canvasTilePoly = Perspective.getCanvasTilePoly(client, tile);
-			OverlayUtil.renderPolygon(graphics, canvasTilePoly, Color.red);
+			if (canvasTilePoly != null)
+			{
+				OverlayUtil.renderPolygon(graphics, canvasTilePoly, Color.red);
+			}
 		}
 	}
 
@@ -90,10 +93,17 @@ public class ScabarasOverlay extends Overlay
 			}
 
 			Polygon canvasTilePoly = Perspective.getCanvasTilePoly(client, tile);
-			OverlayUtil.renderPolygon(graphics, canvasTilePoly, c);
-
-			Rectangle bounds = canvasTilePoly.getBounds();
-			OverlayUtil.renderTextLocation(graphics, new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2), String.valueOf(++ix), c);
+			if (canvasTilePoly != null)
+			{
+				OverlayUtil.renderPolygon(graphics, canvasTilePoly, c);
+				Rectangle bounds = canvasTilePoly.getBounds();
+				OverlayUtil.renderTextLocation(
+					graphics,
+					new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2),
+					String.valueOf(++ix),
+					c
+				);
+			}
 		}
 	}
 
@@ -102,7 +112,10 @@ public class ScabarasOverlay extends Overlay
 		points.forEach((point, color) ->
 		{
 			Polygon canvasTilePoly = Perspective.getCanvasTilePoly(client, point);
-			OverlayUtil.renderPolygon(graphics, canvasTilePoly, color);
+			if (canvasTilePoly != null)
+			{
+				OverlayUtil.renderPolygon(graphics, canvasTilePoly, color);
+			}
 		});
 	}
 
