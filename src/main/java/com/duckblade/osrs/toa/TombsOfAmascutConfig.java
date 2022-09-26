@@ -1,5 +1,7 @@
 package com.duckblade.osrs.toa;
 
+import com.duckblade.osrs.toa.features.timers.splits.SplitsDisplayMode;
+import com.duckblade.osrs.toa.features.timers.splits.SplitsTrackingMode;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -187,6 +189,42 @@ public interface TombsOfAmascutConfig extends Config
 	default boolean targetTimeDisplay()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = "splitsDisplayMode",
+		name = "Splits Display",
+		description = "Show timer splits for each room on-screen.",
+		section = SECTION_TIMERS,
+		position = 302
+	)
+	default SplitsDisplayMode splitsDisplayMode()
+	{
+		return SplitsDisplayMode.OFF;
+	}
+
+	@ConfigItem(
+		keyName = "splitsTrackingMode",
+		name = "Splits Mode",
+		description = "Challenge time ignores between-room times.",
+		section = SECTION_TIMERS,
+		position = 303
+	)
+	default SplitsTrackingMode splitsTrackingMode()
+	{
+		return SplitsTrackingMode.OVERALL;
+	}
+
+	@ConfigItem(
+		keyName = "splitsWriteToFile",
+		name = "Write Splits to File",
+		description = "Write splits to file in ~/.runelite/tombs-of-amascut/splits",
+		section = SECTION_TIMERS,
+		position = 304
+	)
+	default boolean splitsWriteToFile()
+	{
+		return false;
 	}
 
 }
