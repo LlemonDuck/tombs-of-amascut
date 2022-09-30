@@ -1,5 +1,6 @@
 package com.duckblade.osrs.toa.features.scabaras.overlay;
 
+import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -25,6 +26,7 @@ public class ScabarasOverlay extends Overlay
 {
 
 	private final Client client;
+	private final TombsOfAmascutConfig config;
 	private final AdditionPuzzleSolver additionPuzzleSolver;
 	private final LightPuzzleSolver lightPuzzleSolver;
 	private final MatchingPuzzleSolver matchingPuzzleSolver;
@@ -33,11 +35,12 @@ public class ScabarasOverlay extends Overlay
 
 	@Inject
 	public ScabarasOverlay(
-		Client client, AdditionPuzzleSolver additionPuzzleSolver, LightPuzzleSolver lightPuzzleSolver,
+		Client client, TombsOfAmascutConfig config, AdditionPuzzleSolver additionPuzzleSolver, LightPuzzleSolver lightPuzzleSolver,
 		MatchingPuzzleSolver matchingPuzzleSolver, ObeliskPuzzleSolver obeliskPuzzleSolver, SequencePuzzleSolver sequencePuzzleSolver
 	)
 	{
 		this.client = client;
+		this.config = config;
 		this.additionPuzzleSolver = additionPuzzleSolver;
 		this.lightPuzzleSolver = lightPuzzleSolver;
 		this.matchingPuzzleSolver = matchingPuzzleSolver;
@@ -51,46 +54,46 @@ public class ScabarasOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		renderLocalPoints(graphics, additionPuzzleSolver.getFlips());
-		renderLocalPoints(graphics, lightPuzzleSolver.getFlips());
+		renderLocalPoints(graphics, additionPuzzleSolver.getFlips(), config.scabarasAdditionTileColor());
+		renderLocalPoints(graphics, lightPuzzleSolver.getFlips(), config.scabarasLightTileColor());
 
-		renderLocalSequence(graphics, obeliskPuzzleSolver.getObeliskOrder(), obeliskPuzzleSolver.getActiveObelisks());
-		renderLocalSequence(graphics, sequencePuzzleSolver.getPoints(), sequencePuzzleSolver.getCompletedTiles());
+		renderLocalSequence(
+			graphics,
+			obeliskPuzzleSolver.getObeliskOrder(),
+			obeliskPuzzleSolver.getActiveObelisks(),
+			config.scabarasObeliskColorStart(),
+			config.scabarasObeliskColorEnd()
+		);
+		renderLocalSequence(
+			graphics,
+			sequencePuzzleSolver.getPoints(),
+			sequencePuzzleSolver.getCompletedTiles(),
+			config.scabarasSequenceColorStart(),
+			config.scabarasSequenceColorEnd()
+		);
 
-		renderLocalMap(graphics, matchingPuzzleSolver.getDiscoveredTiles());
+		renderLocalMatching(graphics, matchingPuzzleSolver.getDiscoveredTiles());
 		return null;
 	}
 
-	private void renderLocalPoints(Graphics2D graphics, Set<LocalPoint> points)
+	private void renderLocalPoints(Graphics2D graphics, Set<LocalPoint> points, Color color)
 	{
 		for (LocalPoint tile : points)
 		{
 			Polygon canvasTilePoly = Perspective.getCanvasTilePoly(client, tile);
 			if (canvasTilePoly != null)
 			{
-				OverlayUtil.renderPolygon(graphics, canvasTilePoly, Color.red);
+				OverlayUtil.renderPolygon(graphics, canvasTilePoly, color);
 			}
 		}
 	}
 
-	private void renderLocalSequence(Graphics2D graphics, Collection<LocalPoint> points, int progress)
+	private void renderLocalSequence(Graphics2D graphics, Collection<LocalPoint> points, int progress, Color start, Color end)
 	{
 		int ix = 0;
 		for (LocalPoint tile : points)
 		{
-			Color c;
-			if (points.size() == 1)
-			{
-				c = Color.cyan;
-			}
-			else if (ix < progress)
-			{
-				c = Color.gray;
-			}
-			else
-			{
-				c = ColorUtil.colorLerp(Color.cyan, Color.blue, (double) ix / (points.size() - 1));
-			}
+			Color c = ix < progress ? Color.gray : ColorUtil.colorLerp(start, end, ix / 5.0);
 
 			Polygon canvasTilePoly = Perspective.getCanvasTilePoly(client, tile);
 			if (canvasTilePoly != null)
@@ -107,14 +110,41 @@ public class ScabarasOverlay extends Overlay
 		}
 	}
 
-	private void renderLocalMap(Graphics2D graphics, Map<LocalPoint, Color> points)
+	private void renderLocalMatching(Graphics2D graphics, Map<LocalPoint, MatchingTile> matchingTiles)
 	{
-		points.forEach((point, color) ->
+		MatchingTileDisplayMode mode = config.scabarasMatchingDisplayMode();
+		if (mode == MatchingTileDisplayMode.DISABLED)
 		{
-			Polygon canvasTilePoly = Perspective.getCanvasTilePoly(client, point);
-			if (canvasTilePoly != null)
+			return;
+		}
+
+		int matchedOpacity = config.scabarasMatchingCompletedOpacity();
+		boolean tile = mode == MatchingTileDisplayMode.TILE || mode == MatchingTileDisplayMode.BOTH;
+		boolean name = mode == MatchingTileDisplayMode.NAME || mode == MatchingTileDisplayMode.BOTH;
+		matchingTiles.values().forEach(mt ->
+		{
+			Polygon canvasTilePoly = Perspective.getCanvasTilePoly(client, mt.getLocalPoint());
+			if (canvasTilePoly == null)
+			{
+				return;
+			}
+
+			Color color = mt.getColor();
+			if (mt.isMatched())
+			{
+				color = new Color(color.getRed(), color.getGreen(), color.getBlue(), matchedOpacity);
+			}
+
+			if (tile)
 			{
 				OverlayUtil.renderPolygon(graphics, canvasTilePoly, color);
+			}
+			if (name)
+			{
+				Rectangle tileB = canvasTilePoly.getBounds();
+				Rectangle txtB = graphics.getFontMetrics().getStringBounds(mt.getName(), graphics).getBounds();
+				Point p = new Point(tileB.x + tileB.width / 2 - txtB.width / 2, tileB.y + tileB.height / 2 + txtB.height / 2);
+				OverlayUtil.renderTextLocation(graphics, p, mt.getName(), color);
 			}
 		});
 	}
