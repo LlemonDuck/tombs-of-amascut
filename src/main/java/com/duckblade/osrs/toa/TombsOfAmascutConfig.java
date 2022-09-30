@@ -4,6 +4,7 @@ import com.duckblade.osrs.toa.features.het.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import java.awt.Color;
+import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -173,6 +174,7 @@ public interface TombsOfAmascutConfig extends Config
 		position = 302,
 		section = SECTION_SCABARAS
 	)
+	@Alpha
 	default Color scabarasAdditionTileColor()
 	{
 		return Color.red;
@@ -186,6 +188,7 @@ public interface TombsOfAmascutConfig extends Config
 		position = 303,
 		section = SECTION_SCABARAS
 	)
+	@Alpha
 	default Color scabarasLightTileColor()
 	{
 		return Color.red;
@@ -199,6 +202,7 @@ public interface TombsOfAmascutConfig extends Config
 		position = 304,
 		section = SECTION_SCABARAS
 	)
+	@Alpha
 	default Color scabarasObeliskColorStart()
 	{
 		return Color.cyan;
@@ -212,6 +216,7 @@ public interface TombsOfAmascutConfig extends Config
 		position = 305,
 		section = SECTION_SCABARAS
 	)
+	@Alpha
 	default Color scabarasObeliskColorEnd()
 	{
 		return Color.blue;
@@ -225,6 +230,7 @@ public interface TombsOfAmascutConfig extends Config
 		position = 306,
 		section = SECTION_SCABARAS
 	)
+	@Alpha
 	default Color scabarasSequenceColorStart()
 	{
 		return Color.cyan;
@@ -238,6 +244,7 @@ public interface TombsOfAmascutConfig extends Config
 		position = 307,
 		section = SECTION_SCABARAS
 	)
+	@Alpha
 	default Color scabarasSequenceColorEnd()
 	{
 		return Color.blue;

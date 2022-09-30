@@ -40,7 +40,7 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 	private static final Map<Integer, Color> TILE_COLORS = ImmutableMap.<Integer, Color>builder()
 		.put(45365, Color.black) // line
 		.put(45366, Color.red) // knives
-		.put(45367, Color.orange) // crook
+		.put(45367, Color.magenta) // crook
 		.put(45368, Color.blue) // diamond
 		.put(45369, Color.lightGray) // hand
 		.put(45370, Color.cyan) // star
