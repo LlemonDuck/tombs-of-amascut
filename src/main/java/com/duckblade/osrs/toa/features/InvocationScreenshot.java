@@ -70,7 +70,8 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	private static final int INVOCATION_TITLE_CHILD_ID = 3;
 	private static final int INVOCATION_CONTAINER_CHILD_ID = 52;
 	private static final int INVOCATION_RIGHT_SIDE_CONTAINER_CHILD_ID = 57;
-	private static final int INVOCATION_REWARDS_CONTAINER_CHILD_ID = 75;
+	private static final int INVOCATION_INFO_CONTAINER_CHILD_ID = 58;
+	private static final int INVOCATION_REWARDS_CONTAINER_CHILD_ID = 87;
 	private static final int REWARD_BUTTON_SELECTED_VARC = 1086;
 
 	private static final int TOA_PARTY_WIDGET_SCRIPT_ID = 6617;
@@ -259,9 +260,13 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 		{
 			final Widget rightSideContainer = client.getWidget(INVOCATION_GROUP_ID, INVOCATION_RIGHT_SIDE_CONTAINER_CHILD_ID);
 			assert rightSideContainer != null;
-			final Widget rewardsContainer = client.getWidget(INVOCATION_GROUP_ID, INVOCATION_REWARDS_CONTAINER_CHILD_ID);
-			if (rewardsContainer != null && rewardsContainer.getStaticChildren().length > 0)
+
+			// Draw Invocation Level/Bar section
+			final Widget infoContainer = client.getWidget(INVOCATION_GROUP_ID, INVOCATION_INFO_CONTAINER_CHILD_ID);
+			int infoContainerHeight = 5; // default to 5 so there's at least a 5 px gap between these elements
+			if (infoContainer != null && infoContainer.getStaticChildren().length > 0)
 			{
+				infoContainerHeight += infoContainer.getHeight();
 				// Move the reward container closer since we don't draw the scrollbar
 				Graphics layer = graphics.create(
 					rightSideContainer.getRelativeX() - 30,
@@ -269,7 +274,27 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 					rightSideContainer.getWidth(),
 					rightSideContainer.getHeight()
 				);
-				drawWidgets(layer, rewardsContainer.getStaticChildren());
+				// We want to skip the child elements that draw the border
+				Widget[] infoContainerChildren = infoContainer.getStaticChildren();
+				infoContainerChildren[0] = null;
+				infoContainerChildren[1] = null;
+
+				drawWidgets(layer, infoContainerChildren);
+				layer.dispose();
+			}
+
+			// Draw reward section
+			final Widget rewardsContainer = client.getWidget(INVOCATION_GROUP_ID, INVOCATION_REWARDS_CONTAINER_CHILD_ID);
+			if (rewardsContainer != null && rewardsContainer.getDynamicChildren().length > 0)
+			{
+				// Move the reward container closer since we don't draw the scrollbar
+				Graphics layer = graphics.create(
+					rightSideContainer.getRelativeX() - 30,
+					rightSideContainer.getRelativeY() - 60 + infoContainerHeight,
+					rightSideContainer.getWidth(),
+					rightSideContainer.getHeight()
+				);
+				drawWidgets(layer, rewardsContainer.getDynamicChildren());
 				layer.dispose();
 			}
 			else
@@ -293,6 +318,10 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	{
 		for (Widget w : widgets)
 		{
+			if (w == null) {
+				continue;
+			}
+
 			if (w.getDynamicChildren().length > 0)
 			{
 				Graphics layer = graphics.create(w.getRelativeX(), w.getRelativeY(), w.getWidth(), w.getHeight());
