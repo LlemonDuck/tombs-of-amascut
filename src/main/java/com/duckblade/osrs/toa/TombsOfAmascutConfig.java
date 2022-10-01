@@ -29,6 +29,17 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "beamTimer",
+		name = "Beam Timer",
+		description = "Show a timer in the Path of Het to see when the beam will fire.",
+		position = 2
+	)
+	default boolean beamTimer()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "apmekenWaveHelper",
 		name = "Apmeken Wave Helper",
 		description = "When entering the Path of Apmeken, displays a list of the waves in the RuneLite side panel.",
