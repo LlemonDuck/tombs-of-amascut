@@ -318,7 +318,8 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	{
 		for (Widget w : widgets)
 		{
-			if (w == null) {
+			if (w == null)
+			{
 				continue;
 			}
 
