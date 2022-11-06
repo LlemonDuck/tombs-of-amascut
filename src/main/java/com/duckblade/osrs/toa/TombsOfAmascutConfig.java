@@ -280,6 +280,62 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigSection(
+		name = "Points Tracker",
+		description = "<html>Tracks points for the raid, used in calculating drop chance." +
+			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
+		position = 400
+	)
+	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
+
+	@ConfigItem(
+		keyName = "pointsTrackerOverlayEnable",
+		name = "Enable",
+		description = "Show points earned within the raid.",
+		position = 401,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerOverlayEnable()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "pointsTrackerShowRoomPoints",
+		name = "Separate Room Points",
+		description = "Show points for the current room separate from total points.",
+		position = 402,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerShowRoomPoints()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "pointsTrackerShowUniqueChance",
+		name = "Show Unique %",
+		description = "Show unique chance on the overlay.",
+		position = 403,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerShowUniqueChance()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "pointsTrackerShowPetChance",
+		name = "Show Pet %",
+		description = "Show pet chance on the overlay.",
+		position = 404,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerShowPetChance()
+	{
+		return false;
+	}
+
+	@ConfigSection(
 		name = "Purple Chest Jingle",
 		description = "<html>Can play a custom sound file when the purple loot sarcophagus is opened." +
 			"<br/>Custom sound must be provided at ~/.runelite/tombs-of-amascut/toa-chest.wav</html>",

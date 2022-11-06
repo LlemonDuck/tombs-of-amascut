@@ -16,6 +16,7 @@ public enum RaidRoom
 	HET(new int[]{14674}),
 	AKKHA(new int[]{14676}),
 	WARDENS(new int[]{15184, 15696}),
+	TOMB(new int[]{14672}),
 	;
 
 	private final int[] regionIds;

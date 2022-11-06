@@ -26,6 +26,9 @@ public class RaidStateTracker implements PluginLifecycleComponent
 
 	private RaidState currentState = new RaidState(false, false, null);
 
+	// delay inRaid = false by 3 ticks to alleviate any unexpected delays between rooms
+	private int raidLeaveTicks = 3;
+
 	@Override
 	public void startUp()
 	{
@@ -48,7 +51,10 @@ public class RaidStateTracker implements PluginLifecycleComponent
 
 		boolean inLobby = region == REGION_LOBBY;
 		RaidRoom currentRoom = RaidRoom.forRegionId(region);
-		boolean inRaid = currentRoom != null || (w != null && !w.isHidden());
+		boolean inRaidRaw = currentRoom != null || (w != null && !w.isHidden());
+
+		raidLeaveTicks = inRaidRaw ? 3 : raidLeaveTicks - 1;
+		boolean inRaid = raidLeaveTicks > 0;
 
 		RaidState previousState = this.currentState;
 		RaidState newState = new RaidState(inLobby, inRaid, currentRoom);
