@@ -82,6 +82,7 @@ public class UpdateNotifier implements PluginLifecycleComponent
 
 			case 2:
 				updates.add("The Path of Het helper will now display an indicator of when the next beam will fire. Click the seal when it is green from one tile away to get an extra damage tick.");
+				updates.add("Some bugs have been fixed with the points tracker. Please continue to report further issues on GitHub!");
 		}
 
 		return updates;
