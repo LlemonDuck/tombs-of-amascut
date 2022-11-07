@@ -1,4 +1,4 @@
-package com.duckblade.osrs.toa.features.het;
+package com.duckblade.osrs.toa.features.het.pickaxeswap;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;

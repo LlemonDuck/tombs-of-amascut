@@ -1,6 +1,6 @@
 package com.duckblade.osrs.toa;
 
-import com.duckblade.osrs.toa.features.het.DepositPickaxeMode;
+import com.duckblade.osrs.toa.features.het.pickaxeswap.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import java.awt.Color;
@@ -16,17 +16,6 @@ public interface TombsOfAmascutConfig extends Config
 {
 
 	String CONFIG_GROUP = "tombsofamascut";
-
-	@ConfigItem(
-		keyName = "depositPickaxeMode",
-		name = "Deposit-Pickaxe",
-		description = "Automatically swap to Deposit-pickaxe when a pickaxe is in your inventory.",
-		position = 1
-	)
-	default DepositPickaxeMode depositPickaxeMode()
-	{
-		return DepositPickaxeMode.STATUE_SWAP;
-	}
 
 	@ConfigItem(
 		keyName = "apmekenWaveHelper",
@@ -280,10 +269,42 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigSection(
+		name = "Path of Het",
+		description = "Helpers for the Path of Het.",
+		position = 400
+	)
+	String SECTION_HET = "sectionHet";
+
+	@ConfigItem(
+		keyName = "depositPickaxeMode",
+		name = "Deposit-Pickaxe",
+		description = "Automatically swap to Deposit-pickaxe when a pickaxe is in your inventory.",
+		position = 401,
+		section = SECTION_HET
+	)
+	default DepositPickaxeMode depositPickaxeMode()
+	{
+		return DepositPickaxeMode.STATUE_SWAP;
+	}
+
+	@ConfigItem(
+		keyName = "hetBeamTimerEnable",
+		name = "Beam Timer",
+		description = "<html>Display an overlay of when the Caster Statue will fire." +
+			"<br/>Click Het's Seal from one tile away when the indicator is GREEN to get an extra damage tick.</html>",
+		position = 402,
+		section = SECTION_HET
+	)
+	default boolean hetBeamTimerEnable()
+	{
+		return true;
+	}
+
+	@ConfigSection(
 		name = "Points Tracker",
 		description = "<html>Tracks points for the raid, used in calculating drop chance." +
 			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
-		position = 400
+		position = 500
 	)
 	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
 
@@ -291,7 +312,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "pointsTrackerOverlayEnable",
 		name = "Enable",
 		description = "Show points earned within the raid.",
-		position = 401,
+		position = 501,
 		section = SECTION_POINTS_TRACKER
 	)
 	default boolean pointsTrackerOverlayEnable()
@@ -303,7 +324,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "pointsTrackerShowRoomPoints",
 		name = "Separate Room Points",
 		description = "Show points for the current room separate from total points.",
-		position = 402,
+		position = 502,
 		section = SECTION_POINTS_TRACKER
 	)
 	default boolean pointsTrackerShowRoomPoints()
@@ -315,7 +336,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "pointsTrackerShowUniqueChance",
 		name = "Show Unique %",
 		description = "Show unique chance on the overlay.",
-		position = 403,
+		position = 503,
 		section = SECTION_POINTS_TRACKER
 	)
 	default boolean pointsTrackerShowUniqueChance()
@@ -327,7 +348,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "pointsTrackerShowPetChance",
 		name = "Show Pet %",
 		description = "Show pet chance on the overlay.",
-		position = 404,
+		position = 504,
 		section = SECTION_POINTS_TRACKER
 	)
 	default boolean pointsTrackerShowPetChance()
@@ -339,7 +360,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Purple Chest Jingle",
 		description = "<html>Can play a custom sound file when the purple loot sarcophagus is opened." +
 			"<br/>Custom sound must be provided at ~/.runelite/tombs-of-amascut/toa-chest.wav</html>",
-		position = 400,
+		position = 600,
 		closedByDefault = true
 	)
 	String SECTION_SARCOPHAGUS_SOUND = "sectionSarcophagusSound";
@@ -350,7 +371,7 @@ public interface TombsOfAmascutConfig extends Config
 		description = "<html>Either disables the feature or plays an audio file whenever the purple chest is opened." +
 			"<br/>The custom audio file should be named toa-chest.wav inside the .runelite/tombs-of-amascut folder</html>",
 		section = SECTION_SARCOPHAGUS_SOUND,
-		position = 401
+		position = 601
 	)
 	default boolean chestAudioEnable()
 	{
@@ -366,7 +387,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Audio Volume",
 		description = "Adjusts how loud the chest audio is when played. 100 is no change to file volume.",
 		section = SECTION_SARCOPHAGUS_SOUND,
-		position = 402
+		position = 602
 	)
 	default int chestAudioVolume()
 	{

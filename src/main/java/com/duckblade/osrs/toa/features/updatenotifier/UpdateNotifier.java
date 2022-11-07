@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 2;
+	public static final int TARGET_VERSION = 3;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -79,6 +79,9 @@ public class UpdateNotifier implements PluginLifecycleComponent
 
 			case 1:
 				updates.add("A points tracker has been added to determine points earned in raids, as well as the unique rate from those points. Calculating points for groups requires players to be in a RuneLite party.");
+
+			case 2:
+				updates.add("The Path of Het helper will now display an indicator of when the next beam will fire. Click the seal when it is green from one tile away to get an extra damage tick.");
 		}
 
 		return updates;
