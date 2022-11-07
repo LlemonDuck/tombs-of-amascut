@@ -74,16 +74,20 @@ public class PointsTracker implements PluginLifecycleComponent
 		.put(NpcID.OBELISK_11750, 1.5)
 		.put(NpcID.OBELISK_11751, 1.5)
 		.put(NpcID.OBELISK_11752, 1.5)
+		.put(NpcID.ELIDINIS_WARDEN, 0.0) // non-combat wardens (prevents extra points during p1->p2 transition)
+		.put(NpcID.ELIDINIS_WARDEN_11748, 0.0)
+		.put(NpcID.TUMEKENS_WARDEN, 0.0)
+		.put(NpcID.TUMEKENS_WARDEN_11749, 0.0)
+		.put(NpcID.ELIDINIS_WARDEN_11759, 0.0)
+		.put(NpcID.TUMEKENS_WARDEN_11760, 0.0)
 		.put(NpcID.ELIDINIS_WARDEN_11753, 2.0) // p2 wardens
 		.put(NpcID.ELIDINIS_WARDEN_11754, 2.0)
 		.put(NpcID.ELIDINIS_WARDEN_11755, 0.0) // downed
 		.put(NpcID.TUMEKENS_WARDEN_11756, 2.0)
 		.put(NpcID.TUMEKENS_WARDEN_11757, 2.0)
 		.put(NpcID.TUMEKENS_WARDEN_11758, 0.0) // downed
-		.put(NpcID.ELIDINIS_WARDEN_11759, 2.5) // p3 wardens
-		.put(NpcID.ELIDINIS_WARDEN_11761, 2.5)
+		.put(NpcID.ELIDINIS_WARDEN_11761, 2.5) // p3 wardens
 		.put(NpcID.ELIDINIS_WARDEN_11763, 2.5)
-		.put(NpcID.TUMEKENS_WARDEN_11760, 2.5)
 		.put(NpcID.TUMEKENS_WARDEN_11762, 2.5)
 		.put(NpcID.TUMEKENS_WARDEN_11764, 2.5)
 		.build();
