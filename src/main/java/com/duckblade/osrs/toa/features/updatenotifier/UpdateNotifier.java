@@ -48,6 +48,11 @@ public class UpdateNotifier implements PluginLifecycleComponent
 				.build();
 
 			clientToolbar.addNavigation(navButton);
+
+			if (!navButton.isSelected())
+			{
+				navButton.getOnSelect().run();
+			}
 		});
 	}
 
