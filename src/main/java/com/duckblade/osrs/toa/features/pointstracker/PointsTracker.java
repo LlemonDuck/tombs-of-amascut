@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.ItemID;
 import net.runelite.api.NPC;
@@ -24,6 +25,7 @@ import net.runelite.api.events.ItemSpawned;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
+@Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class PointsTracker implements PluginLifecycleComponent
@@ -46,6 +48,7 @@ public class PointsTracker implements PluginLifecycleComponent
 	private static final Map<Integer, Double> DAMAGE_POINTS_FACTORS = ImmutableMap.<Integer, Double>builder()
 		.put(NpcID.CORE, 0.0)
 		.put(NpcID.CORE_11771, 0.0)
+		.put(NpcID.ENERGY_SIPHON, 0.0)
 		.put(NpcID.BOULDER_11782, 0.0)
 		.put(NpcID.BOULDER_11783, 0.0)
 		.put(NpcID.BABOON_BRAWLER, 1.2)
@@ -73,10 +76,10 @@ public class PointsTracker implements PluginLifecycleComponent
 		.put(NpcID.OBELISK_11752, 1.5)
 		.put(NpcID.ELIDINIS_WARDEN_11753, 2.0) // p2 wardens
 		.put(NpcID.ELIDINIS_WARDEN_11754, 2.0)
-		.put(NpcID.ELIDINIS_WARDEN_11755, 2.0)
+		.put(NpcID.ELIDINIS_WARDEN_11755, 0.0) // downed
 		.put(NpcID.TUMEKENS_WARDEN_11756, 2.0)
 		.put(NpcID.TUMEKENS_WARDEN_11757, 2.0)
-		.put(NpcID.TUMEKENS_WARDEN_11758, 2.0)
+		.put(NpcID.TUMEKENS_WARDEN_11758, 0.0) // downed
 		.put(NpcID.ELIDINIS_WARDEN_11759, 2.5) // p3 wardens
 		.put(NpcID.ELIDINIS_WARDEN_11761, 2.5)
 		.put(NpcID.ELIDINIS_WARDEN_11763, 2.5)
@@ -100,6 +103,11 @@ public class PointsTracker implements PluginLifecycleComponent
 		ItemID.SCARAB_DUNG,
 		ItemID.BIG_BANANA,
 		ItemID.ELDRITCH_ASHES
+	);
+
+	private static final ImmutableSet<Integer> WARDEN_HITSPLAT_TYPES = ImmutableSet.of(
+		53, // hit
+		55 // max hit
 	);
 
 	private final EventBus eventBus;
@@ -199,6 +207,7 @@ public class PointsTracker implements PluginLifecycleComponent
 		}
 		else if (e.getMessage().startsWith(ROOM_FAIL_MESSAGE))
 		{
+			wardenDowns = 0;
 			personalRoomPoints = 0;
 			updatePersonalPartyPoints();
 		}
@@ -219,13 +228,14 @@ public class PointsTracker implements PluginLifecycleComponent
 		}
 
 		NPC target = (NPC) e.getActor();
+		log.debug("Hitsplat type {} damage {} on {}", e.getHitsplat().getHitsplatType(), e.getHitsplat().getAmount(), target.getId());
 		if (P2_WARDENS.contains(target.getId()) && wardenDowns > 3)
 		{
 			return;
 		}
 
 		double factor = DAMAGE_POINTS_FACTORS.getOrDefault(target.getId(), 1.0);
-		if (e.getHitsplat().isMine())
+		if (e.getHitsplat().isMine() || WARDEN_HITSPLAT_TYPES.contains(e.getHitsplat().getHitsplatType()))
 		{
 			this.personalRoomPoints = (int) Math.min(MAX_ROOM_POINTS, personalRoomPoints + e.getHitsplat().getAmount() * factor);
 			updatePersonalPartyPoints();
