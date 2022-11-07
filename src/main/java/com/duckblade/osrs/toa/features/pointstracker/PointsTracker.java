@@ -21,7 +21,6 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.ItemSpawned;
-import net.runelite.api.widgets.Widget;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -43,9 +42,6 @@ public class PointsTracker implements PluginLifecycleComponent
 	private static final int MAX_TOTAL_POINTS = 64_000 + BASE_POINTS;
 
 	private static final int ANIMATION_ID_WARDEN_DOWN = 9670;
-
-	private static final int WIDGET_RAID_LEVEL_PARENT = 481;
-	private static final int WIDGET_RAID_LEVEL_CHILD = 42;
 
 	private static final Map<Integer, Double> DAMAGE_POINTS_FACTORS = ImmutableMap.<Integer, Double>builder()
 		.put(NpcID.CORE, 0.0)
@@ -144,22 +140,7 @@ public class PointsTracker implements PluginLifecycleComponent
 	{
 		if (raidLevel < 0)
 		{
-			Widget raidLevelWidget = client.getWidget(WIDGET_RAID_LEVEL_PARENT, WIDGET_RAID_LEVEL_CHILD);
-			if (raidLevelWidget == null)
-			{
-				return;
-			}
-
-			String text = raidLevelWidget.getText();
-			if (text == null)
-			{
-				return;
-			}
-
-			if (text.startsWith("Level: "))
-			{
-				raidLevel = Integer.parseInt(text.substring(7));
-			}
+			raidLevel = client.getVarbitValue(Varbits.TOA_RAID_LEVEL);
 		}
 	}
 
