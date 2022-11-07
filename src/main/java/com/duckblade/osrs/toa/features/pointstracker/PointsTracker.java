@@ -166,6 +166,11 @@ public class PointsTracker implements PluginLifecycleComponent
 	@Subscribe
 	public void onRaidStateChanged(RaidStateChanged e)
 	{
+		if (e.getPreviousState() == null || e.getPreviousState().getCurrentRoom() == null)
+		{
+			return;
+		}
+
 		switch (e.getPreviousState().getCurrentRoom())
 		{
 			case NEXUS:
