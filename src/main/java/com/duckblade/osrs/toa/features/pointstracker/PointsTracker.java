@@ -121,6 +121,7 @@ public class PointsTracker implements PluginLifecycleComponent
 	@Getter
 	private int personalRoomPoints;
 	private int personalTotalPoints;
+	private int nonPartyPoints; // points that are earned once by the entire party
 
 	private int teamSize;
 	private int raidLevel;
@@ -176,17 +177,25 @@ public class PointsTracker implements PluginLifecycleComponent
 			// puzzle estimates
 			case SCABARAS:
 				personalTotalPoints += 300;
+				nonPartyPoints += 300;
 				updatePersonalPartyPoints();
 				break;
 
 			case APMEKEN:
 				personalTotalPoints += 450;
+				nonPartyPoints += 300;
 				updatePersonalPartyPoints();
 				break;
 
 			case CRONDIS:
 				personalTotalPoints += 400;
+				nonPartyPoints += 300;
 				updatePersonalPartyPoints();
+				break;
+
+			case HET:
+			case WARDENS:
+				nonPartyPoints += 300;
 				break;
 		}
 	}
@@ -277,9 +286,8 @@ public class PointsTracker implements PluginLifecycleComponent
 
 	public int getTotalPoints()
 	{
-		return partyPointsTracker.isInParty()
-			? partyPointsTracker.getTotalPartyPoints()
-			: getPersonalTotalPoints() + personalRoomPoints;
+		return (partyPointsTracker.isInParty() ? partyPointsTracker.getTotalPartyPoints() : getPersonalTotalPoints() + personalRoomPoints)
+			+ nonPartyPoints;
 	}
 
 	public double getUniqueChance()
@@ -296,6 +304,7 @@ public class PointsTracker implements PluginLifecycleComponent
 	{
 		this.personalTotalPoints = BASE_POINTS;
 		this.personalRoomPoints = 0;
+		this.nonPartyPoints = 0;
 		this.teamSize = 0;
 		this.raidLevel = -1;
 		this.wardenDowns = 0;
