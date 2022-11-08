@@ -31,7 +31,7 @@ public class TargetTimeManager implements PluginLifecycleComponent
 
 	private static final String NO_TARGET_TIME_PREFIX = "You enter the Tombs of Amascut";
 	private static final String TARGET_TIME_PREFIX = "Overall time to beat:";
-	private static final Pattern TARGET_TIME_PATTERN = Pattern.compile(TARGET_TIME_PREFIX + " (\\d\\d:\\d\\d\\.\\d\\d)");
+	private static final Pattern TARGET_TIME_PATTERN = Pattern.compile("Overall time to beat: (\\d\\d:\\d\\d(?:\\.\\d\\d)?)");
 
 	private final EventBus eventBus;
 	private final Client client;
