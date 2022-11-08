@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.PartyChanged;
 import net.runelite.client.party.PartyService;
 import net.runelite.client.party.WSClient;
 import net.runelite.client.party.events.UserJoin;
@@ -38,6 +39,7 @@ public class PartyPointsTracker implements PluginLifecycleComponent
 	{
 		wsClient.registerMessage(PointsMessage.class);
 		eventBus.register(this);
+		this.clearPartyPointsMap();
 	}
 
 	@Override
@@ -65,9 +67,15 @@ public class PartyPointsTracker implements PluginLifecycleComponent
 		partyPoints.remove(e.getMemberId());
 	}
 
+	@Subscribe
+	public void onPartyChanged(PartyChanged e)
+	{
+		clearPartyPointsMap();
+	}
+
 	public void sendPointsUpdate(int points)
 	{
-		if (!partyService.isInParty())
+		if (!isInParty())
 		{
 			return;
 		}

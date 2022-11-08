@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.ItemID;
 import net.runelite.api.NPC;
@@ -200,9 +201,13 @@ public class PointsTracker implements PluginLifecycleComponent
 	@Subscribe
 	public void onChatMessage(ChatMessage e)
 	{
+		if (e.getType() != ChatMessageType.GAMEMESSAGE)
+		{
+			return;
+		}
+
 		if (e.getMessage().startsWith(START_MESSAGE))
 		{
-			partyPointsTracker.clearPartyPointsMap();
 			reset();
 		}
 		else if (e.getMessage().startsWith(DEATH_MESSAGE))
@@ -305,6 +310,8 @@ public class PointsTracker implements PluginLifecycleComponent
 		this.teamSize = 0;
 		this.raidLevel = -1;
 		this.wardenDowns = 0;
+
+		partyPointsTracker.clearPartyPointsMap();
 		updatePersonalPartyPoints();
 	}
 
