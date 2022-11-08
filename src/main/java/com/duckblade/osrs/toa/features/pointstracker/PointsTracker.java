@@ -151,10 +151,7 @@ public class PointsTracker implements PluginLifecycleComponent
 	@Subscribe
 	public void onGameTick(GameTick e)
 	{
-		if (raidLevel < 0)
-		{
-			raidLevel = client.getVarbitValue(Varbits.TOA_RAID_LEVEL);
-		}
+		raidLevel = client.getVarbitValue(Varbits.TOA_RAID_LEVEL);
 	}
 
 	@Subscribe
