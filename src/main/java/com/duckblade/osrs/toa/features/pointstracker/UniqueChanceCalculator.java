@@ -37,6 +37,6 @@ public class UniqueChanceCalculator
 		}
 
 		double denominator = baseRate - raidLevelModifier;
-		return Math.min(MAX_RATE_UNIQUE, points / denominator);
+		return Math.max(0, Math.min(MAX_RATE_UNIQUE, points / denominator));
 	}
 }
