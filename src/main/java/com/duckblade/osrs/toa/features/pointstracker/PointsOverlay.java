@@ -19,6 +19,9 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 public class PointsOverlay extends OverlayPanel implements PluginLifecycleComponent
 {
 
+	private static final NumberFormat POINTS_FORMAT = NumberFormat.getInstance();
+	private static final NumberFormat CHANCE_FORMAT = new DecimalFormat("#.##%");
+
 	private final OverlayManager overlayManager;
 	private final PointsTracker pointsTracker;
 	private final PartyPointsTracker partyPointsTracker;
@@ -62,37 +65,47 @@ public class PointsOverlay extends OverlayPanel implements PluginLifecycleCompon
 				.build()
 		);
 
+		addPointsLine("Total:", pointsTracker.getTotalPoints());
 		if (partyPointsTracker.isInParty())
 		{
-			addLine("Party:", partyPointsTracker.getTotalPartyPoints());
+			addPointsLine("Personal:", pointsTracker.getPersonalTotalPoints());
 		}
 
-		addLine("Total:", pointsTracker.getTotalPoints());
 		if (config.pointsTrackerShowRoomPoints())
 		{
-			addLine("Room:", pointsTracker.getPersonalRoomPoints());
+			addPointsLine("Room:", pointsTracker.getPersonalRoomPoints());
 		}
 
 		if (config.pointsTrackerShowUniqueChance())
 		{
-			addLine("Unique %:", pointsTracker.getUniqueChance());
+			addChanceLine("Unique:", pointsTracker.getUniqueChance());
 		}
 
 		if (config.pointsTrackerShowPetChance())
 		{
-			addLine("Pet %:", pointsTracker.getPetChance());
+			addChanceLine("Pet:", pointsTracker.getPetChance());
 		}
 
 		return super.render(graphics);
 	}
 
-	private void addLine(String title, double value)
+	private void addLine(String left, String right)
 	{
 		panelComponent.getChildren().add(
 			LineComponent.builder()
-				.left(title)
-				.right(DecimalFormat.getInstance().format(value))
+				.left(left)
+				.right(right)
 				.build()
 		);
+	}
+
+	private void addPointsLine(String title, int value)
+	{
+		addLine(title, POINTS_FORMAT.format(value));
+	}
+
+	private void addChanceLine(String title, double value)
+	{
+		addLine(title, CHANCE_FORMAT.format(value / 100));
 	}
 }
