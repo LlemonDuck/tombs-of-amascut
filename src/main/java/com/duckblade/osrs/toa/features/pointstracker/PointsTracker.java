@@ -66,6 +66,7 @@ public class PointsTracker implements PluginLifecycleComponent
 		.put(NpcID.BABA_11779, 2.0)
 		.put(NpcID.BABA_11780, 2.0)
 		.put(NpcID.ZEBAK, 1.5)
+		.put(NpcID.ZEBAK_11730, 1.5)
 		.put(NpcID.ZEBAK_11732, 1.5)
 		.put(NpcID.ZEBAK_11733, 1.5)
 		.put(NpcID.SPITTING_SCARAB, 0.5)
