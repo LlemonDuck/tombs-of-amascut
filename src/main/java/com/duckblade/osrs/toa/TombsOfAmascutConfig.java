@@ -394,6 +394,26 @@ public interface TombsOfAmascutConfig extends Config
 		return 100;
 	}
 
+	@ConfigSection(
+		name = "Path of Apmeken",
+		description = "Helpers for the Path of Apmeken.",
+		position = 700
+	)
+	String SECTION_APMEKEN = "sectionApmeken";
+
+	@ConfigItem(
+		keyName = "apmekenRoofDeprioritizeEnable",
+		name = "De-prioritize Roof Menu Entry",
+		description = "<html>De-prioritizes the repair roof menu entry when they are already fixed." +
+			"<br/>This prevents misclicking and taking damage.</html>",
+		position = 701,
+		section = SECTION_APMEKEN
+	)
+	default boolean apmekenRoofDeprioritizeEnable()
+	{
+		return false;
+	}
+
 	@ConfigItem(
 		keyName = "updateNotifierLastVersion",
 		name = "",

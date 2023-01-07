@@ -4,6 +4,7 @@ import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
 import com.duckblade.osrs.toa.features.SarcophagusOpeningSoundPlayer;
+import com.duckblade.osrs.toa.features.apmeken.ApmekenHelper;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
 import com.duckblade.osrs.toa.features.het.beamtimer.BeamTimerOverlay;
 import com.duckblade.osrs.toa.features.het.beamtimer.BeamTimerTracker;
@@ -39,6 +40,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		Multibinder<PluginLifecycleComponent> lifecycleComponents = Multibinder.newSetBinder(binder(), PluginLifecycleComponent.class);
 		lifecycleComponents.addBinding().to(AdditionPuzzleSolver.class);
 		lifecycleComponents.addBinding().to(ApmekenWaveInstaller.class);
+		lifecycleComponents.addBinding().to(ApmekenHelper.class);
 		lifecycleComponents.addBinding().to(BeamTimerOverlay.class);
 		lifecycleComponents.addBinding().to(BeamTimerTracker.class);
 		lifecycleComponents.addBinding().to(DepositPickaxeSwap.class);
