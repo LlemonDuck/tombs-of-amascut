@@ -41,6 +41,7 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	String KEY_QUICK_PROCEED_ENABLE_MODE = "quickProceedEnableMode";
+
 	@ConfigItem(
 		keyName = KEY_QUICK_PROCEED_ENABLE_MODE,
 		name = "Quick Proceed",
@@ -381,20 +382,19 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigSection(
-		name = "Purple Chest Jingle",
-		description = "<html>Can play a custom sound file when the purple loot sarcophagus is opened." +
-			"<br/>Custom sound must be provided at ~/.runelite/tombs-of-amascut/toa-chest.wav</html>",
+		name = "Burial Tomb",
+		description = "Configuration for the burial tomb.",
 		position = 600,
 		closedByDefault = true
 	)
-	String SECTION_SARCOPHAGUS_SOUND = "sectionSarcophagusSound";
+	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
 
 	@ConfigItem(
 		keyName = "chestAudioEnable",
-		name = "Enable",
+		name = "Purple Chest Audio",
 		description = "<html>Either disables the feature or plays an audio file whenever the purple chest is opened." +
 			"<br/>The custom audio file should be named toa-chest.wav inside the .runelite/tombs-of-amascut folder</html>",
-		section = SECTION_SARCOPHAGUS_SOUND,
+		section = SECTION_BURIAL_TOMB,
 		position = 601
 	)
 	default boolean chestAudioEnable()
@@ -403,6 +403,7 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	String CHEST_AUDIO_VOLUME_KEY = "chestAudioVolume";
+
 	@Range(
 		max = 200
 	)
@@ -410,12 +411,101 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = CHEST_AUDIO_VOLUME_KEY,
 		name = "Audio Volume",
 		description = "Adjusts how loud the chest audio is when played. 100 is no change to file volume.",
-		section = SECTION_SARCOPHAGUS_SOUND,
+		section = SECTION_BURIAL_TOMB,
 		position = 602
 	)
 	default int chestAudioVolume()
 	{
 		return 100;
+	}
+
+	String SARCOPHAGUS_RECOLOR_WHITE = "sarcophagusRecolorWhite";
+
+	@ConfigItem(
+		name = "Recolour White Chest",
+		description = "Recolour the white sarcophagus.",
+		position = 603,
+		keyName = SARCOPHAGUS_RECOLOR_WHITE,
+		section = SECTION_BURIAL_TOMB
+	)
+	default boolean sarcophagusRecolorWhite()
+	{
+		return false;
+	}
+
+	String SARCOPHAGUS_WHITE_RECOLOR = "sarcophagusWhiteRecolor";
+
+	@ConfigItem(
+		name = "White Colour",
+		description = "Colour to replace the white sarcophagus.",
+		position = 604,
+		keyName = SARCOPHAGUS_WHITE_RECOLOR,
+		section = SECTION_BURIAL_TOMB
+	)
+	default Color sarcophagusWhiteRecolor()
+	{
+		return Color.WHITE;
+	}
+
+	Color SARCOPHAGUS_PURPLE_COLOR = new Color(48, 7, 94);
+	String SARCOPHAGUS_RECOLOR_MY_PURPLE = "sarcophagusRecolorMyPurple";
+
+	@ConfigItem(
+		name = "Recolour Purple Chest (Mine)",
+		description = "Recolour the purple sarcophagus." +
+			"<br>When the loot is mine.",
+		position = 605,
+		keyName = SARCOPHAGUS_RECOLOR_MY_PURPLE,
+		section = SECTION_BURIAL_TOMB
+	)
+	default boolean sarcophagusRecolorMyPurple()
+	{
+		return false;
+	}
+
+	String SARCOPHAGUS_MY_PURPLE_RECOLOR = "sarcophagusMyPurpleRecolor";
+
+	@ConfigItem(
+		name = "Purple Colour (Mine)",
+		description = "Colour to replace the purple sarcophagus." +
+			"<br>When the loot is mine.",
+		position = 606,
+		keyName = SARCOPHAGUS_MY_PURPLE_RECOLOR,
+		section = SECTION_BURIAL_TOMB
+	)
+	default Color sarcophagusMyPurpleRecolor()
+	{
+		return SARCOPHAGUS_PURPLE_COLOR;
+	}
+
+	String SARCOPHAGUS_RECOLOR_OTHER_PURPLE = "sarcophagusRecolorOtherPurple";
+
+	@ConfigItem(
+		name = "Recolour Purple Chest (Other)",
+		description = "Recolour the purple sarcophagus." +
+			"<br>When the loot is NOT mine.",
+		position = 607,
+		keyName = SARCOPHAGUS_RECOLOR_OTHER_PURPLE,
+		section = SECTION_BURIAL_TOMB
+	)
+	default boolean sarcophagusRecolorOtherPurple()
+	{
+		return false;
+	}
+
+	String SARCOPHAGUS_OTHER_PURPLE_RECOLOR = "sarcophagusOtherPurpleRecolor";
+
+	@ConfigItem(
+		name = "Purple Colour (Other)",
+		description = "Colour to replace the purple sarcophagus." +
+			"<br>When the loot is NOT mine.",
+		position = 608,
+		keyName = SARCOPHAGUS_OTHER_PURPLE_RECOLOR,
+		section = SECTION_BURIAL_TOMB
+	)
+	default Color sarcophagusOtherPurpleRecolor()
+	{
+		return SARCOPHAGUS_PURPLE_COLOR;
 	}
 
 	@ConfigItem(
@@ -436,4 +526,5 @@ public interface TombsOfAmascutConfig extends Config
 		hidden = true
 	)
 	void updateNotifierLastVersion(int newVersion);
+
 }

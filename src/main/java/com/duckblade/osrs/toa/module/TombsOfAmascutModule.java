@@ -5,7 +5,6 @@ import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.LeftClickBankAll;
 import com.duckblade.osrs.toa.features.OrbHider;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
-import com.duckblade.osrs.toa.features.SarcophagusOpeningSoundPlayer;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
 import com.duckblade.osrs.toa.features.het.beamtimer.BeamTimerOverlay;
 import com.duckblade.osrs.toa.features.het.beamtimer.BeamTimerTracker;
@@ -22,6 +21,8 @@ import com.duckblade.osrs.toa.features.scabaras.overlay.ScabarasOverlayManager;
 import com.duckblade.osrs.toa.features.scabaras.overlay.SequencePuzzleSolver;
 import com.duckblade.osrs.toa.features.scabaras.panel.ScabarasPanelManager;
 import com.duckblade.osrs.toa.features.targettime.TargetTimeManager;
+import com.duckblade.osrs.toa.features.tomb.SarcophagusRecolorer;
+import com.duckblade.osrs.toa.features.tomb.SarcophagusOpeningSoundPlayer;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
 import com.google.inject.AbstractModule;
@@ -62,6 +63,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(SequencePuzzleSolver.class);
 		lifecycleComponents.addBinding().to(TargetTimeManager.class);
 		lifecycleComponents.addBinding().to(UpdateNotifier.class);
+		lifecycleComponents.addBinding().to(SarcophagusRecolorer.class);
 	}
 
 	@Provides
