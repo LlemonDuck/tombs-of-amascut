@@ -30,6 +30,7 @@ public class UpdateNotifier implements PluginLifecycleComponent
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
+		config.updateNotifierLastVersion(0);
 		return config.showUpdateMessages() &&
 			config.updateNotifierLastVersion() < TARGET_VERSION &&
 			raidState.isInLobby();
@@ -44,15 +45,22 @@ public class UpdateNotifier implements PluginLifecycleComponent
 				.tooltip("ToA Plugin Updates")
 				.priority(999)
 				.icon(PANEL_ICON)
-				.panel(new UpdateNotifierPanel(getUpdates(), () -> config.updateNotifierLastVersion(TARGET_VERSION)))
+				.panel(new UpdateNotifierPanel(getUpdates(), () ->
+				{
+					config.updateNotifierLastVersion(TARGET_VERSION);
+					clientToolbar.removeNavigation(navButton);
+				}))
 				.build();
 
 			clientToolbar.addNavigation(navButton);
 
-			if (!navButton.isSelected())
+			SwingUtilities.invokeLater(() ->
 			{
-				navButton.getOnSelect().run();
-			}
+				if (!navButton.isSelected())
+				{
+					navButton.getOnSelect().run();
+				}
+			});
 		});
 	}
 

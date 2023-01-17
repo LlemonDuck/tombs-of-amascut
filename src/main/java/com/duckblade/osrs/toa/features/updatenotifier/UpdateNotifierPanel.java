@@ -13,7 +13,7 @@ public class UpdateNotifierPanel extends PluginPanel
 
 	UpdateNotifierPanel(List<String> updates, Runnable acknowledgeCallback)
 	{
-		super(false);
+		super(true);
 
 		setBorder(BorderFactory.createEmptyBorder(20, 5, 0, 5));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
