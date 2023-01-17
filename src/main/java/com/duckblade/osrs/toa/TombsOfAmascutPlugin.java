@@ -25,6 +25,9 @@ public class TombsOfAmascutPlugin extends Plugin
 	@Inject
 	private Injector injector;
 
+	@Inject
+	private ConfigMigrationService configMigrationService;
+
 	private ComponentManager componentManager = null;
 
 	@Override
@@ -40,6 +43,7 @@ public class TombsOfAmascutPlugin extends Plugin
 		{
 			log.warn("Failed to create ToA folder {}", TOA_FOLDER.getAbsolutePath());
 		}
+		configMigrationService.migrate();
 
 		if (componentManager == null)
 		{

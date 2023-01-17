@@ -2,6 +2,7 @@ package com.duckblade.osrs.toa.features;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
@@ -21,6 +22,14 @@ import net.runelite.client.eventbus.Subscribe;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class QuickProceedSwaps implements PluginLifecycleComponent
 {
+
+	public enum QuickProceedEnableMode
+	{
+		ALL,
+		NOT_CRONDIS,
+		NONE,
+		;
+	}
 
 	private static final Set<Integer> NPC_IDS = ImmutableSet.of(
 		NpcID.OSMUMTEN, // post-demi-boss
@@ -50,8 +59,17 @@ public class QuickProceedSwaps implements PluginLifecycleComponent
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
-		return config.leftClickProceedEnable() &&
-			raidState.isInRaid();
+		switch (config.quickProceedEnableMode())
+		{
+			case ALL:
+				return raidState.isInRaid();
+
+			case NOT_CRONDIS:
+				return raidState.isInRaid() && raidState.getCurrentRoom() != RaidRoom.CRONDIS;
+
+			default:
+				return false;
+		}
 	}
 
 	@Override

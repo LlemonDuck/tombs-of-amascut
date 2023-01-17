@@ -1,5 +1,6 @@
 package com.duckblade.osrs.toa;
 
+import com.duckblade.osrs.toa.features.QuickProceedSwaps.QuickProceedEnableMode;
 import com.duckblade.osrs.toa.features.het.pickaxeswap.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
@@ -39,15 +40,16 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
+	String KEY_QUICK_PROCEED_ENABLE_MODE = "quickProceedEnableMode";
 	@ConfigItem(
-		keyName = "leftClickProceedEnable",
-		name = "Quick Proceed Swaps",
+		keyName = KEY_QUICK_PROCEED_ENABLE_MODE,
+		name = "Quick Proceed",
 		description = "Left click proceed/begin/leave on Osmumten and quick-enter/quick-use entryways and teleport crystals.",
 		position = 5
 	)
-	default boolean leftClickProceedEnable()
+	default QuickProceedEnableMode quickProceedEnableMode()
 	{
-		return true;
+		return QuickProceedEnableMode.ALL;
 	}
 
 	@ConfigItem(
