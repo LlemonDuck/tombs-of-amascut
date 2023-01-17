@@ -2,6 +2,7 @@ package com.duckblade.osrs.toa.module;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
+import com.duckblade.osrs.toa.features.OrbHider;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
 import com.duckblade.osrs.toa.features.SarcophagusOpeningSoundPlayer;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
@@ -47,6 +48,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(LightPuzzleSolver.class);
 		lifecycleComponents.addBinding().to(MatchingPuzzleSolver.class);
 		lifecycleComponents.addBinding().to(ObeliskPuzzleSolver.class);
+		lifecycleComponents.addBinding().to(OrbHider.class);
 		lifecycleComponents.addBinding().to(PartyPointsTracker.class);
 		lifecycleComponents.addBinding().to(PointsOverlay.class);
 		lifecycleComponents.addBinding().to(PointsTracker.class);

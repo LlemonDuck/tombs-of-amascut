@@ -53,10 +53,21 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "hideHpOrbs",
+		name = "Hide HP Orbs",
+		description = "Removes HP orbs from the screen. Can be useful on lower resoltions and window sizes.",
+		position = 6
+	)
+	default boolean hideHpOrbs()
+	{
+		return false;
+	}
+
+	@ConfigItem(
 		keyName = "showUpdateMessages",
 		name = "Show Updates",
 		description = "Opens a panel describing plugin updates after new features are added to the plugin.",
-		position = 6
+		position = 7
 	)
 	default boolean showUpdateMessages()
 	{
