@@ -64,6 +64,17 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "leftClickBankAll",
+		name = "Bank-all Single Click",
+		description = "Allows you to Bank-all loot without requiring a second click on the minimenu.",
+		position = 7
+	)
+	default boolean leftClickBankAll()
+	{
+		return false;
+	}
+
+	@ConfigItem(
 		keyName = "showUpdateMessages",
 		name = "Show Updates",
 		description = "Opens a panel describing plugin updates after new features are added to the plugin.",
