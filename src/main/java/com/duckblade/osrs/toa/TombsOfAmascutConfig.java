@@ -444,10 +444,9 @@ public interface TombsOfAmascutConfig extends Config
 	)
 	default Color sarcophagusWhiteRecolor()
 	{
-		return Color.WHITE;
+		return new Color(237, 177, 23);
 	}
 
-	Color SARCOPHAGUS_PURPLE_COLOR = new Color(48, 7, 94);
 	String SARCOPHAGUS_RECOLOR_MY_PURPLE = "sarcophagusRecolorMyPurple";
 
 	@ConfigItem(
@@ -475,7 +474,7 @@ public interface TombsOfAmascutConfig extends Config
 	)
 	default Color sarcophagusMyPurpleRecolor()
 	{
-		return SARCOPHAGUS_PURPLE_COLOR;
+		return new Color(192, 20, 124);
 	}
 
 	String SARCOPHAGUS_RECOLOR_OTHER_PURPLE = "sarcophagusRecolorOtherPurple";
@@ -505,7 +504,7 @@ public interface TombsOfAmascutConfig extends Config
 	)
 	default Color sarcophagusOtherPurpleRecolor()
 	{
-		return SARCOPHAGUS_PURPLE_COLOR;
+		return new Color(17, 88, 152);
 	}
 
 	@ConfigItem(
