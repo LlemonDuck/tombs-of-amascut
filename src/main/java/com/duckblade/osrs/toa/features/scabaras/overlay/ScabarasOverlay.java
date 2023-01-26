@@ -1,6 +1,7 @@
 package com.duckblade.osrs.toa.features.scabaras.overlay;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -83,7 +84,7 @@ public class ScabarasOverlay extends Overlay
 			Polygon canvasTilePoly = Perspective.getCanvasTilePoly(client, tile);
 			if (canvasTilePoly != null)
 			{
-				OverlayUtil.renderPolygon(graphics, canvasTilePoly, color);
+				OverlayUtil.renderPolygon(graphics, canvasTilePoly, color, new Color(0, 0, 0, Math.min(color.getAlpha(), 50)), new BasicStroke(2));
 			}
 		}
 	}
@@ -93,14 +94,14 @@ public class ScabarasOverlay extends Overlay
 		int ix = 0;
 		for (LocalPoint tile : points)
 		{
-			Color c = ix < progress ? Color.gray : ColorUtil.colorLerp(start, end, ix / 5.0);
+			Color c = ix < progress ? ColorUtil.colorWithAlpha(Color.gray, start.getAlpha()) : ColorUtil.colorLerp(start, end, ix / 5.0);
 
 			Polygon canvasTilePoly = Perspective.getCanvasTilePoly(client, tile);
 			if (canvasTilePoly != null)
 			{
-				OverlayUtil.renderPolygon(graphics, canvasTilePoly, c);
+				OverlayUtil.renderPolygon(graphics, canvasTilePoly, c, new Color(0, 0, 0, Math.min(c.getAlpha(), 50)), new BasicStroke(2));
 				Rectangle bounds = canvasTilePoly.getBounds();
-				OverlayUtil.renderTextLocation(
+				renderTextLocationAlpha(
 					graphics,
 					new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2),
 					String.valueOf(++ix),
@@ -137,16 +138,24 @@ public class ScabarasOverlay extends Overlay
 
 			if (tile)
 			{
-				OverlayUtil.renderPolygon(graphics, canvasTilePoly, color);
+				OverlayUtil.renderPolygon(graphics, canvasTilePoly, color, new Color(0, 0, 0, Math.min(color.getAlpha(), 50)), new BasicStroke(2));
 			}
 			if (name)
 			{
 				Rectangle tileB = canvasTilePoly.getBounds();
 				Rectangle txtB = graphics.getFontMetrics().getStringBounds(mt.getName(), graphics).getBounds();
 				Point p = new Point(tileB.x + tileB.width / 2 - txtB.width / 2, tileB.y + tileB.height / 2 + txtB.height / 2);
-				OverlayUtil.renderTextLocation(graphics, p, mt.getName(), color);
+				renderTextLocationAlpha(graphics, p, mt.getName(), color);
 			}
 		});
+	}
+
+	private void renderTextLocationAlpha(Graphics2D graphics, Point p, String text, Color c)
+	{
+		graphics.setColor(ColorUtil.colorWithAlpha(Color.black, c.getAlpha()));
+		graphics.drawString(text, p.getX() + 1, p.getY() + 1);
+		graphics.setColor(c);
+		graphics.drawString(text, p.getX(), p.getY());
 	}
 
 }
