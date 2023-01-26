@@ -30,7 +30,6 @@ public class UpdateNotifier implements PluginLifecycleComponent
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
-		config.updateNotifierLastVersion(0);
 		return config.showUpdateMessages() &&
 			config.updateNotifierLastVersion() < TARGET_VERSION &&
 			raidState.isInLobby();
