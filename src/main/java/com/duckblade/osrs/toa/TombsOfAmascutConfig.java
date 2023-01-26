@@ -56,7 +56,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		keyName = "hideHpOrbs",
 		name = "Hide HP Orbs",
-		description = "Removes HP orbs from the screen. Can be useful on lower resoltions and window sizes.",
+		description = "Removes HP orbs from the screen. Can be useful on lower resolutions and window sizes.",
 		position = 6
 	)
 	default boolean hideHpOrbs()
