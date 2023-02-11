@@ -39,18 +39,30 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Animation;
+import net.runelite.api.ChatLineBuffer;
+import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
+import net.runelite.api.DynamicObject;
+import net.runelite.api.MessageNode;
 import net.runelite.api.Model;
+import net.runelite.api.Renderable;
 import net.runelite.api.WallObject;
+import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.WallObjectDespawned;
 import net.runelite.api.events.WallObjectSpawned;
 import net.runelite.client.callback.ClientThread;
+import net.runelite.client.callback.Hooks;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
+import net.runelite.client.util.Text;
 
 @Slf4j
 @Singleton
@@ -66,6 +78,8 @@ public class SarcophagusRecolorer implements PluginLifecycleComponent
 		TombsOfAmascutConfig.SARCOPHAGUS_OTHER_PURPLE_RECOLOR
 	);
 
+	private static final Pattern LOOT_PATTERN = Pattern.compile("^(?<prefix>.+ found something special: )(?<loot>.+)$");
+
 	private static final int[] VARBIT_MULTILOC_IDS_CHEST = new int[]{
 		14356, 14357, 14358, 14359, 14360, 14370, 14371, 14372
 	};
@@ -73,6 +87,7 @@ public class SarcophagusRecolorer implements PluginLifecycleComponent
 	private static final int VARBIT_VALUE_CHEST_KEY = 2;
 	private static final int VARBIT_ID_SARCOPHAGUS = 14373;
 	private static final int WALL_OBJECT_ID_SARCOPHAGUS = 46221;
+	private static final int ANIMATION_ID_BALL_OF_LIGHT = 9523;
 
 	@Inject
 	private EventBus eventBus;
@@ -82,7 +97,10 @@ public class SarcophagusRecolorer implements PluginLifecycleComponent
 	private ClientThread clientThread;
 	@Inject
 	private TombsOfAmascutConfig config;
+	@Inject
+	private Hooks hooks;
 
+	private final Hooks.RenderableDrawListener drawListener = this::shouldDraw;
 	private final List<WallObject> wallObjects = new ArrayList<>();
 
 	private int[] defaultFaceColors1;
@@ -106,12 +124,14 @@ public class SarcophagusRecolorer implements PluginLifecycleComponent
 		});
 
 		eventBus.register(this);
+		hooks.registerRenderableDrawListener(drawListener);
 	}
 
 	@Override
 	public void shutDown()
 	{
 		eventBus.unregister(this);
+		hooks.unregisterRenderableDrawListener(drawListener);
 		wallObjects.clear();
 		sarcophagusIsPurple = false;
 		purpleIsMine = true;
@@ -164,6 +184,53 @@ public class SarcophagusRecolorer implements PluginLifecycleComponent
 		}
 	}
 
+	@Subscribe
+	public void onChatMessage(final ChatMessage event)
+	{
+		if (event.getType() != ChatMessageType.GAMEMESSAGE)
+		{
+			return;
+		}
+
+		final Matcher matcher = LOOT_PATTERN.matcher(event.getMessage());
+
+		if (!matcher.matches())
+		{
+			return;
+		}
+
+		final String loot = matcher.group("loot");
+
+		if (loot == null || loot.isEmpty())
+		{
+			return;
+		}
+
+		if (config.sarcophagusHideLoot() && purpleIsMine)
+		{
+			final MessageNode messageNode = event.getMessageNode();
+
+			final ChatLineBuffer chatLineBuffer = client.getChatLineMap().get(messageNode.getType().getType());
+
+			if (chatLineBuffer != null)
+			{
+				chatLineBuffer.removeMessageNode(messageNode);
+			}
+		}
+
+		if (config.sarcophagusRecolorLoot())
+		{
+			final Color color = getLootColor(Text.standardize(loot));
+
+			if (color == null)
+			{
+				return;
+			}
+
+			clientThread.invokeLater(() -> recolor(wallObjects, color));
+		}
+	}
+
 	private void parseVarbits()
 	{
 		sarcophagusIsPurple = client.getVarbitValue(VARBIT_ID_SARCOPHAGUS) % 2 != 0;
@@ -196,6 +263,18 @@ public class SarcophagusRecolorer implements PluginLifecycleComponent
 		for (final WallObject wallObject : wallObjects)
 		{
 			recolor(wallObject);
+		}
+	}
+
+	private void recolor(final Collection<WallObject> wallObjects, final Color color)
+	{
+		for (final WallObject wallObject : wallObjects)
+		{
+			final Model model = wallObject.getRenderable1().getModel();
+
+			if (model == null) continue;
+
+			recolor(model.getFaceColors1(), color);
 		}
 	}
 
@@ -246,6 +325,11 @@ public class SarcophagusRecolorer implements PluginLifecycleComponent
 			color = config.sarcophagusWhiteRecolor();
 		}
 
+		recolor(faceColors1, color);
+	}
+
+	private void recolor(final int[] faceColors1, final Color color)
+	{
 		Arrays.fill(faceColors1, colorToRs2hsb(color));
 	}
 
@@ -258,6 +342,42 @@ public class SarcophagusRecolorer implements PluginLifecycleComponent
 		}
 
 		System.arraycopy(defaultFaceColors1, 0, faceColors1, 0, faceColors1.length);
+	}
+
+	private boolean shouldDraw(final Renderable renderable, final boolean drawingUI)
+	{
+		if (!purpleIsMine || !config.sarcophagusHideLoot() || !(renderable instanceof DynamicObject))
+		{
+			return true;
+		}
+
+		final Animation animation = ((DynamicObject) renderable).getAnimation();
+
+		return animation == null || animation.getId() != ANIMATION_ID_BALL_OF_LIGHT;
+	}
+
+	private @Nullable Color getLootColor(final String loot)
+	{
+		switch (loot)
+		{
+			case "lightbearer":
+				return config.sarcophagusLightbearerColor();
+			case "osmumten's fang":
+				return config.sarcophagusOsmumtensFangColor();
+			case "elidinis' ward":
+				return config.sarcophagusElidinisWardColor();
+			case "masori mask":
+				return config.sarcophagusMasoriMaskColor();
+			case "masori body":
+				return config.sarcophagusMasoriBodyColor();
+			case "masori chaps":
+				return config.sarcophagusMasoriChapsColor();
+			case "tumeken's shadow (uncharged)":
+				return config.sarcophagusTumekensShadowColor();
+			default:
+				log.error("Failed to get color for unsupported loot: {}", loot);
+				return null;
+		}
 	}
 
 	private static int colorToRs2hsb(final Color color)
