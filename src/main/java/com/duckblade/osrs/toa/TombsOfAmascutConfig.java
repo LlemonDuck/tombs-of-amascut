@@ -508,6 +508,116 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
+		name = "Recolour Loot",
+		description = "Recolour the purple sarcophagus on loot roll." +
+			"<br>Set loot colours below.",
+		position = 609,
+		keyName = "sarcophagusRecolorLoot",
+		section = SECTION_BURIAL_TOMB
+	)
+	default boolean sarcophagusRecolorLoot()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		name = "Lightbearer",
+		description = "Colour to use when loot is a lightbearer.",
+		position = 610,
+		keyName = "sarcophagusLightbearerColor",
+		section = SECTION_BURIAL_TOMB
+	)
+	default Color sarcophagusLightbearerColor()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+		name = "Elidinis' Ward",
+		description = "Colour to use when loot is Elidinis' Ward.",
+		position = 611,
+		keyName = "sarcophagusElidinisWardColor",
+		section = SECTION_BURIAL_TOMB
+	)
+	default Color sarcophagusElidinisWardColor()
+	{
+		return Color.GREEN;
+	}
+
+	@ConfigItem(
+		name = "Osmumten's Fang",
+		description = "Colour to use when loot is Osmumten's Fang.",
+		position = 612,
+		keyName = "sarcophagusOsmumtensFangColor",
+		section = SECTION_BURIAL_TOMB
+	)
+	default Color sarcophagusOsmumtensFangColor()
+	{
+		return Color.GREEN;
+	}
+
+	@ConfigItem(
+		name = "Masori Mask",
+		description = "Colour to use when loot is a Masori Mask.",
+		position = 613,
+		keyName = "sarcophagusMasoriMaskColor",
+		section = SECTION_BURIAL_TOMB
+	)
+	default Color sarcophagusMasoriMaskColor()
+	{
+		return Color.BLUE;
+	}
+
+	@ConfigItem(
+		name = "Masori Body",
+		description = "Colour to use when loot is a Masori Body.",
+		position = 614,
+		keyName = "sarcophagusMasoriBodyColor",
+		section = SECTION_BURIAL_TOMB
+	)
+	default Color sarcophagusMasoriBodyColor()
+	{
+		return Color.BLUE;
+	}
+
+	@ConfigItem(
+		name = "Masori Chaps",
+		description = "Colour to use when loot is a Masori Chaps.",
+		position = 615,
+		keyName = "sarcophagusMasoriChapsColor",
+		section = SECTION_BURIAL_TOMB
+	)
+	default Color sarcophagusMasoriChapsColor()
+	{
+		return Color.BLUE;
+	}
+
+	@ConfigItem(
+		name = "Tumeken's Shadow",
+		description = "Colour to use when loot is Tumeken's Shadow.",
+		position = 616,
+		keyName = "sarcophagusTumekensShadowColor",
+		section = SECTION_BURIAL_TOMB
+	)
+	default Color sarcophagusTumekensShadowColor()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+		name = "Hide Loot",
+		description = "Hide the loot animation and chatbox text." +
+			"<br>Only active when purple is mine.",
+		position = 617,
+		keyName = "sarcophagusHideLoot",
+		section = SECTION_BURIAL_TOMB
+	)
+	default boolean sarcophagusHideLoot()
+	{
+		return false;
+	}
+
+	@ConfigItem(
 		keyName = "updateNotifierLastVersion",
 		name = "",
 		description = "",
