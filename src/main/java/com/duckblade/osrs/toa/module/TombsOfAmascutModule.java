@@ -5,6 +5,8 @@ import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.LeftClickBankAll;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeOverlay;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxePreventEntry;
+import com.duckblade.osrs.toa.features.het.solver.HetSolver;
+import com.duckblade.osrs.toa.features.het.solver.HetSolverOverlay;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbManager;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
@@ -52,6 +54,8 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(DepositPickaxeOverlay.class);
 		lifecycleComponents.addBinding().to(DepositPickaxePreventEntry.class);
 		lifecycleComponents.addBinding().to(DepositPickaxeSwap.class);
+		lifecycleComponents.addBinding().to(HetSolver.class);
+		lifecycleComponents.addBinding().to(HetSolverOverlay.class);
 		lifecycleComponents.addBinding().to(HpOrbManager.class);
 		lifecycleComponents.addBinding().to(InvocationPresetsManager.class);
 		lifecycleComponents.addBinding().to(InvocationScreenshot.class);
