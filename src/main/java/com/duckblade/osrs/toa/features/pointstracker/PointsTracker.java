@@ -6,6 +6,8 @@ import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateChanged;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -124,6 +126,7 @@ public class PointsTracker implements PluginLifecycleComponent
 	private int personalRoomPoints;
 	private int personalTotalPoints;
 	private int nonPartyPoints; // points that are earned once by the entire party
+	private final List<Integer> seenMvpItems = new ArrayList<>(4);
 
 	private int teamSize;
 	private int raidLevel;
@@ -261,9 +264,10 @@ public class PointsTracker implements PluginLifecycleComponent
 	@Subscribe
 	public void onItemSpawned(ItemSpawned e)
 	{
-		if (MVP_ITEMS.contains(e.getItem().getId()))
+		if (MVP_ITEMS.contains(e.getItem().getId()) && !seenMvpItems.contains(e.getItem().getId()))
 		{
 			personalTotalPoints += 300 * teamSize;
+			seenMvpItems.add(e.getItem().getId());
 			updatePersonalPartyPoints();
 		}
 	}
@@ -311,6 +315,7 @@ public class PointsTracker implements PluginLifecycleComponent
 		this.teamSize = 0;
 		this.raidLevel = -1;
 		this.wardenDowns = 0;
+		this.seenMvpItems.clear();
 
 		partyPointsTracker.clearPartyPointsMap();
 		updatePersonalPartyPoints();
