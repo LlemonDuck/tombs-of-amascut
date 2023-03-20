@@ -2,6 +2,7 @@ package com.duckblade.osrs.toa;
 
 import com.duckblade.osrs.toa.features.QuickProceedSwaps.QuickProceedEnableMode;
 import com.duckblade.osrs.toa.features.het.pickaxeswap.DepositPickaxeMode;
+import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import java.awt.Color;
@@ -53,15 +54,16 @@ public interface TombsOfAmascutConfig extends Config
 		return QuickProceedEnableMode.ALL;
 	}
 
+	String KEY_HP_ORB_MODE = "hpOrbsMode";
 	@ConfigItem(
-		keyName = "hideHpOrbs",
-		name = "Hide HP Orbs",
-		description = "Removes HP orbs from the screen. Can be useful on lower resolutions and window sizes.",
+		keyName = KEY_HP_ORB_MODE,
+		name = "HP Orbs",
+		description = "Removes HP orbs from the screen or replaces them with health bars.",
 		position = 6
 	)
-	default boolean hideHpOrbs()
+	default HpOrbMode hpOrbsMode()
 	{
-		return false;
+		return HpOrbMode.ORBS;
 	}
 
 	@ConfigItem(
