@@ -112,6 +112,8 @@ public class HealthBarsOverlay extends OverlayPanel
 		hpBar.setLabelDisplayMode(ProgressBarComponent.LabelDisplayMode.TEXT_ONLY);
 		hpBar.setCenterLabel(name);
 		hpBar.setValue(hpFactor);
+		hpBar.setMinimum(0);
+		hpBar.setMaximum(1);
 		hpBar.setPreferredSize(new Dimension(60, 20));
 		return hpBar;
 	}
