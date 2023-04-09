@@ -43,7 +43,8 @@ public class DepositPickaxeSwap implements PluginLifecycleComponent
 		ItemID.CRYSTAL_PICKAXE,
 		ItemID.CRYSTAL_PICKAXE_23863,
 		ItemID.CRYSTAL_PICKAXE_INACTIVE,
-		ItemID._3RD_AGE_PICKAXE
+		ItemID._3RD_AGE_PICKAXE,
+		ItemID.GILDED_PICKAXE
 	);
 
 	private final EventBus eventBus;
