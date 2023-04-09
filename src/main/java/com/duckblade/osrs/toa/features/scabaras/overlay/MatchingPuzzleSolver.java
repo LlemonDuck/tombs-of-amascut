@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectSpawned;
@@ -20,13 +21,13 @@ import net.runelite.api.events.GroundObjectSpawned;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
+@Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class MatchingPuzzleSolver implements PluginLifecycleComponent
 {
 
-	private static final Map<Integer, String> TILE_NAMES = ImmutableMap.<Integer, String>builder()
-		.put(45365, "Line") // line
+	private static final Map<Integer, String> TILE_NAMES = ImmutableMap.<Integer, String>builder().put(45365, "Line") // line
 		.put(45366, "Knives") // knives
 		.put(45367, "Crook") // crook
 		.put(45368, "Diamond") // diamond
@@ -37,8 +38,7 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 		.put(45373, "Boot") // boot
 		.build();
 
-	private static final Map<Integer, Color> TILE_COLORS = ImmutableMap.<Integer, Color>builder()
-		.put(45365, Color.black) // line
+	private static final Map<Integer, Color> TILE_COLORS = ImmutableMap.<Integer, Color>builder().put(45365, Color.black) // line
 		.put(45366, Color.red) // knives
 		.put(45367, Color.magenta) // crook
 		.put(45368, Color.blue) // diamond
@@ -49,8 +49,7 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 		.put(45373, Color.green) // boot
 		.build();
 
-	private static final Map<Integer, Integer> MATCHED_OBJECT_IDS = ImmutableMap.<Integer, Integer>builder()
-		.put(45388, 45365) // line
+	private static final Map<Integer, Integer> MATCHED_OBJECT_IDS = ImmutableMap.<Integer, Integer>builder().put(45388, 45365) // line
 		.put(45389, 45366) // knives
 		.put(45386, 45367) // crook
 		.put(45391, 45368) // diamond
@@ -69,8 +68,7 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
-		return config.scabarasHelperMode() == ScabarasHelperMode.OVERLAY &&
-			raidState.getCurrentRoom() == RaidRoom.SCABARAS;
+		return config.scabarasHelperMode() == ScabarasHelperMode.OVERLAY && raidState.getCurrentRoom() == RaidRoom.SCABARAS;
 	}
 
 	@Override
@@ -93,11 +91,7 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 		if (TILE_COLORS.containsKey(id))
 		{
 			LocalPoint lp = e.getGroundObject().getLocalLocation();
-			discoveredTiles.put(lp, new MatchingTile(
-				lp,
-				TILE_NAMES.getOrDefault(id, "Unknown"),
-				TILE_COLORS.getOrDefault(id, Color.black)
-			));
+			discoveredTiles.put(lp, new MatchingTile(lp, TILE_NAMES.getOrDefault(id, "Unknown"), TILE_COLORS.getOrDefault(id, Color.black)));
 		}
 	}
 
@@ -107,7 +101,14 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 		int gameId = e.getGameObject().getId();
 		if (MATCHED_OBJECT_IDS.containsKey(gameId))
 		{
-			discoveredTiles.get(e.getGameObject().getLocalLocation()).setMatched(true);
+			MatchingTile match = discoveredTiles.get(e.getGameObject().getLocalLocation());
+			if (match == null)
+			{
+				log.warn("Failed to find discovered tile for game object id {}!", gameId);
+				return;
+			}
+
+			match.setMatched(true);
 		}
 	}
 
