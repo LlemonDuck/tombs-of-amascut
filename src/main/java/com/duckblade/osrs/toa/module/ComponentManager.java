@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
+import net.runelite.client.util.GameEventManager;
 
 /**
  * Manages all the subcomponents of the plugin
@@ -28,6 +29,7 @@ public class ComponentManager
 {
 
 	private final EventBus eventBus;
+	private final GameEventManager gameEventManager;
 	private final TombsOfAmascutConfig config;
 	private final RaidStateTracker raidStateTracker;
 	private final Set<PluginLifecycleComponent> components;
@@ -104,6 +106,7 @@ public class ComponentManager
 		try
 		{
 			component.startUp();
+			gameEventManager.simulateGameEvents(component);
 			states.put(component, true);
 		}
 		catch (Exception e)
