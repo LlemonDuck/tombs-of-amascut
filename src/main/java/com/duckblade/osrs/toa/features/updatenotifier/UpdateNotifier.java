@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 4;
+	public static final int TARGET_VERSION = 5;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -102,6 +102,11 @@ public class UpdateNotifier implements PluginLifecycleComponent
 				updates.add("The loot chest Bank-all option can be toggled to no longer require two clicks.");
 				updates.add("The loot sarcophagus flame colours can now be recoloured (thanks @rdutta!).");
 				updates.add("The Scabaras addition puzzle routes now use more optimal paths (thanks @PowContent!).");
+
+			case 4:
+				updates.add("HP orbs can now be replaced by health bars a la ToB Health Bars.");
+				updates.add("The NOT_CRONDIS option for Quick-proceed swaps will no longer prevent quick entry on the door to the boss.");
+				updates.add("An indicator for which puzzle entrance to use to skip the obelisk puzzle can be enabled under Scabaras options.");
 		}
 
 		return updates;
