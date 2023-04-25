@@ -7,7 +7,7 @@ public class TombsOfAmascutPluginTest
 {
 	public static void main(String[] args) throws Exception
 	{
-		ExternalPluginManager.loadBuiltin(TombsOfAmascutPlugin.class);
+		ExternalPluginManager.loadBuiltin(TombsOfAmascutPlugin.class, ToaDebugPlugin.class);
 		RuneLite.main(args);
 	}
 }
