@@ -4,6 +4,7 @@ import com.duckblade.osrs.toa.features.QuickProceedSwaps.QuickProceedEnableMode;
 import com.duckblade.osrs.toa.features.het.pickaxeswap.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
+import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import java.awt.Color;
 import net.runelite.client.config.Alpha;
@@ -293,6 +294,18 @@ public interface TombsOfAmascutConfig extends Config
 	default int scabarasMatchingCompletedOpacity()
 	{
 		return 64;
+	}
+
+	@ConfigItem(
+		keyName = "scabarasHighlightSkipObeliskEntry",
+		name = "Show Obelisk Skip",
+		description = "Highlight which entrance will skip requiring the obelisk puzzle.",
+		position = 310,
+		section = SECTION_SCABARAS
+	)
+	default SkipObeliskOverlay.EnableMode scabarasHighlightSkipObeliskEntry()
+	{
+		return SkipObeliskOverlay.EnableMode.OFF;
 	}
 
 	@ConfigSection(
