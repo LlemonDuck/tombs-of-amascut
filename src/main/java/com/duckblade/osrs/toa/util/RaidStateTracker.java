@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;
+import net.runelite.api.Varbits;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameTick;
@@ -24,7 +25,7 @@ public class RaidStateTracker implements PluginLifecycleComponent
 	private final Client client;
 	private final EventBus eventBus;
 
-	private RaidState currentState = new RaidState(false, false, null);
+	private RaidState currentState = new RaidState(false, false, null, 0);
 
 	// delay inRaid = false by 3 ticks to alleviate any unexpected delays between rooms
 	private int raidLeaveTicks = 3;
@@ -57,7 +58,7 @@ public class RaidStateTracker implements PluginLifecycleComponent
 		boolean inRaid = raidLeaveTicks > 0;
 
 		RaidState previousState = this.currentState;
-		RaidState newState = new RaidState(inLobby, inRaid, currentRoom);
+		RaidState newState = new RaidState(inLobby, inRaid, currentRoom, countPlayers());
 		if (!previousState.equals(newState))
 		{
 			this.currentState = newState;
@@ -80,8 +81,25 @@ public class RaidStateTracker implements PluginLifecycleComponent
 		return this.currentState.getCurrentRoom();
 	}
 
+	public int getPlayerCount()
+	{
+		return this.currentState.getPlayerCount();
+	}
+
 	public RaidState getCurrentState()
 	{
 		return this.currentState;
+	}
+
+	private int countPlayers()
+	{
+		return 1 +
+			(client.getVarbitValue(Varbits.TOA_MEMBER_1_HEALTH) != 0 ? 1 : 0) +
+			(client.getVarbitValue(Varbits.TOA_MEMBER_2_HEALTH) != 0 ? 1 : 0) +
+			(client.getVarbitValue(Varbits.TOA_MEMBER_3_HEALTH) != 0 ? 1 : 0) +
+			(client.getVarbitValue(Varbits.TOA_MEMBER_4_HEALTH) != 0 ? 1 : 0) +
+			(client.getVarbitValue(Varbits.TOA_MEMBER_5_HEALTH) != 0 ? 1 : 0) +
+			(client.getVarbitValue(Varbits.TOA_MEMBER_6_HEALTH) != 0 ? 1 : 0) +
+			(client.getVarbitValue(Varbits.TOA_MEMBER_7_HEALTH) != 0 ? 1 : 0);
 	}
 }

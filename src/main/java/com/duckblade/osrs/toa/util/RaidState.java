@@ -9,5 +9,6 @@ public class RaidState
 	private final boolean inLobby;
 	private final boolean inRaid;
 	private final RaidRoom currentRoom;
+	private final int playerCount;
 
 }

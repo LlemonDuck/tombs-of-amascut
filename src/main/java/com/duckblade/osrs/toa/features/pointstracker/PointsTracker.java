@@ -162,6 +162,7 @@ public class PointsTracker implements PluginLifecycleComponent
 	@Subscribe
 	public void onRaidStateChanged(RaidStateChanged e)
 	{
+		teamSize = e.getNewState().getPlayerCount();
 		if (e.getPreviousState() == null || e.getPreviousState().getCurrentRoom() == null)
 		{
 			return;
@@ -169,13 +170,6 @@ public class PointsTracker implements PluginLifecycleComponent
 
 		switch (e.getPreviousState().getCurrentRoom())
 		{
-			case NEXUS:
-				if (teamSize == 0)
-				{
-					determineTeamSize();
-				}
-				break;
-
 			// puzzle estimates
 			case SCABARAS:
 				personalTotalPoints += 300;
@@ -319,18 +313,6 @@ public class PointsTracker implements PluginLifecycleComponent
 
 		partyPointsTracker.clearPartyPointsMap();
 		updatePersonalPartyPoints();
-	}
-
-	private void determineTeamSize()
-	{
-		teamSize = 1 +
-			(client.getVarbitValue(Varbits.TOA_MEMBER_1_HEALTH) != 0 ? 1 : 0) +
-			(client.getVarbitValue(Varbits.TOA_MEMBER_2_HEALTH) != 0 ? 1 : 0) +
-			(client.getVarbitValue(Varbits.TOA_MEMBER_3_HEALTH) != 0 ? 1 : 0) +
-			(client.getVarbitValue(Varbits.TOA_MEMBER_4_HEALTH) != 0 ? 1 : 0) +
-			(client.getVarbitValue(Varbits.TOA_MEMBER_5_HEALTH) != 0 ? 1 : 0) +
-			(client.getVarbitValue(Varbits.TOA_MEMBER_6_HEALTH) != 0 ? 1 : 0) +
-			(client.getVarbitValue(Varbits.TOA_MEMBER_7_HEALTH) != 0 ? 1 : 0);
 	}
 
 	private void updatePersonalPartyPoints()
