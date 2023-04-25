@@ -4,6 +4,7 @@ import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
+import com.duckblade.osrs.toa.util.RaidStateTracker;
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import javax.inject.Inject;
@@ -55,21 +56,13 @@ public class QuickProceedSwaps implements PluginLifecycleComponent
 	);
 
 	private final EventBus eventBus;
+	private final TombsOfAmascutConfig config;
+	private final RaidStateTracker raidStateTracker;
 
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
-		switch (config.quickProceedEnableMode())
-		{
-			case ALL:
-				return raidState.isInRaid();
-
-			case NOT_CRONDIS:
-				return raidState.isInRaid() && raidState.getCurrentRoom() != RaidRoom.CRONDIS;
-
-			default:
-				return false;
-		}
+		return raidState.isInRaid() && config.quickProceedEnableMode() != QuickProceedEnableMode.NONE;
 	}
 
 	@Override
@@ -105,8 +98,18 @@ public class QuickProceedSwaps implements PluginLifecycleComponent
 					NPC_IDS.contains(me.getNpc().getId());
 
 			case GAME_OBJECT_FIRST_OPTION:
-				return (me.getOption().equals("Enter") || me.getOption().equals("Use") || me.getOption().equals("Pass")) &&
-					OBJECT_IDS.contains(me.getIdentifier());
+				final int id = me.getIdentifier();
+				final String option = me.getOption();
+
+				if (id == ObjectID.BARRIER_45135 &&
+					raidStateTracker.getCurrentRoom() == RaidRoom.CRONDIS &&
+					option.equals("Pass"))
+				{
+					return config.quickProceedEnableMode() != QuickProceedEnableMode.NOT_CRONDIS;
+				}
+
+				return OBJECT_IDS.contains(id) &&
+					(option.equals("Enter") || option.equals("Use") || option.equals("Pass"));
 
 			default:
 				return false;
