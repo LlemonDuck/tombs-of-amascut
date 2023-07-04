@@ -28,7 +28,6 @@ package com.duckblade.osrs.toa.features.hporbs;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.google.common.base.Strings;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -37,7 +36,6 @@ import net.runelite.api.Client;
 import net.runelite.api.Varbits;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.components.ProgressBarComponent;
 
 public class HealthBarsOverlay extends OverlayPanel
 {
@@ -69,7 +67,6 @@ public class HealthBarsOverlay extends OverlayPanel
 			return null;
 		}
 
-		boolean columnMode = Strings.isNullOrEmpty(client.getVarcStrValue(1103));
 		DoubleHpBarComponent current = new DoubleHpBarComponent();
 		for (int i = 0; i < 8; i++)
 		{
@@ -80,42 +77,21 @@ public class HealthBarsOverlay extends OverlayPanel
 				continue;
 			}
 
-			if (columnMode)
+			if (i % 2 == 0)
 			{
-				panelComponent.getChildren().add(buildHpBar(playerName, hpFactor));
+				current.setCenterLabel1(playerName);
+				current.setValue1(hpFactor);
+				panelComponent.getChildren().add(current);
 			}
 			else
 			{
-				if (i % 2 == 0)
-				{
-					current.setCenterLabel1(playerName);
-					current.setValue1(hpFactor);
-					panelComponent.getChildren().add(current);
-				}
-				else
-				{
-					current.setCenterLabel2(playerName);
-					current.setValue2(hpFactor);
-					current = new DoubleHpBarComponent();
-				}
+				current.setCenterLabel2(playerName);
+				current.setValue2(hpFactor);
+				current = new DoubleHpBarComponent();
 			}
 		}
 
 		return super.render(graphics);
-	}
-
-	private ProgressBarComponent buildHpBar(String name, double hpFactor)
-	{
-		ProgressBarComponent hpBar = new ProgressBarComponent();
-		hpBar.setBackgroundColor(new Color(102, 15, 16, 230));
-		hpBar.setForegroundColor(new Color(0, 146, 54, 230));
-		hpBar.setLabelDisplayMode(ProgressBarComponent.LabelDisplayMode.TEXT_ONLY);
-		hpBar.setCenterLabel(name);
-		hpBar.setValue(hpFactor);
-		hpBar.setMinimum(0);
-		hpBar.setMaximum(1);
-		hpBar.setPreferredSize(new Dimension(60, 20));
-		return hpBar;
 	}
 
 	private static double hpFactor(int hpVarb)
