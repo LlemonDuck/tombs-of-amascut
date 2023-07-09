@@ -6,6 +6,7 @@ import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
+import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
 import java.awt.Color;
 import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
@@ -530,7 +531,7 @@ public interface TombsOfAmascutConfig extends Config
 	)
 	default int updateNotifierLastVersion()
 	{
-		return 0;
+		return UpdateNotifier.TARGET_VERSION - 1;
 	}
 
 	@ConfigItem(
