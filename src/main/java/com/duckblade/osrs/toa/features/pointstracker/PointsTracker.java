@@ -6,6 +6,9 @@ import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateChanged;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import java.awt.Color;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,12 +30,16 @@ import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.ItemSpawned;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.util.ColorUtil;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class PointsTracker implements PluginLifecycleComponent
 {
+
+	static final NumberFormat POINTS_FORMAT = NumberFormat.getInstance();
+	static final NumberFormat PERCENT_FORMAT = new DecimalFormat("#.##%");
 
 	private static final String START_MESSAGE = "You enter the Tombs of Amascut";
 	private static final String DEATH_MESSAGE = "You have died";
@@ -229,6 +236,11 @@ public class PointsTracker implements PluginLifecycleComponent
 			personalTotalPoints = Math.min(MAX_TOTAL_POINTS, personalTotalPoints + personalRoomPoints);
 			personalRoomPoints = 0;
 			updatePersonalPartyPoints();
+
+			if (e.getMessage().contains("Wardens"))
+			{
+				client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", buildPointsMessage(), "", false);
+			}
 		}
 	}
 
@@ -282,13 +294,21 @@ public class PointsTracker implements PluginLifecycleComponent
 
 	public int getPersonalTotalPoints()
 	{
-		return this.personalTotalPoints - BASE_POINTS;
+		return this.personalTotalPoints + this.personalRoomPoints - BASE_POINTS;
+	}
+
+	public double getPersonalPercent()
+	{
+		return (double) getPersonalTotalPoints() / getTotalPoints();
 	}
 
 	public int getTotalPoints()
 	{
-		return (partyPointsTracker.isInParty() ? partyPointsTracker.getTotalPartyPoints() : getPersonalTotalPoints() + personalRoomPoints)
-			+ nonPartyPoints;
+		if (partyPointsTracker.isInParty())
+		{
+			return partyPointsTracker.getTotalPartyPoints();
+		}
+		return getPersonalTotalPoints() + nonPartyPoints;
 	}
 
 	public double getUniqueChance()
@@ -320,6 +340,19 @@ public class PointsTracker implements PluginLifecycleComponent
 		partyPointsTracker.sendPointsUpdate(
 			Math.min(MAX_TOTAL_POINTS, personalTotalPoints + personalRoomPoints) - BASE_POINTS
 		);
+	}
+
+	private String buildPointsMessage()
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("Total points: ");
+		sb.append(ColorUtil.wrapWithColorTag(POINTS_FORMAT.format(getTotalPoints()), Color.red));
+		sb.append(", Personal points: ");
+		sb.append(ColorUtil.wrapWithColorTag(POINTS_FORMAT.format(getPersonalTotalPoints()), Color.red));
+		sb.append(" (");
+		sb.append(ColorUtil.wrapWithColorTag(PERCENT_FORMAT.format(getPersonalPercent()), Color.red));
+		sb.append(")");
+		return sb.toString();
 	}
 
 }

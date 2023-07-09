@@ -5,8 +5,6 @@ import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidState;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -18,9 +16,6 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 @Singleton
 public class PointsOverlay extends OverlayPanel implements PluginLifecycleComponent
 {
-
-	private static final NumberFormat POINTS_FORMAT = NumberFormat.getInstance();
-	private static final NumberFormat CHANCE_FORMAT = new DecimalFormat("#.##%");
 
 	private final OverlayManager overlayManager;
 	private final PointsTracker pointsTracker;
@@ -101,11 +96,11 @@ public class PointsOverlay extends OverlayPanel implements PluginLifecycleCompon
 
 	private void addPointsLine(String title, int value)
 	{
-		addLine(title, POINTS_FORMAT.format(value));
+		addLine(title, PointsTracker.POINTS_FORMAT.format(value));
 	}
 
 	private void addChanceLine(String title, double value)
 	{
-		addLine(title, CHANCE_FORMAT.format(value / 100));
+		addLine(title, PointsTracker.PERCENT_FORMAT.format(value / 100));
 	}
 }
