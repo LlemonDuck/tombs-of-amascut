@@ -351,7 +351,7 @@ public interface TombsOfAmascutConfig extends Config
 
 	@ConfigItem(
 		keyName = "pointsTrackerOverlayEnable",
-		name = "Enable",
+		name = "Enable Overlay",
 		description = "Show points earned within the raid.",
 		position = 501,
 		section = SECTION_POINTS_TRACKER
@@ -395,6 +395,18 @@ public interface TombsOfAmascutConfig extends Config
 	default boolean pointsTrackerShowPetChance()
 	{
 		return false;
+	}
+
+	@ConfigItem(
+		keyName = "pointsTrackerPostRaidMessage",
+		name = "Points Total Message",
+		description = "Show the total points in chat after the raid, akin to the Chambers of Xeric.",
+		position = 505,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerPostRaidMessage()
+	{
+		return true;
 	}
 
 	@ConfigSection(

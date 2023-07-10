@@ -127,6 +127,7 @@ public class PointsTracker implements PluginLifecycleComponent
 
 	private final EventBus eventBus;
 	private final Client client;
+	private final TombsOfAmascutConfig config;
 	private final PartyPointsTracker partyPointsTracker;
 
 	@Getter
@@ -237,7 +238,7 @@ public class PointsTracker implements PluginLifecycleComponent
 			personalRoomPoints = 0;
 			updatePersonalPartyPoints();
 
-			if (e.getMessage().contains("Wardens"))
+			if (e.getMessage().contains("Wardens") && config.pointsTrackerPostRaidMessage())
 			{
 				client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", buildPointsMessage(), "", false);
 			}
