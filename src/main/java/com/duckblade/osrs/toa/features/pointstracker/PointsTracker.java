@@ -4,6 +4,7 @@ import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateChanged;
+import com.duckblade.osrs.toa.util.RaidStateTracker;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.awt.Color;
@@ -129,6 +130,7 @@ public class PointsTracker implements PluginLifecycleComponent
 	private final Client client;
 	private final TombsOfAmascutConfig config;
 	private final PartyPointsTracker partyPointsTracker;
+	private final RaidStateTracker raidStateTracker;
 
 	@Getter
 	private int personalRoomPoints;
@@ -300,6 +302,11 @@ public class PointsTracker implements PluginLifecycleComponent
 
 	public double getPersonalPercent()
 	{
+		if (raidStateTracker.getPlayerCount() == 1)
+		{
+			return 1.0;
+		}
+
 		return (double) getPersonalTotalPoints() / getTotalPoints();
 	}
 
