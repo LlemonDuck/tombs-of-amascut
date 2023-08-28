@@ -70,7 +70,7 @@ public class HealthBarsOverlay extends OverlayPanel
 		}
 
 		// solo raid
-		if (Strings.isNullOrEmpty(client.getVarcStrValue(1103)))
+		if (Strings.isNullOrEmpty(client.getVarcStrValue(1100)))
 		{
 			String playerName = client.getVarcStrValue(1099);
 			double hpFactor = hpFactor(client.getVarbitValue(Varbits.TOA_MEMBER_0_HEALTH) - 1);
