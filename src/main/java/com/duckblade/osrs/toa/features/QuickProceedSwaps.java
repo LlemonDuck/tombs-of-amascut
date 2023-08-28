@@ -102,7 +102,7 @@ public class QuickProceedSwaps implements PluginLifecycleComponent
 				final String option = me.getOption();
 
 				if (id == ObjectID.BARRIER_45135 &&
-					raidStateTracker.getCurrentRoom() == RaidRoom.CRONDIS &&
+					raidStateTracker.getCurrentState().getCurrentRoom() == RaidRoom.CRONDIS &&
 					option.equals("Pass"))
 				{
 					return config.quickProceedEnableMode() != QuickProceedEnableMode.NOT_CRONDIS;

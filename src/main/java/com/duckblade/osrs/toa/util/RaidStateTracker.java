@@ -3,6 +3,7 @@ package com.duckblade.osrs.toa.util;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;
 import net.runelite.api.Varbits;
@@ -25,10 +26,11 @@ public class RaidStateTracker implements PluginLifecycleComponent
 	private final Client client;
 	private final EventBus eventBus;
 
+	@Getter
 	private RaidState currentState = new RaidState(false, false, null, 0);
 
 	// delay inRaid = false by 3 ticks to alleviate any unexpected delays between rooms
-	private int raidLeaveTicks = 3;
+	private int raidLeaveTicks = 0;
 
 	@Override
 	public void startUp()
@@ -66,29 +68,9 @@ public class RaidStateTracker implements PluginLifecycleComponent
 		}
 	}
 
-	public boolean isInLobby()
-	{
-		return this.currentState.isInLobby();
-	}
-
-	public boolean isInRaid()
-	{
-		return this.currentState.isInRaid();
-	}
-
-	public RaidRoom getCurrentRoom()
-	{
-		return this.currentState.getCurrentRoom();
-	}
-
 	public int getPlayerCount()
 	{
 		return this.currentState.getPlayerCount();
-	}
-
-	public RaidState getCurrentState()
-	{
-		return this.currentState;
 	}
 
 	private int countPlayers()
