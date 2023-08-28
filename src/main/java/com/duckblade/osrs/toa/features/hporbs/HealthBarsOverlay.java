@@ -28,6 +28,7 @@ package com.duckblade.osrs.toa.features.hporbs;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.google.common.base.Strings;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -36,6 +37,7 @@ import net.runelite.api.Client;
 import net.runelite.api.Varbits;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
+import net.runelite.client.ui.overlay.components.ProgressBarComponent;
 
 public class HealthBarsOverlay extends OverlayPanel
 {
@@ -65,6 +67,16 @@ public class HealthBarsOverlay extends OverlayPanel
 		if (config.hpOrbsMode() != HpOrbMode.HEALTH_BARS)
 		{
 			return null;
+		}
+
+		// solo raid
+		if (Strings.isNullOrEmpty(client.getVarcStrValue(1103)))
+		{
+			String playerName = client.getVarcStrValue(1099);
+			double hpFactor = hpFactor(client.getVarbitValue(Varbits.TOA_MEMBER_0_HEALTH) - 1);
+			panelComponent.getChildren().add(buildHpBar(playerName, hpFactor));
+
+			return super.render(graphics);
 		}
 
 		DoubleHpBarComponent current = new DoubleHpBarComponent();
@@ -97,5 +109,19 @@ public class HealthBarsOverlay extends OverlayPanel
 	private static double hpFactor(int hpVarb)
 	{
 		return (double) Math.max(hpVarb, 0) / 26.0;
+	}
+
+	private ProgressBarComponent buildHpBar(String name, double hpFactor)
+	{
+		ProgressBarComponent hpBar = new ProgressBarComponent();
+		hpBar.setBackgroundColor(new Color(102, 15, 16, 230));
+		hpBar.setForegroundColor(new Color(0, 146, 54, 230));
+		hpBar.setLabelDisplayMode(ProgressBarComponent.LabelDisplayMode.TEXT_ONLY);
+		hpBar.setCenterLabel(name);
+		hpBar.setValue(hpFactor);
+		hpBar.setMinimum(0);
+		hpBar.setMaximum(1);
+		hpBar.setPreferredSize(new Dimension(60, 20));
+		return hpBar;
 	}
 }
