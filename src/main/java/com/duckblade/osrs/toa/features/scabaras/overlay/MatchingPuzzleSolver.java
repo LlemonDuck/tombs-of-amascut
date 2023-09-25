@@ -104,7 +104,7 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 			MatchingTile match = discoveredTiles.get(e.getGameObject().getLocalLocation());
 			if (match == null)
 			{
-				log.warn("Failed to find discovered tile for game object id {}!", gameId);
+				log.debug("Failed to find discovered tile for game object id {}!", gameId);
 				return;
 			}
 

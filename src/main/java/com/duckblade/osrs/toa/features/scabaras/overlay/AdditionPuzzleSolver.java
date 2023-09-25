@@ -195,7 +195,7 @@ public class AdditionPuzzleSolver implements PluginLifecycleComponent
 		Point tl = findStartTile(sceneTiles);
 		if (tl == null)
 		{
-			log.warn("Failed to locate start of addition puzzle");
+			log.debug("Failed to locate start of addition puzzle");
 			return;
 		}
 

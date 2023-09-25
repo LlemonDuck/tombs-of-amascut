@@ -120,7 +120,7 @@ public class LightPuzzleSolver implements PluginLifecycleComponent
 		Point tl = findStartTile(sceneTiles);
 		if (tl == null)
 		{
-			log.warn("Failed to locate start of light puzzle");
+			log.debug("Failed to locate start of light puzzle");
 			return;
 		}
 
