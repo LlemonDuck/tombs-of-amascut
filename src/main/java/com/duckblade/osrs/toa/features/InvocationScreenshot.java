@@ -100,7 +100,6 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	public void startUp()
 	{
 		eventBus.register(this);
-		addCameraIconOverride();
 		clientThread.invokeLater(this::createButton);
 	}
 
