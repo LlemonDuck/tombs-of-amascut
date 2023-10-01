@@ -9,6 +9,7 @@ import net.runelite.api.Client;
 import net.runelite.api.Varbits;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.eventbus.EventBus;
@@ -23,11 +24,13 @@ public class RaidStateTracker implements PluginLifecycleComponent
 	private static final int WIDGET_PARENT_ID = 481;
 	private static final int WIDGET_CHILD_ID = 40;
 
+	private static final RaidState DEFAULT_STATE = new RaidState(false, false, null, 0);
+
 	private final Client client;
 	private final EventBus eventBus;
 
 	@Getter
-	private RaidState currentState = new RaidState(false, false, null, 0);
+	private RaidState currentState = DEFAULT_STATE;
 
 	// delay inRaid = false by 3 ticks to alleviate any unexpected delays between rooms
 	private int raidLeaveTicks = 0;
@@ -59,18 +62,35 @@ public class RaidStateTracker implements PluginLifecycleComponent
 		raidLeaveTicks = inRaidRaw ? 3 : raidLeaveTicks - 1;
 		boolean inRaid = raidLeaveTicks > 0;
 
-		RaidState previousState = this.currentState;
-		RaidState newState = new RaidState(inLobby, inRaid, currentRoom, countPlayers());
-		if (!previousState.equals(newState))
-		{
-			this.currentState = newState;
-			eventBus.post(new RaidStateChanged(previousState, newState));
-		}
+		setRaidState(new RaidState(inLobby, inRaid, currentRoom, countPlayers()), false);
 	}
 
 	public int getPlayerCount()
 	{
 		return this.currentState.getPlayerCount();
+	}
+
+	@Subscribe
+	public void onGameStateChanged(GameStateChanged e)
+	{
+		switch (e.getGameState())
+		{
+			case LOGGING_IN:
+			case HOPPING:
+				raidLeaveTicks = 0;
+				setRaidState(DEFAULT_STATE, true);
+		}
+	}
+
+	private void setRaidState(RaidState newValue, boolean forceEvent)
+	{
+		RaidState previous = currentState;
+		currentState = newValue;
+
+		if (forceEvent || !currentState.equals(previous))
+		{
+			eventBus.post(new RaidStateChanged(previous, currentState));
+		}
 	}
 
 	private int countPlayers()
