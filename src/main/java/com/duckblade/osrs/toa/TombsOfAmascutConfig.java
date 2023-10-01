@@ -6,6 +6,7 @@ import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
+import com.duckblade.osrs.toa.features.timetracking.SplitsMode;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
 import java.awt.Color;
 import net.runelite.client.config.Alpha;
@@ -28,17 +29,6 @@ public interface TombsOfAmascutConfig extends Config
 		position = 3
 	)
 	default boolean apmekenWaveHelper()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "targetTimeDisplay",
-		name = "Target Time in Timer",
-		description = "Expand the in-raid timer to also show the target time to beat.",
-		position = 4
-	)
-	default boolean targetTimeDisplay()
 	{
 		return true;
 	}
@@ -533,6 +523,50 @@ public interface TombsOfAmascutConfig extends Config
 	default Color sarcophagusOtherPurpleRecolor()
 	{
 		return new Color(17, 88, 152);
+	}
+
+	@ConfigSection(
+		name = "Time Tracking",
+		description = "Time tracking and splits.",
+		closedByDefault = true,
+		position = 700
+	)
+	String SECTION_TIME_TRACKING = "sectionTimeTracking";
+
+	@ConfigItem(
+		keyName = "targetTimeDisplay",
+		name = "Target Time in Timer",
+		description = "Expand the in-raid timer to also show the target time to beat.",
+		position = 701,
+		section = SECTION_TIME_TRACKING
+	)
+	default boolean targetTimeDisplay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "splitsMessage",
+		name = "Splits Post-Raid Message",
+		description = "Show room splits in a chat message at the end of the raid. Path shows boss completion times, room shows each individual room (can be very long).",
+		position = 702,
+		section = SECTION_TIME_TRACKING
+	)
+	default SplitsMode splitsMessage()
+	{
+		return SplitsMode.OFF;
+	}
+
+	@ConfigItem(
+		keyName = "splitsOverlay",
+		name = "Splits Overlay",
+		description = "Show room splits in an on-screen overlay. Path shows boss completion times, room shows each individual room (can be very long).",
+		position = 703,
+		section = SECTION_TIME_TRACKING
+	)
+	default SplitsMode splitsOverlay()
+	{
+		return SplitsMode.OFF;
 	}
 
 	@ConfigItem(
