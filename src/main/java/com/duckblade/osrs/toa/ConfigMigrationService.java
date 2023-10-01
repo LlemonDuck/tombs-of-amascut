@@ -20,6 +20,7 @@ public class ConfigMigrationService
 	void migrate()
 	{
 		migrateQuickProceedEnable();
+		migrateHideHpOrbs();
 	}
 
 	private void migrateQuickProceedEnable()
