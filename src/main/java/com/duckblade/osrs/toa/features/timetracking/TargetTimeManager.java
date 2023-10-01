@@ -1,9 +1,10 @@
-package com.duckblade.osrs.toa.features.targettime;
+package com.duckblade.osrs.toa.features.timetracking;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateChanged;
+import com.duckblade.osrs.toa.util.TimerMode;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -16,6 +17,7 @@ import net.runelite.api.MessageNode;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.util.Text;
@@ -26,17 +28,16 @@ public class TargetTimeManager implements PluginLifecycleComponent
 {
 
 	private static final int SCRIPT_TOA_TIME_UPDATE_TIMER = 6581;
-	private static final int WIDGET_TIMER_PARENT_ID = 481;
-	private static final int WIDGET_TIMER_CHILD_ID = 46;
+	static final int WIDGET_TIMER = WidgetInfo.PACK(481, 46);
 
 	private static final String NO_TARGET_TIME_PREFIX = "You enter the Tombs of Amascut";
 	private static final String TARGET_TIME_PREFIX = "Overall time to beat:";
-	private static final Pattern TARGET_TIME_PATTERN = Pattern.compile("Overall time to beat: (\\d\\d:\\d\\d(?:\\.\\d\\d)?)");
+	private static final Pattern TARGET_TIME_PATTERN = Pattern.compile("Overall time to beat: (\\d\\d):\\d\\d(?:\\.\\d\\d)?");
 
 	private final EventBus eventBus;
 	private final Client client;
 
-	private String targetTime;
+	private int mins;
 
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState currentState)
@@ -91,22 +92,22 @@ public class TargetTimeManager implements PluginLifecycleComponent
 	{
 		if (!e.getNewState().isInRaid())
 		{
-			targetTime = null;
+			mins = -1;
 		}
 	}
 
 	@Subscribe
 	public void onScriptPostFired(ScriptPostFired e)
 	{
-		if (e.getScriptId() == SCRIPT_TOA_TIME_UPDATE_TIMER && targetTime != null)
+		if (e.getScriptId() == SCRIPT_TOA_TIME_UPDATE_TIMER && getTargetTime() != null)
 		{
-			Widget timer = client.getWidget(WIDGET_TIMER_PARENT_ID, WIDGET_TIMER_CHILD_ID);
+			Widget timer = client.getWidget(WIDGET_TIMER);
 			if (timer == null || timer.getText().contains("/"))
 			{
 				return;
 			}
 
-			timer.setText(timer.getText() + " / " + targetTime);
+			timer.setText(timer.getText() + " / " + getTargetTime());
 
 			// resize two fairly high up parent containers to prevent clipping
 			Widget resize1 = timer.getParent().getParent().getParent();
@@ -137,7 +138,21 @@ public class TargetTimeManager implements PluginLifecycleComponent
 			return false;
 		}
 
-		targetTime = m.group(1);
+		mins = Integer.parseInt(m.group(1));
 		return true;
+	}
+
+	public String getTargetTime()
+	{
+		return mins != -1
+			? formatTargetTime(TimerMode.fromClient(client), mins)
+			: null;
+	}
+
+	private static String formatTargetTime(TimerMode timerMode, int mins)
+	{
+		return timerMode == TimerMode.PRECISE
+			? String.format("%02d:00.00", mins)
+			: String.format("%02d:00", mins);
 	}
 }
