@@ -20,4 +20,10 @@ public class ToaDebugPlugin extends Plugin
 		((Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(Level.WARN);
 		((Logger) LoggerFactory.getLogger("com.duckblade.osrs.toa")).setLevel(Level.DEBUG);
 	}
+
+	@Override
+	protected void shutDown() throws Exception
+	{
+		((Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(Level.DEBUG);
+	}
 }
