@@ -1,7 +1,6 @@
 package com.duckblade.osrs.toa;
 
 import com.duckblade.osrs.toa.features.QuickProceedSwaps.QuickProceedEnableMode;
-import com.duckblade.osrs.toa.features.het.pickaxeswap.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
@@ -307,28 +306,44 @@ public interface TombsOfAmascutConfig extends Config
 	String SECTION_HET = "sectionHet";
 
 	@ConfigItem(
-		keyName = "depositPickaxeMode",
-		name = "Deposit-Pickaxe",
-		description = "Automatically swap to Deposit-pickaxe when a pickaxe is in your inventory.",
-		position = 401,
-		section = SECTION_HET
-	)
-	default DepositPickaxeMode depositPickaxeMode()
-	{
-		return DepositPickaxeMode.STATUE_SWAP;
-	}
-
-	@ConfigItem(
 		keyName = "hetBeamTimerEnable",
 		name = "Beam Timer",
 		description = "<html>Display an overlay of when the Caster Statue will fire." +
 			"<br/>Click Het's Seal from one tile away when the indicator is GREEN to get an extra damage tick.</html>",
-		position = 402,
+		position = 401,
 		section = SECTION_HET
 	)
 	default boolean hetBeamTimerEnable()
 	{
 		return true;
+	}
+
+	String KEY_HET_PICKAXE_MENU_SWAP = "hetPickaxeMenuSwap";
+
+	@ConfigItem(
+		keyName = KEY_HET_PICKAXE_MENU_SWAP,
+		name = "Deposit-Pickaxe",
+		description = "Automatically swap to Deposit-pickaxe when a pickaxe is in your inventory.",
+		position = 402,
+		section = SECTION_HET
+	)
+	default boolean hetPickaxeMenuSwap()
+	{
+		return true;
+	}
+
+	String KEY_HET_PICKAXE_PREVENT_EXIT = "hetPickaxePreventExit";
+
+	@ConfigItem(
+		keyName = KEY_HET_PICKAXE_PREVENT_EXIT,
+		name = "Prevent Room Exit",
+		description = "Deprioritize the option to leave the puzzle room until you have deposited your pickaxe in the statue.",
+		position = 403,
+		section = SECTION_HET
+	)
+	default boolean hetPickaxePreventExit()
+	{
+		return false;
 	}
 
 	@ConfigSection(

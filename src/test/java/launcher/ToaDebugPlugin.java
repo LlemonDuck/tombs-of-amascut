@@ -1,4 +1,4 @@
-package com.duckblade.osrs.toa;
+package launcher;
 
 import ch.qos.logback.classic.Level;
 import javax.inject.Singleton;

@@ -1,5 +1,6 @@
-package com.duckblade.osrs.toa;
+package launcher;
 
+import com.duckblade.osrs.toa.TombsOfAmascutPlugin;
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
 
