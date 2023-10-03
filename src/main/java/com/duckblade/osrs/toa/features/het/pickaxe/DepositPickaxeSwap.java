@@ -24,7 +24,7 @@ public class DepositPickaxeSwap implements PluginLifecycleComponent
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState currentState)
 	{
-		return currentState.getCurrentRoom() == RaidRoom.HET &&
+		return (currentState.getCurrentRoom() == RaidRoom.HET || currentState.isInLobby()) &&
 			config.hetPickaxeMenuSwap();
 	}
 
