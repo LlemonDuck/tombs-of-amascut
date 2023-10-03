@@ -358,6 +358,30 @@ public interface TombsOfAmascutConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+		keyName = "hetPickaxePuzzleOverlay",
+		name = "Puzzle Room Visual Warning",
+		description = "Add a visual warning reminder to deposit your pickaxe at the end of the mirror puzzle room.",
+		position = 405,
+		section = SECTION_HET
+	)
+	default boolean hetPickaxePuzzleOverlay()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "hetPickaxeLobbyOverlay",
+		name = "Lobby Visual Warning",
+		description = "Add a visual warning reminder to deposit your pickaxe in the raid lobby.",
+		position = 406,
+		section = SECTION_HET
+	)
+	default boolean hetPickaxeLobbyOverlay()
+	{
+		return false;
+	}
+
 	@ConfigSection(
 		name = "Points Tracker",
 		description = "<html>Tracks points for the raid, used in calculating drop chance." +

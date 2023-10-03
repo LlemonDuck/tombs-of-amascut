@@ -3,6 +3,7 @@ package com.duckblade.osrs.toa.module;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.LeftClickBankAll;
+import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeOverlay;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxePreventEntry;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbManager;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
@@ -48,6 +49,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(ApmekenWaveInstaller.class);
 		lifecycleComponents.addBinding().to(BeamTimerOverlay.class);
 		lifecycleComponents.addBinding().to(BeamTimerTracker.class);
+		lifecycleComponents.addBinding().to(DepositPickaxeOverlay.class);
 		lifecycleComponents.addBinding().to(DepositPickaxePreventEntry.class);
 		lifecycleComponents.addBinding().to(DepositPickaxeSwap.class);
 		lifecycleComponents.addBinding().to(HpOrbManager.class);
