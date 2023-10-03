@@ -346,6 +346,18 @@ public interface TombsOfAmascutConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+		keyName = "hetPickaxePreventRaidStart",
+		name = "Prevent Raid Start",
+		description = "Deprioritize the option to enter the raid until you have deposited your pickaxe in the lobby wall cavity.",
+		position = 404,
+		section = SECTION_HET
+	)
+	default boolean hetPickaxePreventRaidStart()
+	{
+		return false;
+	}
+
 	@ConfigSection(
 		name = "Points Tracker",
 		description = "<html>Tracks points for the raid, used in calculating drop chance." +

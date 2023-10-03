@@ -36,6 +36,8 @@ public class PickaxeUtil
 		ItemID.GILDED_PICKAXE
 	);
 
+	private static final int VARBIT_PICKAXE_STORAGE = 14440;
+
 	public static boolean hasPickaxe(Client client)
 	{
 
@@ -48,6 +50,11 @@ public class PickaxeUtil
 
 		return (inv != null && InventoryUtil.containsAny(inv, PICKAXE_IDS)) ||
 			(equip != null && InventoryUtil.containsAny(equip, PICKAXE_IDS));
+	}
+
+	public static boolean pickaxeIsInStorage(Client client)
+	{
+		return client.getVarbitValue(VARBIT_PICKAXE_STORAGE) != 0;
 	}
 
 }

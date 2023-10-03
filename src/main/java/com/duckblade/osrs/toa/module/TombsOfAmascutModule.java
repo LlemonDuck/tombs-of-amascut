@@ -3,7 +3,7 @@ package com.duckblade.osrs.toa.module;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.LeftClickBankAll;
-import com.duckblade.osrs.toa.features.het.pickaxe.PickaxePreventExit;
+import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxePreventEntry;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbManager;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
@@ -48,6 +48,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(ApmekenWaveInstaller.class);
 		lifecycleComponents.addBinding().to(BeamTimerOverlay.class);
 		lifecycleComponents.addBinding().to(BeamTimerTracker.class);
+		lifecycleComponents.addBinding().to(DepositPickaxePreventEntry.class);
 		lifecycleComponents.addBinding().to(DepositPickaxeSwap.class);
 		lifecycleComponents.addBinding().to(HpOrbManager.class);
 		lifecycleComponents.addBinding().to(InvocationPresetsManager.class);
@@ -57,7 +58,6 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(MatchingPuzzleSolver.class);
 		lifecycleComponents.addBinding().to(ObeliskPuzzleSolver.class);
 		lifecycleComponents.addBinding().to(PartyPointsTracker.class);
-		lifecycleComponents.addBinding().to(PickaxePreventExit.class);
 		lifecycleComponents.addBinding().to(PointsOverlay.class);
 		lifecycleComponents.addBinding().to(PointsTracker.class);
 		lifecycleComponents.addBinding().to(QuickProceedSwaps.class);
