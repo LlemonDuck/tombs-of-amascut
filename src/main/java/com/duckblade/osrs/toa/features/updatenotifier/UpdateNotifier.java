@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 5;
+	public static final int TARGET_VERSION = 6;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -107,6 +107,11 @@ public class UpdateNotifier implements PluginLifecycleComponent
 				updates.add("HP orbs can now be replaced by health bars a la ToB Health Bars.");
 				updates.add("The NOT_CRONDIS option for Quick-proceed swaps will no longer prevent quick entry on the door to the boss.");
 				updates.add("An indicator for which puzzle entrance to use to skip the obelisk puzzle can be enabled under Scabaras options.");
+
+			case 5:
+				updates.add("Added support for room and path time splits.");
+				updates.add("Added a visual overlay deposit-pickaxe reminder for both the puzzle room and pre-raid lobby.");
+				updates.add("Fixed a myriad of bugs in points tracking, health bar formatting, and error handling.");
 		}
 
 		return updates;
