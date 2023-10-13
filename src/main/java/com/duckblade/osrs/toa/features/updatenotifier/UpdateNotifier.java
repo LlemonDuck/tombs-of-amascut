@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 6;
+	public static final int TARGET_VERSION = 7;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -112,6 +112,9 @@ public class UpdateNotifier implements PluginLifecycleComponent
 				updates.add("Added support for room and path time splits.");
 				updates.add("Added a visual overlay deposit-pickaxe reminder for both the puzzle room and pre-raid lobby.");
 				updates.add("Fixed a myriad of bugs in points tracking, health bar formatting, and error handling.");
+
+			case 6:
+				updates.add("The Path of Het mirror puzzle now has a full overlay solver.");
 		}
 
 		return updates;
