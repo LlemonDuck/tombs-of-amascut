@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 import net.runelite.api.Client;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.api.widgets.WidgetUtil;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -19,7 +19,7 @@ public class HpOrbManager implements PluginLifecycleComponent
 {
 
 	private static final int BUILD_ORBS_WIDGET_SCRIPT_ID = 6579;
-	private static final int WIDGET_ID_ORBS = WidgetInfo.PACK(481, 4);
+	private static final int WIDGET_ID_ORBS = WidgetUtil.packComponentId(481, 4);
 
 	@Inject
 	private Client client;

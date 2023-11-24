@@ -17,7 +17,7 @@ import net.runelite.api.MessageNode;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.api.widgets.WidgetUtil;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.util.Text;
@@ -28,7 +28,7 @@ public class TargetTimeManager implements PluginLifecycleComponent
 {
 
 	private static final int SCRIPT_TOA_TIME_UPDATE_TIMER = 6581;
-	static final int WIDGET_TIMER = WidgetInfo.PACK(481, 46);
+	static final int WIDGET_TIMER = WidgetUtil.packComponentId(481, 46);
 
 	private static final String NO_TARGET_TIME_PREFIX = "You enter the Tombs of Amascut";
 	private static final String TARGET_TIME_PREFIX = "Overall time to beat:";
