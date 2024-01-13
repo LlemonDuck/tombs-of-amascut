@@ -60,16 +60,12 @@ public class ScabarasPanelManager implements PluginLifecycleComponent
 		clientToolbar.addNavigation(navButton);
 		SwingUtilities.invokeLater(() ->
 		{
-			if (!navButton.isSelected())
-			{
-				navButton.getOnSelect().run();
-			}
+			clientToolbar.openPanel(navButton);
 		});
 	}
 
 	private void removePanel()
 	{
-		navButton.setSelected(false);
 		clientToolbar.removeNavigation(navButton);
 	}
 }

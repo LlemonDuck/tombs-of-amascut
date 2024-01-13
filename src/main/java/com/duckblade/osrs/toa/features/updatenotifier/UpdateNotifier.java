@@ -55,10 +55,7 @@ public class UpdateNotifier implements PluginLifecycleComponent
 
 			SwingUtilities.invokeLater(() ->
 			{
-				if (!navButton.isSelected())
-				{
-					navButton.getOnSelect().run();
-				}
+				clientToolbar.openPanel(navButton);
 			});
 		});
 	}
