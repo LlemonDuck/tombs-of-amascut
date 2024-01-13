@@ -57,18 +57,11 @@ public class ApmekenWaveInstaller implements PluginLifecycleComponent
 	private void openPanel()
 	{
 		clientToolbar.addNavigation(navButton);
-		SwingUtilities.invokeLater(() ->
-		{
-			if (!navButton.isSelected())
-			{
-				navButton.getOnSelect().run();
-			}
-		});
+		SwingUtilities.invokeLater(() -> clientToolbar.openPanel(navButton));
 	}
 
 	private void removePanel()
 	{
-		navButton.setSelected(false);
 		clientToolbar.removeNavigation(navButton);
 	}
 }

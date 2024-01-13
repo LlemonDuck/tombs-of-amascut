@@ -53,23 +53,14 @@ public class UpdateNotifier implements PluginLifecycleComponent
 
 			clientToolbar.addNavigation(navButton);
 
-			SwingUtilities.invokeLater(() ->
-			{
-				if (!navButton.isSelected())
-				{
-					navButton.getOnSelect().run();
-				}
-			});
+			SwingUtilities.invokeLater(() -> clientToolbar.openPanel(navButton));
 		});
 	}
 
 	@Override
 	public void shutDown()
 	{
-		SwingUtilities.invokeLater(() ->
-		{
-			clientToolbar.removeNavigation(navButton);
-		});
+		SwingUtilities.invokeLater(() -> clientToolbar.removeNavigation(navButton));
 	}
 
 	private List<String> getUpdates()
