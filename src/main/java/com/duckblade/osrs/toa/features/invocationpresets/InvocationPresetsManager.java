@@ -142,6 +142,12 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 			.setOption("Save")
 			.setTarget("New Preset")
 			.onClick(ignored -> savePreset());
+
+		client.createMenuEntry(-1)
+			.setType(MenuAction.RUNELITE)
+			.setOption("Close")
+			.setTarget("Presets")
+			.onClick(ignored -> setCurrentPreset(null));
 	}
 
 	private void setCurrentPreset(InvocationPreset preset)
