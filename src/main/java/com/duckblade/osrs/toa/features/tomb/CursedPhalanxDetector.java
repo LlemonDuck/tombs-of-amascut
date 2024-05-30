@@ -2,15 +2,16 @@ package com.duckblade.osrs.toa.features.tomb;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.InventoryUtil;
 import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
+import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
-import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.InventoryID;
-import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.ItemID;
 import net.runelite.api.MenuEntry;
@@ -22,6 +23,11 @@ import net.runelite.client.eventbus.Subscribe;
 @Singleton
 public class CursedPhalanxDetector implements PluginLifecycleComponent
 {
+	private static final Set<Integer> CURSED_PHALANX_ITEM_IDS = ImmutableSet.of(
+		ItemID.CURSED_PHALANX,
+		ItemID.OSMUMTENS_FANG_OR
+	);
+
 	@Inject
 	private EventBus eventBus;
 	@Inject
@@ -50,7 +56,7 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 	@Subscribe
 	private void onMenuOptionClicked(final MenuOptionClicked event)
 	{
-		if (!config.cursedPhalanxDetect() || client.getVarbitValue(Varbits.TOA_RAID_LEVEL) < 500)
+		if (client.getVarbitValue(Varbits.TOA_RAID_LEVEL) < 500)
 		{
 			return;
 		}
@@ -62,29 +68,21 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 			return;
 		}
 
-		ItemContainer itemContainer = client.getItemContainer(InventoryID.EQUIPMENT);
+		final ItemContainer eq = client.getItemContainer(InventoryID.EQUIPMENT);
+		final ItemContainer inv = client.getItemContainer(InventoryID.INVENTORY);
 
-		if (itemContainer != null)
+		if (eq == null || inv == null)
 		{
-			final Item weapon = itemContainer.getItem(EquipmentInventorySlot.WEAPON.getSlotIdx());
-
-			if (weapon != null && weapon.getId() == ItemID.OSMUMTENS_FANG_OR)
-			{
-				event.consume();
-				client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Remove and/or drop cursed phalanx before doing that.", null);
-				return;
-			}
+			return;
 		}
 
-		itemContainer = client.getItemContainer(InventoryID.INVENTORY);
+		final boolean wearingPhalanx = InventoryUtil.containsAny(eq, CURSED_PHALANX_ITEM_IDS);
+		final boolean carryingPhalanx = InventoryUtil.containsAny(inv, CURSED_PHALANX_ITEM_IDS);
 
-		if (itemContainer != null)
+		if (wearingPhalanx || carryingPhalanx)
 		{
-			if (itemContainer.contains(ItemID.OSMUMTENS_FANG_OR) || itemContainer.contains(ItemID.CURSED_PHALANX))
-			{
-				event.consume();
-				client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Remove and/or drop cursed phalanx before doing that.", null);
-			}
+			event.consume();
+			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Remove and/or drop cursed phalanx before doing that.", null);
 		}
 	}
 }
