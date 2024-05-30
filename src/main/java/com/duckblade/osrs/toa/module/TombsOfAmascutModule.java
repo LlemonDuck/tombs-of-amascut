@@ -28,6 +28,7 @@ import com.duckblade.osrs.toa.features.scabaras.panel.ScabarasPanelManager;
 import com.duckblade.osrs.toa.features.timetracking.SplitsOverlay;
 import com.duckblade.osrs.toa.features.timetracking.SplitsTracker;
 import com.duckblade.osrs.toa.features.timetracking.TargetTimeManager;
+import com.duckblade.osrs.toa.features.tomb.CursedPhalanxDetector;
 import com.duckblade.osrs.toa.features.tomb.SarcophagusRecolorer;
 import com.duckblade.osrs.toa.features.tomb.SarcophagusOpeningSoundPlayer;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
@@ -78,6 +79,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(TargetTimeManager.class);
 		lifecycleComponents.addBinding().to(UpdateNotifier.class);
 		lifecycleComponents.addBinding().to(SarcophagusRecolorer.class);
+		lifecycleComponents.addBinding().to(CursedPhalanxDetector.class);
 	}
 
 	@Provides
