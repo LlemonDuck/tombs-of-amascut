@@ -12,7 +12,6 @@ import javax.inject.Singleton;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.InventoryID;
-import net.runelite.api.ItemContainer;
 import net.runelite.api.ItemID;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.Varbits;
@@ -68,21 +67,14 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 			return;
 		}
 
-		final ItemContainer eq = client.getItemContainer(InventoryID.EQUIPMENT);
-		final ItemContainer inv = client.getItemContainer(InventoryID.INVENTORY);
-
-		if (eq == null || inv == null)
-		{
-			return;
-		}
-
-		final boolean wearingPhalanx = InventoryUtil.containsAny(eq, CURSED_PHALANX_ITEM_IDS);
-		final boolean carryingPhalanx = InventoryUtil.containsAny(inv, CURSED_PHALANX_ITEM_IDS);
+		boolean wearingPhalanx = InventoryUtil.containsAny(client.getItemContainer(InventoryID.EQUIPMENT), CURSED_PHALANX_ITEM_IDS);
+		boolean carryingPhalanx = InventoryUtil.containsAny(client.getItemContainer(InventoryID.INVENTORY), CURSED_PHALANX_ITEM_IDS);
 
 		if (wearingPhalanx || carryingPhalanx)
 		{
 			event.consume();
 			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Remove and/or drop cursed phalanx before doing that.", null);
+			return;
 		}
 	}
 }
