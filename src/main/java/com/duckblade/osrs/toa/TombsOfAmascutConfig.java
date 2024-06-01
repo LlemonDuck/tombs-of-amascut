@@ -46,6 +46,7 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	String KEY_HP_ORB_MODE = "hpOrbsMode";
+
 	@ConfigItem(
 		keyName = KEY_HP_ORB_MODE,
 		name = "HP Orbs",
@@ -612,6 +613,18 @@ public interface TombsOfAmascutConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+		name = "Track Purple Dry Count",
+		description = "Show purple dry streak count in chat upon raid completion.",
+		position = 610,
+		keyName = "trackPurpleDryCount",
+		section = SECTION_BURIAL_TOMB
+	)
+	default boolean trackPurpleDryCount()
+	{
+		return false;
+	}
+
 	@ConfigSection(
 		name = "Time Tracking",
 		description = "Time tracking and splits.",
@@ -675,4 +688,22 @@ public interface TombsOfAmascutConfig extends Config
 	)
 	void updateNotifierLastVersion(int newVersion);
 
+	@ConfigItem(
+		keyName = "purpleDryStreakCount",
+		name = "",
+		description = "",
+		hidden = true
+	)
+	default int getPurpleDryStreakCount()
+	{
+		return 0;
+	}
+
+	@ConfigItem(
+		keyName = "purpleDryStreakCount",
+		name = "",
+		description = "",
+		hidden = true
+	)
+	void setPurpleDryStreakCount(int count);
 }
