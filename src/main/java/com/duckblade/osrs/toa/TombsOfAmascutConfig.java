@@ -7,6 +7,7 @@ import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import com.duckblade.osrs.toa.features.timetracking.SplitsMode;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
+import com.duckblade.osrs.toa.util.FontStyle;
 import com.duckblade.osrs.toa.util.HighlightMode;
 import java.awt.Color;
 import net.runelite.client.config.Alpha;
@@ -15,6 +16,7 @@ import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
 import net.runelite.client.config.Range;
+import net.runelite.client.config.Units;
 
 @ConfigGroup(TombsOfAmascutConfig.CONFIG_GROUP)
 public interface TombsOfAmascutConfig extends Config
@@ -668,6 +670,52 @@ public interface TombsOfAmascutConfig extends Config
 	default SplitsMode splitsOverlay()
 	{
 		return SplitsMode.OFF;
+	}
+
+	@ConfigSection(
+		name = "Akkha",
+		description = "Configuration for Akkha boss room.",
+		closedByDefault = true,
+		position = 800
+	)
+	String SECTION_AKKHA = "sectionAkkha";
+
+	@ConfigItem(
+		name = "Shadows Hp Overlay",
+		description = "Overlay Akkha's Shadows Hp.",
+		position = 801,
+		keyName = "akkhaShadowHpOverlay",
+		section = SECTION_AKKHA
+	)
+	default boolean akkhaShadowHpOverlay()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		name = "Font Style",
+		description = "Font style of text overlay.",
+		position = 802,
+		keyName = "akkhaFontStyle",
+		section = SECTION_AKKHA
+	)
+	default FontStyle akkhaFontStyle()
+	{
+		return FontStyle.PLAIN;
+	}
+
+	@ConfigItem(
+		name = "Font Size",
+		description = "Font size of text overlay.",
+		position = 803,
+		keyName = "akkhaFontSize",
+		section = SECTION_AKKHA
+	)
+	@Units(Units.PIXELS)
+	@Range(min = 12)
+	default int akkhaFontSize()
+	{
+		return 12;
 	}
 
 	@ConfigSection(
