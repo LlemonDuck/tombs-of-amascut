@@ -95,7 +95,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Enable Presets",
 		description = "Allows for saving and restoring of invocation presets. Right-click \"Preset\" button to save/load.",
 		section = SECTION_INVOCATION_PRESETS,
-		position = 101
+		position = 0
 	)
 	default boolean invocationPresetsEnable()
 	{
@@ -107,7 +107,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Auto-Scroll",
 		description = "Automatically scroll to invocations which need to be changed for the current preset.",
 		section = SECTION_INVOCATION_PRESETS,
-		position = 102
+		position = 1
 	)
 	default boolean invocationPresetsScroll()
 	{
@@ -121,7 +121,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Enable Screenshot button",
 		description = "Adds a button to the ToA Invocation interface that will copy all invocations as an image to your system clipboard",
 		section = SECTION_INVOCATION_SCREENSHOT,
-		position = 201
+		position = 0
 	)
 	default boolean invocationScreenshotEnable()
 	{
@@ -133,7 +133,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Show Rewards Section",
 		description = "<html>Should the rewards section be included<br/>(requires the Reward button to be selected within the interface)</html>",
 		section = SECTION_INVOCATION_SCREENSHOT,
-		position = 202
+		position = 1
 	)
 	default boolean showRewardsSection()
 	{
@@ -145,7 +145,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Use Resource Pack",
 		description = "Use Resource Pack Theme for screenshot background",
 		section = SECTION_INVOCATION_SCREENSHOT,
-		position = 203
+		position = 2
 	)
 	default boolean useResourcePack()
 	{
