@@ -298,7 +298,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Beam Timer",
 		description = "<html>Display an overlay of when the Caster Statue will fire." +
 			"<br/>Click Het's Seal from one tile away when the indicator is GREEN to get an extra damage tick.</html>",
-		position = 401,
+		position = 0,
 		section = SECTION_HET
 	)
 	default boolean hetBeamTimerEnable()
@@ -310,7 +310,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "hetSolverEnable",
 		name = "Mirror Puzzle Solver",
 		description = "Show where to place/clean mirrors for the active puzzle layout.",
-		position = 402,
+		position = 1,
 		section = SECTION_HET
 	)
 	default boolean hetSolverEnable()
@@ -324,7 +324,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = KEY_HET_PICKAXE_MENU_SWAP,
 		name = "Deposit-Pickaxe",
 		description = "Automatically swap to Deposit-pickaxe when a pickaxe is in your inventory.",
-		position = 403,
+		position = 2,
 		section = SECTION_HET
 	)
 	default boolean hetPickaxeMenuSwap()
@@ -338,7 +338,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = KEY_HET_PICKAXE_PREVENT_EXIT,
 		name = "Prevent Room Exit",
 		description = "Deprioritize the option to leave the puzzle room until you have deposited your pickaxe in the statue.",
-		position = 404,
+		position = 3,
 		section = SECTION_HET
 	)
 	default boolean hetPickaxePreventExit()
@@ -350,7 +350,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "hetPickaxePreventRaidStart",
 		name = "Prevent Raid Start",
 		description = "Deprioritize the option to enter the raid until you have deposited your pickaxe in the lobby wall cavity.",
-		position = 405,
+		position = 4,
 		section = SECTION_HET
 	)
 	default boolean hetPickaxePreventRaidStart()
@@ -362,7 +362,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "hetPickaxePuzzleOverlay",
 		name = "Puzzle Room Visual Warning",
 		description = "Add a visual warning reminder to deposit your pickaxe at the end of the mirror puzzle room.",
-		position = 406,
+		position = 5,
 		section = SECTION_HET
 	)
 	default boolean hetPickaxePuzzleOverlay()
@@ -374,7 +374,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "hetPickaxeLobbyOverlay",
 		name = "Lobby Visual Warning",
 		description = "Add a visual warning reminder to deposit your pickaxe in the raid lobby.",
-		position = 407,
+		position = 6,
 		section = SECTION_HET
 	)
 	default boolean hetPickaxeLobbyOverlay()
