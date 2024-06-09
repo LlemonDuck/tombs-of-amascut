@@ -21,74 +21,7 @@ public interface TombsOfAmascutConfig extends Config
 
 	String CONFIG_GROUP = "tombsofamascut";
 
-	@ConfigItem(
-		keyName = "apmekenWaveHelper",
-		name = "Apmeken Wave Helper",
-		description = "When entering the Path of Apmeken, displays a list of the waves in the RuneLite side panel.",
-		position = 3
-	)
-	default boolean apmekenWaveHelper()
-	{
-		return true;
-	}
-
-	String KEY_QUICK_PROCEED_ENABLE_MODE = "quickProceedEnableMode";
-
-	@ConfigItem(
-		keyName = KEY_QUICK_PROCEED_ENABLE_MODE,
-		name = "Quick Proceed",
-		description = "Left click proceed/begin/leave on Osmumten and quick-enter/quick-use entryways and teleport crystals.",
-		position = 5
-	)
-	default QuickProceedEnableMode quickProceedEnableMode()
-	{
-		return QuickProceedEnableMode.ALL;
-	}
-
-	String KEY_HP_ORB_MODE = "hpOrbsMode";
-	@ConfigItem(
-		keyName = KEY_HP_ORB_MODE,
-		name = "HP Orbs",
-		description = "Removes HP orbs from the screen or replaces them with health bars.",
-		position = 6
-	)
-	default HpOrbMode hpOrbsMode()
-	{
-		return HpOrbMode.ORBS;
-	}
-
-	@ConfigItem(
-		keyName = "leftClickBankAll",
-		name = "Bank-all Single Click",
-		description = "Allows you to Bank-all loot without requiring a second click on the minimenu.",
-		position = 7
-	)
-	default boolean leftClickBankAll()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "showUpdateMessages",
-		name = "Show Updates",
-		description = "Opens a panel describing plugin updates after new features are added to the plugin.",
-		position = 7
-	)
-	default boolean showUpdateMessages()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "hideFadeTransition",
-		name = "Hide Fade Transition",
-		description = "Hides the fade transition between loading zones.",
-		position = 9
-	)
-	default boolean hideFadeTransition()
-	{
-		return false;
-	}
+	// Sections
 
 	@ConfigSection(
 		name = "Invocation Presets",
@@ -97,6 +30,65 @@ public interface TombsOfAmascutConfig extends Config
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
+
+	@ConfigSection(
+		name = "Invocation Screenshot",
+		description = "All config options related to the Invocation Screenshot functionality",
+		position = 200,
+		closedByDefault = true
+	)
+	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
+
+	@ConfigSection(
+		name = "Path of Scabaras",
+		description = "Options for the puzzles in the Path of Scabaras.",
+		position = 300,
+		closedByDefault = true
+	)
+	String SECTION_SCABARAS = "sectionScabaras";
+
+	@ConfigSection(
+		name = "Path of Het",
+		description = "Helpers for the Path of Het.",
+		position = 400,
+		closedByDefault = true
+	)
+	String SECTION_HET = "sectionHet";
+
+	@ConfigSection(
+		name = "Points Tracker",
+		description = "<html>Tracks points for the raid, used in calculating drop chance." +
+			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
+		position = 500,
+		closedByDefault = true
+	)
+	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
+
+	@ConfigSection(
+		name = "Burial Tomb",
+		description = "Configuration for the burial tomb.",
+		position = 600,
+		closedByDefault = true
+	)
+	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
+
+	@ConfigSection(
+		name = "Time Tracking",
+		description = "Time tracking and splits.",
+		position = 700,
+		closedByDefault = true
+	)
+	String SECTION_TIME_TRACKING = "sectionTimeTracking";
+
+	@ConfigSection(
+		name = "Miscellaneous",
+		description = "Miscellaneous configurations.",
+		position = 800,
+		closedByDefault = true
+	)
+	String SECTION_MISCELLANEOUS = "sectionMiscellaneous";
+
+	// Invocation Presets
 
 	@ConfigItem(
 		keyName = "invocationPresetsEnable",
@@ -122,13 +114,7 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
-	@ConfigSection(
-		name = "Invocation Screenshot",
-		description = "All config options related to the Invocation Screenshot functionality",
-		position = 200,
-		closedByDefault = true
-	)
-	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
+	// Invocation Screenshot
 
 	@ConfigItem(
 		keyName = "invocationScreenshotEnable",
@@ -166,13 +152,7 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
-	@ConfigSection(
-		name = "Path of Scabaras",
-		description = "Options for the puzzles in the Path of Scabaras.",
-		position = 300,
-		closedByDefault = true
-	)
-	String SECTION_SCABARAS = "sectionScabaras";
+	// Scabaras
 
 	@ConfigItem(
 		keyName = "scabarasHelperMode",
@@ -311,13 +291,7 @@ public interface TombsOfAmascutConfig extends Config
 		return SkipObeliskOverlay.EnableMode.OFF;
 	}
 
-	@ConfigSection(
-		name = "Path of Het",
-		description = "Helpers for the Path of Het.",
-		position = 400,
-		closedByDefault = true
-	)
-	String SECTION_HET = "sectionHet";
+	// Het
 
 	@ConfigItem(
 		keyName = "hetBeamTimerEnable",
@@ -408,14 +382,7 @@ public interface TombsOfAmascutConfig extends Config
 		return false;
 	}
 
-	@ConfigSection(
-		name = "Points Tracker",
-		description = "<html>Tracks points for the raid, used in calculating drop chance." +
-			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
-		position = 500,
-		closedByDefault = true
-	)
-	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
+	// Points Tracker
 
 	@ConfigItem(
 		keyName = "pointsTrackerOverlayEnable",
@@ -477,13 +444,7 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
-	@ConfigSection(
-		name = "Burial Tomb",
-		description = "Configuration for the burial tomb.",
-		position = 600,
-		closedByDefault = true
-	)
-	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
+	// Burial Tomb
 
 	@ConfigItem(
 		keyName = "chestAudioEnable",
@@ -616,13 +577,7 @@ public interface TombsOfAmascutConfig extends Config
 		return false;
 	}
 
-	@ConfigSection(
-		name = "Time Tracking",
-		description = "Time tracking and splits.",
-		position = 700,
-		closedByDefault = true
-	)
-	String SECTION_TIME_TRACKING = "sectionTimeTracking";
+	// Time Tracking
 
 	@ConfigItem(
 		keyName = "targetTimeDisplay",
@@ -659,6 +614,86 @@ public interface TombsOfAmascutConfig extends Config
 	{
 		return SplitsMode.OFF;
 	}
+
+	// Miscellaneous
+
+	@ConfigItem(
+		keyName = "apmekenWaveHelper",
+		name = "Apmeken Wave Helper",
+		description = "When entering the Path of Apmeken, displays a list of the waves in the RuneLite side panel.",
+		position = 801,
+		section = SECTION_MISCELLANEOUS
+	)
+	default boolean apmekenWaveHelper()
+	{
+		return true;
+	}
+
+	String KEY_QUICK_PROCEED_ENABLE_MODE = "quickProceedEnableMode";
+
+	@ConfigItem(
+		keyName = KEY_QUICK_PROCEED_ENABLE_MODE,
+		name = "Quick Proceed",
+		description = "Left click proceed/begin/leave on Osmumten and quick-enter/quick-use entryways and teleport crystals.",
+		position = 802,
+		section = SECTION_MISCELLANEOUS
+	)
+	default QuickProceedEnableMode quickProceedEnableMode()
+	{
+		return QuickProceedEnableMode.ALL;
+	}
+
+	String KEY_HP_ORB_MODE = "hpOrbsMode";
+
+	@ConfigItem(
+		keyName = KEY_HP_ORB_MODE,
+		name = "HP Orbs",
+		description = "Removes HP orbs from the screen or replaces them with health bars.",
+		position = 803,
+		section = SECTION_MISCELLANEOUS
+	)
+	default HpOrbMode hpOrbsMode()
+	{
+		return HpOrbMode.ORBS;
+	}
+
+	@ConfigItem(
+		keyName = "leftClickBankAll",
+		name = "Bank-all Single Click",
+		description = "Allows you to Bank-all loot without requiring a second click on the minimenu.",
+		position = 804,
+		section = SECTION_MISCELLANEOUS
+	)
+	default boolean leftClickBankAll()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "showUpdateMessages",
+		name = "Show Updates",
+		description = "Opens a panel describing plugin updates after new features are added to the plugin.",
+		position = 805,
+		section = SECTION_MISCELLANEOUS
+	)
+	default boolean showUpdateMessages()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "hideFadeTransition",
+		name = "Hide Fade Transition",
+		description = "Hides the fade transition between loading zones.",
+		position = 806,
+		section = SECTION_MISCELLANEOUS
+	)
+	default boolean hideFadeTransition()
+	{
+		return false;
+	}
+
+	// Hidden
 
 	@ConfigItem(
 		keyName = "updateNotifierLastVersion",
