@@ -24,9 +24,33 @@ public interface TombsOfAmascutConfig extends Config
 	// Sections
 
 	@ConfigSection(
+		name = "Path of Het",
+		description = "Helpers for the Path of Het.",
+		position = 0,
+		closedByDefault = true
+	)
+	String SECTION_HET = "sectionHet";
+
+	@ConfigSection(
+		name = "Path of Scabaras",
+		description = "Options for the puzzles in the Path of Scabaras.",
+		position = 1,
+		closedByDefault = true
+	)
+	String SECTION_SCABARAS = "sectionScabaras";
+
+	@ConfigSection(
+		name = "Burial Tomb",
+		description = "Configuration for the burial tomb.",
+		position = 2,
+		closedByDefault = true
+	)
+	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
+
+	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
-		position = 100,
+		position = 3,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
@@ -34,48 +58,24 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Screenshot",
 		description = "All config options related to the Invocation Screenshot functionality",
-		position = 200,
+		position = 4,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
 
 	@ConfigSection(
-		name = "Path of Scabaras",
-		description = "Options for the puzzles in the Path of Scabaras.",
-		position = 300,
-		closedByDefault = true
-	)
-	String SECTION_SCABARAS = "sectionScabaras";
-
-	@ConfigSection(
-		name = "Path of Het",
-		description = "Helpers for the Path of Het.",
-		position = 400,
-		closedByDefault = true
-	)
-	String SECTION_HET = "sectionHet";
-
-	@ConfigSection(
 		name = "Points Tracker",
 		description = "<html>Tracks points for the raid, used in calculating drop chance." +
 			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
-		position = 500,
+		position = 5,
 		closedByDefault = true
 	)
 	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
 
 	@ConfigSection(
-		name = "Burial Tomb",
-		description = "Configuration for the burial tomb.",
-		position = 600,
-		closedByDefault = true
-	)
-	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
-
-	@ConfigSection(
 		name = "Time Tracking",
 		description = "Time tracking and splits.",
-		position = 700,
+		position = 6,
 		closedByDefault = true
 	)
 	String SECTION_TIME_TRACKING = "sectionTimeTracking";
@@ -83,7 +83,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Miscellaneous",
 		description = "Miscellaneous configurations.",
-		position = 800,
+		position = 7,
 		closedByDefault = true
 	)
 	String SECTION_MISCELLANEOUS = "sectionMiscellaneous";
