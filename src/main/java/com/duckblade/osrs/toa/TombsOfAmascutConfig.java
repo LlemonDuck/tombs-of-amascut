@@ -88,68 +88,95 @@ public interface TombsOfAmascutConfig extends Config
 	)
 	String SECTION_MISCELLANEOUS = "sectionMiscellaneous";
 
-	// Invocation Presets
+	// Het
 
 	@ConfigItem(
-		keyName = "invocationPresetsEnable",
-		name = "Enable Presets",
-		description = "Allows for saving and restoring of invocation presets. Right-click \"Preset\" button to save/load.",
-		section = SECTION_INVOCATION_PRESETS,
-		position = 0
+		keyName = "hetBeamTimerEnable",
+		name = "Beam Timer",
+		description = "<html>Display an overlay of when the Caster Statue will fire." +
+			"<br/>Click Het's Seal from one tile away when the indicator is GREEN to get an extra damage tick.</html>",
+		position = 0,
+		section = SECTION_HET
 	)
-	default boolean invocationPresetsEnable()
+	default boolean hetBeamTimerEnable()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "hetSolverEnable",
+		name = "Mirror Puzzle Solver",
+		description = "Show where to place/clean mirrors for the active puzzle layout.",
+		position = 1,
+		section = SECTION_HET
+	)
+	default boolean hetSolverEnable()
+	{
+		return true;
+	}
+
+	String KEY_HET_PICKAXE_MENU_SWAP = "hetPickaxeMenuSwap";
+
+	@ConfigItem(
+		keyName = KEY_HET_PICKAXE_MENU_SWAP,
+		name = "Deposit-Pickaxe",
+		description = "Automatically swap to Deposit-pickaxe when a pickaxe is in your inventory.",
+		position = 2,
+		section = SECTION_HET
+	)
+	default boolean hetPickaxeMenuSwap()
+	{
+		return true;
+	}
+
+	String KEY_HET_PICKAXE_PREVENT_EXIT = "hetPickaxePreventExit";
+
+	@ConfigItem(
+		keyName = KEY_HET_PICKAXE_PREVENT_EXIT,
+		name = "Prevent Room Exit",
+		description = "Deprioritize the option to leave the puzzle room until you have deposited your pickaxe in the statue.",
+		position = 3,
+		section = SECTION_HET
+	)
+	default boolean hetPickaxePreventExit()
 	{
 		return false;
 	}
 
 	@ConfigItem(
-		keyName = "invocationPresetsScroll",
-		name = "Auto-Scroll",
-		description = "Automatically scroll to invocations which need to be changed for the current preset.",
-		section = SECTION_INVOCATION_PRESETS,
-		position = 1
+		keyName = "hetPickaxePreventRaidStart",
+		name = "Prevent Raid Start",
+		description = "Deprioritize the option to enter the raid until you have deposited your pickaxe in the lobby wall cavity.",
+		position = 4,
+		section = SECTION_HET
 	)
-	default boolean invocationPresetsScroll()
+	default boolean hetPickaxePreventRaidStart()
 	{
-		return true;
-	}
-
-	// Invocation Screenshot
-
-	@ConfigItem(
-		keyName = "invocationScreenshotEnable",
-		name = "Enable Screenshot button",
-		description = "Adds a button to the ToA Invocation interface that will copy all invocations as an image to your system clipboard",
-		section = SECTION_INVOCATION_SCREENSHOT,
-		position = 0
-	)
-	default boolean invocationScreenshotEnable()
-	{
-		return true;
+		return false;
 	}
 
 	@ConfigItem(
-		keyName = "showRewardsSection",
-		name = "Show Rewards Section",
-		description = "<html>Should the rewards section be included<br/>(requires the Reward button to be selected within the interface)</html>",
-		section = SECTION_INVOCATION_SCREENSHOT,
-		position = 1
+		keyName = "hetPickaxePuzzleOverlay",
+		name = "Puzzle Room Visual Warning",
+		description = "Add a visual warning reminder to deposit your pickaxe at the end of the mirror puzzle room.",
+		position = 5,
+		section = SECTION_HET
 	)
-	default boolean showRewardsSection()
+	default boolean hetPickaxePuzzleOverlay()
 	{
-		return true;
+		return false;
 	}
 
 	@ConfigItem(
-		keyName = "useResourcePack",
-		name = "Use Resource Pack",
-		description = "Use Resource Pack Theme for screenshot background",
-		section = SECTION_INVOCATION_SCREENSHOT,
-		position = 2
+		keyName = "hetPickaxeLobbyOverlay",
+		name = "Lobby Visual Warning",
+		description = "Add a visual warning reminder to deposit your pickaxe in the raid lobby.",
+		position = 6,
+		section = SECTION_HET
 	)
-	default boolean useResourcePack()
+	default boolean hetPickaxeLobbyOverlay()
 	{
-		return true;
+		return false;
 	}
 
 	// Scabaras
@@ -291,159 +318,6 @@ public interface TombsOfAmascutConfig extends Config
 		return SkipObeliskOverlay.EnableMode.OFF;
 	}
 
-	// Het
-
-	@ConfigItem(
-		keyName = "hetBeamTimerEnable",
-		name = "Beam Timer",
-		description = "<html>Display an overlay of when the Caster Statue will fire." +
-			"<br/>Click Het's Seal from one tile away when the indicator is GREEN to get an extra damage tick.</html>",
-		position = 0,
-		section = SECTION_HET
-	)
-	default boolean hetBeamTimerEnable()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "hetSolverEnable",
-		name = "Mirror Puzzle Solver",
-		description = "Show where to place/clean mirrors for the active puzzle layout.",
-		position = 1,
-		section = SECTION_HET
-	)
-	default boolean hetSolverEnable()
-	{
-		return true;
-	}
-
-	String KEY_HET_PICKAXE_MENU_SWAP = "hetPickaxeMenuSwap";
-
-	@ConfigItem(
-		keyName = KEY_HET_PICKAXE_MENU_SWAP,
-		name = "Deposit-Pickaxe",
-		description = "Automatically swap to Deposit-pickaxe when a pickaxe is in your inventory.",
-		position = 2,
-		section = SECTION_HET
-	)
-	default boolean hetPickaxeMenuSwap()
-	{
-		return true;
-	}
-
-	String KEY_HET_PICKAXE_PREVENT_EXIT = "hetPickaxePreventExit";
-
-	@ConfigItem(
-		keyName = KEY_HET_PICKAXE_PREVENT_EXIT,
-		name = "Prevent Room Exit",
-		description = "Deprioritize the option to leave the puzzle room until you have deposited your pickaxe in the statue.",
-		position = 3,
-		section = SECTION_HET
-	)
-	default boolean hetPickaxePreventExit()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "hetPickaxePreventRaidStart",
-		name = "Prevent Raid Start",
-		description = "Deprioritize the option to enter the raid until you have deposited your pickaxe in the lobby wall cavity.",
-		position = 4,
-		section = SECTION_HET
-	)
-	default boolean hetPickaxePreventRaidStart()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "hetPickaxePuzzleOverlay",
-		name = "Puzzle Room Visual Warning",
-		description = "Add a visual warning reminder to deposit your pickaxe at the end of the mirror puzzle room.",
-		position = 5,
-		section = SECTION_HET
-	)
-	default boolean hetPickaxePuzzleOverlay()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "hetPickaxeLobbyOverlay",
-		name = "Lobby Visual Warning",
-		description = "Add a visual warning reminder to deposit your pickaxe in the raid lobby.",
-		position = 6,
-		section = SECTION_HET
-	)
-	default boolean hetPickaxeLobbyOverlay()
-	{
-		return false;
-	}
-
-	// Points Tracker
-
-	@ConfigItem(
-		keyName = "pointsTrackerOverlayEnable",
-		name = "Enable Overlay",
-		description = "Show points earned within the raid.",
-		position = 0,
-		section = SECTION_POINTS_TRACKER
-	)
-	default boolean pointsTrackerOverlayEnable()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "pointsTrackerShowRoomPoints",
-		name = "Separate Room Points",
-		description = "Show points for the current room separate from total points.",
-		position = 1,
-		section = SECTION_POINTS_TRACKER
-	)
-	default boolean pointsTrackerShowRoomPoints()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "pointsTrackerShowUniqueChance",
-		name = "Show Unique %",
-		description = "Show unique chance on the overlay.",
-		position = 2,
-		section = SECTION_POINTS_TRACKER
-	)
-	default boolean pointsTrackerShowUniqueChance()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "pointsTrackerShowPetChance",
-		name = "Show Pet %",
-		description = "Show pet chance on the overlay.",
-		position = 3,
-		section = SECTION_POINTS_TRACKER
-	)
-	default boolean pointsTrackerShowPetChance()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "pointsTrackerPostRaidMessage",
-		name = "Points Total Message",
-		description = "Show the total points in chat after the raid, akin to the Chambers of Xeric.",
-		position = 4,
-		section = SECTION_POINTS_TRACKER
-	)
-	default boolean pointsTrackerPostRaidMessage()
-	{
-		return true;
-	}
-
 	// Burial Tomb
 
 	@ConfigItem(
@@ -575,6 +449,132 @@ public interface TombsOfAmascutConfig extends Config
 	default boolean cursedPhalanxDetect()
 	{
 		return false;
+	}
+
+	// Invocation Presets
+
+	@ConfigItem(
+		keyName = "invocationPresetsEnable",
+		name = "Enable Presets",
+		description = "Allows for saving and restoring of invocation presets. Right-click \"Preset\" button to save/load.",
+		section = SECTION_INVOCATION_PRESETS,
+		position = 0
+	)
+	default boolean invocationPresetsEnable()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "invocationPresetsScroll",
+		name = "Auto-Scroll",
+		description = "Automatically scroll to invocations which need to be changed for the current preset.",
+		section = SECTION_INVOCATION_PRESETS,
+		position = 1
+	)
+	default boolean invocationPresetsScroll()
+	{
+		return true;
+	}
+
+	// Invocation Screenshot
+
+	@ConfigItem(
+		keyName = "invocationScreenshotEnable",
+		name = "Enable Screenshot button",
+		description = "Adds a button to the ToA Invocation interface that will copy all invocations as an image to your system clipboard",
+		section = SECTION_INVOCATION_SCREENSHOT,
+		position = 0
+	)
+	default boolean invocationScreenshotEnable()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showRewardsSection",
+		name = "Show Rewards Section",
+		description = "<html>Should the rewards section be included<br/>(requires the Reward button to be selected within the interface)</html>",
+		section = SECTION_INVOCATION_SCREENSHOT,
+		position = 1
+	)
+	default boolean showRewardsSection()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "useResourcePack",
+		name = "Use Resource Pack",
+		description = "Use Resource Pack Theme for screenshot background",
+		section = SECTION_INVOCATION_SCREENSHOT,
+		position = 2
+	)
+	default boolean useResourcePack()
+	{
+		return true;
+	}
+
+	// Points Tracker
+
+	@ConfigItem(
+		keyName = "pointsTrackerOverlayEnable",
+		name = "Enable Overlay",
+		description = "Show points earned within the raid.",
+		position = 0,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerOverlayEnable()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "pointsTrackerShowRoomPoints",
+		name = "Separate Room Points",
+		description = "Show points for the current room separate from total points.",
+		position = 1,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerShowRoomPoints()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "pointsTrackerShowUniqueChance",
+		name = "Show Unique %",
+		description = "Show unique chance on the overlay.",
+		position = 2,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerShowUniqueChance()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "pointsTrackerShowPetChance",
+		name = "Show Pet %",
+		description = "Show pet chance on the overlay.",
+		position = 3,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerShowPetChance()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "pointsTrackerPostRaidMessage",
+		name = "Points Total Message",
+		description = "Show the total points in chat after the raid, akin to the Chambers of Xeric.",
+		position = 4,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerPostRaidMessage()
+	{
+		return true;
 	}
 
 	// Time Tracking
