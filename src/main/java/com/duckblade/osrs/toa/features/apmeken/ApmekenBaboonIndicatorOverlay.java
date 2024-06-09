@@ -25,7 +25,6 @@ import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLifecycleComponent
 {
 
-	private static final int ANIMATION_ID_VOLATILE_BABOON = 9756;
 	private static final int AREA_SIZE_3X3 = 3;
 
 	private final OverlayManager overlayManager;
@@ -127,7 +126,7 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 	{
 		for (final NPC npc : apmekenBaboonIndicator.getVolatileBaboons())
 		{
-			final Color color = npc.getAnimation() == ANIMATION_ID_VOLATILE_BABOON ? Color.RED : Color.ORANGE;
+			final Color color = Color.ORANGE;
 
 			final LocalPoint localPoint = npc.getLocalLocation();
 
