@@ -22,7 +22,7 @@ import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class Apmeken implements PluginLifecycleComponent
+public class ApmekenBaboonIndicator implements PluginLifecycleComponent
 {
 	private final EventBus eventBus;
 

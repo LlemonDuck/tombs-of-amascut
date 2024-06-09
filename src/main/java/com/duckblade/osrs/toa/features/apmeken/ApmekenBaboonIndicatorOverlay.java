@@ -22,7 +22,7 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
 @Singleton
-public class ApmekenOverlay extends Overlay implements PluginLifecycleComponent
+public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLifecycleComponent
 {
 
 	private static final int ANIMATION_ID_VOLATILE_BABOON = 9756;
@@ -32,22 +32,22 @@ public class ApmekenOverlay extends Overlay implements PluginLifecycleComponent
 	private final ModelOutlineRenderer modelOutlineRenderer;
 	private final Client client;
 	private final TombsOfAmascutConfig config;
-	private final Apmeken apmeken;
+	private final ApmekenBaboonIndicator apmekenBaboonIndicator;
 
 	@Inject
-	public ApmekenOverlay(
+	public ApmekenBaboonIndicatorOverlay(
 		final OverlayManager overlayManager,
 		final ModelOutlineRenderer modelOutlineRenderer,
 		final Client client,
 		final TombsOfAmascutConfig config,
-		final Apmeken apmeken
+		final ApmekenBaboonIndicator apmekenBaboonIndicator
 	)
 	{
 		this.overlayManager = overlayManager;
 		this.modelOutlineRenderer = modelOutlineRenderer;
 		this.client = client;
 		this.config = config;
-		this.apmeken = apmeken;
+		this.apmekenBaboonIndicator = apmekenBaboonIndicator;
 
 		setLayer(OverlayLayer.ABOVE_SCENE);
 		setPosition(OverlayPosition.DYNAMIC);
@@ -56,7 +56,7 @@ public class ApmekenOverlay extends Overlay implements PluginLifecycleComponent
 	@Override
 	public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
 	{
-		return apmeken.isEnabled(config, raidState);
+		return apmekenBaboonIndicator.isEnabled(config, raidState);
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class ApmekenOverlay extends Overlay implements PluginLifecycleComponent
 
 	private void renderBaboonOutline()
 	{
-		for (final NPC npc : apmeken.getBaboons())
+		for (final NPC npc : apmekenBaboonIndicator.getBaboons())
 		{
 			final Color color;
 
@@ -125,7 +125,7 @@ public class ApmekenOverlay extends Overlay implements PluginLifecycleComponent
 
 	private void renderVolatileBaboonTiles(final Graphics2D graphics2D)
 	{
-		for (final NPC npc : apmeken.getVolatileBaboons())
+		for (final NPC npc : apmekenBaboonIndicator.getVolatileBaboons())
 		{
 			final Color color = npc.getAnimation() == ANIMATION_ID_VOLATILE_BABOON ? Color.RED : Color.ORANGE;
 
