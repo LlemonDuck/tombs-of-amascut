@@ -588,6 +588,19 @@ public interface TombsOfAmascutConfig extends Config
 		return new Color(17, 88, 152);
 	}
 
+	@ConfigItem(
+		name = "Detect Cursed Phalanx",
+		description = "Prevents opening chests if player is carrying a cursed phalanx" +
+			"<br>or Osmumten's fang (or).",
+		position = 609,
+		keyName = "cursedPhalanxDetect",
+		section = SECTION_BURIAL_TOMB
+	)
+	default boolean cursedPhalanxDetect()
+	{
+		return false;
+	}
+
 	@ConfigSection(
 		name = "Time Tracking",
 		description = "Time tracking and splits.",
