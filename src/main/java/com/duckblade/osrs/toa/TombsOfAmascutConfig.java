@@ -46,6 +46,7 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	String KEY_HP_ORB_MODE = "hpOrbsMode";
+
 	@ConfigItem(
 		keyName = KEY_HP_ORB_MODE,
 		name = "HP Orbs",
@@ -630,6 +631,38 @@ public interface TombsOfAmascutConfig extends Config
 	default SplitsMode splitsOverlay()
 	{
 		return SplitsMode.OFF;
+	}
+
+	@ConfigSection(
+		name = "Path of Apmeken",
+		description = "Options for the Path of Apmeken.",
+		position = 900,
+		closedByDefault = true
+	)
+	String SECTION_APMEKEN = "sectionApmeken";
+
+	@ConfigItem(
+		name = "Baboon Outline",
+		description = "Highlight baboons.",
+		position = 901,
+		keyName = "apmekenBaboonOutline",
+		section = SECTION_APMEKEN
+	)
+	default boolean apmekenBaboonOutline()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		name = "Volatile Baboon Tile",
+		description = "Highlight the tiles of the explode radius.",
+		position = 902,
+		keyName = "apmekenVolatileBaboonTiles",
+		section = SECTION_APMEKEN
+	)
+	default boolean apmekenVolatileBaboonTiles()
+	{
+		return false;
 	}
 
 	@ConfigItem(

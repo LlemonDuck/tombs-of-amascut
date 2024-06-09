@@ -3,6 +3,8 @@ package com.duckblade.osrs.toa.module;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.LeftClickBankAll;
+import com.duckblade.osrs.toa.features.apmeken.Apmeken;
+import com.duckblade.osrs.toa.features.apmeken.ApmekenOverlay;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeOverlay;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxePreventEntry;
 import com.duckblade.osrs.toa.features.het.solver.HetSolver;
@@ -48,6 +50,8 @@ public class TombsOfAmascutModule extends AbstractModule
 	{
 		Multibinder<PluginLifecycleComponent> lifecycleComponents = Multibinder.newSetBinder(binder(), PluginLifecycleComponent.class);
 		lifecycleComponents.addBinding().to(AdditionPuzzleSolver.class);
+		lifecycleComponents.addBinding().to(Apmeken.class);
+		lifecycleComponents.addBinding().to(ApmekenOverlay.class);
 		lifecycleComponents.addBinding().to(ApmekenWaveInstaller.class);
 		lifecycleComponents.addBinding().to(BeamTimerOverlay.class);
 		lifecycleComponents.addBinding().to(BeamTimerTracker.class);
