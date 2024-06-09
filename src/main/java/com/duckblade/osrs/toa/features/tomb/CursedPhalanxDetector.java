@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.InventoryID;
@@ -20,6 +21,7 @@ import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class CursedPhalanxDetector implements PluginLifecycleComponent
 {
 	private static final Set<Integer> CURSED_PHALANX_ITEM_IDS = ImmutableSet.of(
@@ -27,12 +29,8 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 		ItemID.OSMUMTENS_FANG_OR
 	);
 
-	@Inject
-	private EventBus eventBus;
-	@Inject
-	private Client client;
-	@Inject
-	private TombsOfAmascutConfig config;
+	private final EventBus eventBus;
+	private final Client client;
 
 	@Override
 	public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
@@ -74,7 +72,6 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 		{
 			event.consume();
 			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Remove and/or drop cursed phalanx before doing that.", null);
-			return;
 		}
 	}
 }
