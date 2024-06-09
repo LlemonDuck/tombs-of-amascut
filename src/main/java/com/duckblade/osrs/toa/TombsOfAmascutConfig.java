@@ -621,7 +621,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "apmekenWaveHelper",
 		name = "Apmeken Wave Helper",
 		description = "When entering the Path of Apmeken, displays a list of the waves in the RuneLite side panel.",
-		position = 801,
+		position = 0,
 		section = SECTION_MISCELLANEOUS
 	)
 	default boolean apmekenWaveHelper()
@@ -635,7 +635,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = KEY_QUICK_PROCEED_ENABLE_MODE,
 		name = "Quick Proceed",
 		description = "Left click proceed/begin/leave on Osmumten and quick-enter/quick-use entryways and teleport crystals.",
-		position = 802,
+		position = 1,
 		section = SECTION_MISCELLANEOUS
 	)
 	default QuickProceedEnableMode quickProceedEnableMode()
@@ -649,7 +649,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = KEY_HP_ORB_MODE,
 		name = "HP Orbs",
 		description = "Removes HP orbs from the screen or replaces them with health bars.",
-		position = 803,
+		position = 2,
 		section = SECTION_MISCELLANEOUS
 	)
 	default HpOrbMode hpOrbsMode()
@@ -661,7 +661,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "leftClickBankAll",
 		name = "Bank-all Single Click",
 		description = "Allows you to Bank-all loot without requiring a second click on the minimenu.",
-		position = 804,
+		position = 3,
 		section = SECTION_MISCELLANEOUS
 	)
 	default boolean leftClickBankAll()
@@ -673,7 +673,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "showUpdateMessages",
 		name = "Show Updates",
 		description = "Opens a panel describing plugin updates after new features are added to the plugin.",
-		position = 805,
+		position = 4,
 		section = SECTION_MISCELLANEOUS
 	)
 	default boolean showUpdateMessages()
@@ -685,7 +685,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "hideFadeTransition",
 		name = "Hide Fade Transition",
 		description = "Hides the fade transition between loading zones.",
-		position = 806,
+		position = 5,
 		section = SECTION_MISCELLANEOUS
 	)
 	default boolean hideFadeTransition()
