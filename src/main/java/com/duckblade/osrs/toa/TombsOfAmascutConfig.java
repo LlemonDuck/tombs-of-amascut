@@ -452,7 +452,7 @@ public interface TombsOfAmascutConfig extends Config
 		description = "<html>Either disables the feature or plays an audio file whenever the purple chest is opened." +
 			"<br/>The custom audio file should be named toa-chest.wav inside the .runelite/tombs-of-amascut folder</html>",
 		section = SECTION_BURIAL_TOMB,
-		position = 601
+		position = 0
 	)
 	default boolean chestAudioEnable()
 	{
@@ -469,7 +469,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Audio Volume",
 		description = "Adjusts how loud the chest audio is when played. 100 is no change to file volume.",
 		section = SECTION_BURIAL_TOMB,
-		position = 602
+		position = 1
 	)
 	default int chestAudioVolume()
 	{
@@ -481,7 +481,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Recolour White Chest",
 		description = "Recolour the white sarcophagus.",
-		position = 603,
+		position = 2,
 		keyName = SARCOPHAGUS_RECOLOR_WHITE,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -495,7 +495,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "White Colour",
 		description = "Colour to replace the white sarcophagus.",
-		position = 604,
+		position = 3,
 		keyName = SARCOPHAGUS_WHITE_RECOLOR,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -510,7 +510,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Recolour Purple Chest (Mine)",
 		description = "Recolour the purple sarcophagus." +
 			"<br>When the loot is mine.",
-		position = 605,
+		position = 4,
 		keyName = SARCOPHAGUS_RECOLOR_MY_PURPLE,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -525,7 +525,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Purple Colour (Mine)",
 		description = "Colour to replace the purple sarcophagus." +
 			"<br>When the loot is mine.",
-		position = 606,
+		position = 5,
 		keyName = SARCOPHAGUS_MY_PURPLE_RECOLOR,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -540,7 +540,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Recolour Purple Chest (Other)",
 		description = "Recolour the purple sarcophagus." +
 			"<br>When the loot is NOT mine.",
-		position = 607,
+		position = 6,
 		keyName = SARCOPHAGUS_RECOLOR_OTHER_PURPLE,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -555,7 +555,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Purple Colour (Other)",
 		description = "Colour to replace the purple sarcophagus." +
 			"<br>When the loot is NOT mine.",
-		position = 608,
+		position = 7,
 		keyName = SARCOPHAGUS_OTHER_PURPLE_RECOLOR,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -568,7 +568,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Detect Cursed Phalanx",
 		description = "Prevents opening chests if player is carrying a cursed phalanx" +
 			"<br>or Osmumten's fang (or).",
-		position = 609,
+		position = 8,
 		keyName = "cursedPhalanxDetect",
 		section = SECTION_BURIAL_TOMB
 	)
