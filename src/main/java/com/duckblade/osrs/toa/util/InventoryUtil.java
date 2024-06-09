@@ -12,16 +12,16 @@ public class InventoryUtil
 	public static boolean containsAny(Client client, Set<Integer> ids)
 	{
 		ItemContainer inv = client.getItemContainer(InventoryID.INVENTORY);
-		if (inv == null)
-		{
-			return false;
-		}
-
 		return containsAny(inv, ids);
 	}
 
 	public static boolean containsAny(ItemContainer inv, Set<Integer> ids)
 	{
+		if (inv == null)
+		{
+			return false;
+		}
+
 		for (Item item : inv.getItems())
 		{
 			if (ids.contains(item.getId()))
