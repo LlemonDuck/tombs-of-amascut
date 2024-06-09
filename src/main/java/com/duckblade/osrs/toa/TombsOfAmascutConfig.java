@@ -79,6 +79,17 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "hideFadeTransition",
+		name = "Hide Fade Transition",
+		description = "Hides the fade transition between loading zones.",
+		position = 9
+	)
+	default boolean hideFadeTransition()
+	{
+		return false;
+	}
+
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
