@@ -388,7 +388,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "pointsTrackerOverlayEnable",
 		name = "Enable Overlay",
 		description = "Show points earned within the raid.",
-		position = 501,
+		position = 0,
 		section = SECTION_POINTS_TRACKER
 	)
 	default boolean pointsTrackerOverlayEnable()
@@ -400,7 +400,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "pointsTrackerShowRoomPoints",
 		name = "Separate Room Points",
 		description = "Show points for the current room separate from total points.",
-		position = 502,
+		position = 1,
 		section = SECTION_POINTS_TRACKER
 	)
 	default boolean pointsTrackerShowRoomPoints()
@@ -412,7 +412,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "pointsTrackerShowUniqueChance",
 		name = "Show Unique %",
 		description = "Show unique chance on the overlay.",
-		position = 503,
+		position = 2,
 		section = SECTION_POINTS_TRACKER
 	)
 	default boolean pointsTrackerShowUniqueChance()
@@ -424,7 +424,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "pointsTrackerShowPetChance",
 		name = "Show Pet %",
 		description = "Show pet chance on the overlay.",
-		position = 504,
+		position = 3,
 		section = SECTION_POINTS_TRACKER
 	)
 	default boolean pointsTrackerShowPetChance()
@@ -436,7 +436,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "pointsTrackerPostRaidMessage",
 		name = "Points Total Message",
 		description = "Show the total points in chat after the raid, akin to the Chambers of Xeric.",
-		position = 505,
+		position = 4,
 		section = SECTION_POINTS_TRACKER
 	)
 	default boolean pointsTrackerPostRaidMessage()
