@@ -35,7 +35,13 @@ public class ApmekenOverlay extends Overlay implements PluginLifecycleComponent
 	private final Apmeken apmeken;
 
 	@Inject
-	public ApmekenOverlay(final OverlayManager overlayManager, final ModelOutlineRenderer modelOutlineRenderer, final Client client, final TombsOfAmascutConfig config, final Apmeken apmeken)
+	public ApmekenOverlay(
+		final OverlayManager overlayManager,
+		final ModelOutlineRenderer modelOutlineRenderer,
+		final Client client,
+		final TombsOfAmascutConfig config,
+		final Apmeken apmeken
+	)
 	{
 		this.overlayManager = overlayManager;
 		this.modelOutlineRenderer = modelOutlineRenderer;
