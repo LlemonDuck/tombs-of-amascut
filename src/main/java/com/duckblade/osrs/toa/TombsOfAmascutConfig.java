@@ -158,7 +158,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "scabarasHelperMode",
 		name = "Scabaras Helpers",
 		description = "Puzzle helpers for the Path of Scabaras (leading to Kephri).",
-		position = 301,
+		position = 0,
 		section = SECTION_SCABARAS
 	)
 	default ScabarasHelperMode scabarasHelperMode()
@@ -171,7 +171,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Addition Colour",
 		description = "Highlight colour for tiles in the addition puzzle." +
 			"<br/>Set alpha to 0 to disable.",
-		position = 302,
+		position = 1,
 		section = SECTION_SCABARAS
 	)
 	@Alpha
@@ -185,7 +185,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Light Flip Colour",
 		description = "Highlight colour for tiles in the light flips puzzle." +
 			"<br/>Set alpha to 0 to disable.",
-		position = 303,
+		position = 2,
 		section = SECTION_SCABARAS
 	)
 	@Alpha
@@ -199,7 +199,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Obelisk Start",
 		description = "Start colour for highlighting the obelisks in the obelisk puzzle." +
 			"<br/>Set alpha to 0 to disable.",
-		position = 304,
+		position = 3,
 		section = SECTION_SCABARAS
 	)
 	@Alpha
@@ -213,7 +213,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Obelisk End",
 		description = "End colour for highlighting the obelisks in the obelisk puzzle." +
 			"<br/>Set alpha to 0 to disable.",
-		position = 305,
+		position = 4,
 		section = SECTION_SCABARAS
 	)
 	@Alpha
@@ -227,7 +227,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Sequence Start",
 		description = "Start colour for highlighting the tiles in the sequence (simon says) puzzle." +
 			"<br/>Set alpha to 0 to disable.",
-		position = 306,
+		position = 5,
 		section = SECTION_SCABARAS
 	)
 	@Alpha
@@ -241,7 +241,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Sequence End",
 		description = "End colour for highlighting the tiles in the sequence (simon says) puzzle." +
 			"<br/>Set alpha to 0 to disable.",
-		position = 307,
+		position = 6,
 		section = SECTION_SCABARAS
 	)
 	@Alpha
@@ -254,7 +254,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "scabarasMatchingDisplayMode",
 		name = "Matching Display",
 		description = "Whether to show highlight tiles, show names of tiles, or both for the matching puzzle.",
-		position = 308,
+		position = 7,
 		section = SECTION_SCABARAS
 	)
 	default MatchingTileDisplayMode scabarasMatchingDisplayMode()
@@ -267,7 +267,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Matched Opacity",
 		description = "Opacity (transparency) of completed tiles in the matching puzzle." +
 			"<br/>Set to 0 to hide completed tiles completely.",
-		position = 309,
+		position = 8,
 		section = SECTION_SCABARAS
 	)
 	@Range(
@@ -283,7 +283,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "scabarasHighlightSkipObeliskEntry",
 		name = "Show Obelisk Skip",
 		description = "Highlight which entrance will skip requiring the obelisk puzzle.",
-		position = 310,
+		position = 9,
 		section = SECTION_SCABARAS
 	)
 	default SkipObeliskOverlay.EnableMode scabarasHighlightSkipObeliskEntry()
