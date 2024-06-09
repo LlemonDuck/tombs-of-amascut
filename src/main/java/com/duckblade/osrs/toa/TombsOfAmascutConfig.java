@@ -7,6 +7,7 @@ import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import com.duckblade.osrs.toa.features.timetracking.SplitsMode;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
+import com.duckblade.osrs.toa.util.HighlightMode;
 import java.awt.Color;
 import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
@@ -648,9 +649,9 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "apmekenBaboonOutline",
 		section = SECTION_APMEKEN
 	)
-	default boolean apmekenBaboonOutline()
+	default HighlightMode apmekenBaboonOutline()
 	{
-		return false;
+		return HighlightMode.OFF;
 	}
 
 	@ConfigItem(
@@ -663,6 +664,78 @@ public interface TombsOfAmascutConfig extends Config
 	default boolean apmekenVolatileBaboonTiles()
 	{
 		return false;
+	}
+
+	@ConfigItem(
+		name = "Melee Baboon",
+		description = "Color to highlight the melee baboon.",
+		position = 903,
+		keyName = "apemekenBaboonColorMelee",
+		section = SECTION_APMEKEN
+	)
+	default Color apmekenBaboonColorMelee()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+		name = "Range Baboon",
+		description = "Color to highlight the range baboon.",
+		position = 904,
+		keyName = "apemekenBaboonColorRange",
+		section = SECTION_APMEKEN
+	)
+	default Color apmekenBaboonColorRange()
+	{
+		return Color.GREEN;
+	}
+
+	@ConfigItem(
+		name = "Mage Baboon",
+		description = "Color to highlight the mage baboon.",
+		position = 905,
+		keyName = "apemekenBaboonColorMage",
+		section = SECTION_APMEKEN
+	)
+	default Color apmekenBaboonColorMage()
+	{
+		return Color.BLUE;
+	}
+
+	@ConfigItem(
+		name = "Shaman Baboon",
+		description = "Color to highlight the shaman baboon.",
+		position = 906,
+		keyName = "apemekenBaboonColorShaman",
+		section = SECTION_APMEKEN
+	)
+	default Color apmekenBaboonColorShaman()
+	{
+		return Color.CYAN;
+	}
+
+	@ConfigItem(
+		name = "Cursed Baboon",
+		description = "Color to highlight the cursed baboon.",
+		position = 907,
+		keyName = "apemekenBaboonColorCursed",
+		section = SECTION_APMEKEN
+	)
+	default Color apmekenBaboonColorCursed()
+	{
+		return Color.MAGENTA;
+	}
+
+	@ConfigItem(
+		name = "Volatile Baboon",
+		description = "Color to highlight the volatile baboon.",
+		position = 908,
+		keyName = "apemekenBaboonColorVolatile",
+		section = SECTION_APMEKEN
+	)
+	default Color apmekenBaboonColorVolatile()
+	{
+		return Color.ORANGE;
 	}
 
 	@ConfigItem(

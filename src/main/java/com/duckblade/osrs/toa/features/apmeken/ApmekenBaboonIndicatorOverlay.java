@@ -2,6 +2,7 @@ package com.duckblade.osrs.toa.features.apmeken;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.HighlightMode;
 import com.duckblade.osrs.toa.util.OverlayUtil;
 import com.duckblade.osrs.toa.util.RaidState;
 import java.awt.Color;
@@ -48,6 +49,7 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 		this.config = config;
 		this.apmekenBaboonIndicator = apmekenBaboonIndicator;
 
+		setPriority(Overlay.PRIORITY_HIGH);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 		setPosition(OverlayPosition.DYNAMIC);
 	}
@@ -73,9 +75,9 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 	@Override
 	public Dimension render(final Graphics2D graphics2D)
 	{
-		if (config.apmekenBaboonOutline())
+		if (config.apmekenBaboonOutline() != HighlightMode.OFF)
 		{
-			renderBaboonOutline();
+			renderBaboonOutline(graphics2D);
 		}
 
 		if (config.apmekenVolatileBaboonTiles())
@@ -86,7 +88,7 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 		return null;
 	}
 
-	private void renderBaboonOutline()
+	private void renderBaboonOutline(final Graphics2D graphics2D)
 	{
 		for (final NPC npc : apmekenBaboonIndicator.getBaboons())
 		{
@@ -96,21 +98,21 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 			{
 				case NpcID.BABOON_BRAWLER:
 				case NpcID.BABOON_BRAWLER_11712:
-					color = Color.RED;
+					color = config.apmekenBaboonColorMelee();
 					break;
 				case NpcID.BABOON_MAGE:
 				case NpcID.BABOON_MAGE_11714:
-					color = Color.BLUE;
+					color = config.apmekenBaboonColorMage();
 					break;
 				case NpcID.BABOON_THROWER:
 				case NpcID.BABOON_THROWER_11713:
-					color = Color.GREEN;
+					color = config.apmekenBaboonColorRange();
 					break;
 				case NpcID.BABOON_SHAMAN:
-					color = Color.CYAN;
+					color = config.apmekenBaboonColorShaman();
 					break;
 				case NpcID.CURSED_BABOON:
-					color = Color.MAGENTA;
+					color = config.apmekenBaboonColorCursed();
 					break;
 				case NpcID.VOLATILE_BABOON:
 				case NpcID.BABOON_THRALL:
@@ -118,7 +120,23 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 					continue;
 			}
 
-			modelOutlineRenderer.drawOutline(npc, 1, color, 0);
+			switch (config.apmekenBaboonOutline())
+			{
+				case OUTLINE:
+					modelOutlineRenderer.drawOutline(npc, 1, color, 0);
+					break;
+				case TILE:
+					final Polygon polygon = npc.getCanvasTilePoly();
+
+					if (polygon != null)
+					{
+						OverlayUtil.drawOutlineAndFill(graphics2D, color, new Color(color.getRed(), color.getGreen(),
+							color.getBlue(), 10), 1, polygon);
+					}
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
@@ -126,8 +144,6 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 	{
 		for (final NPC npc : apmekenBaboonIndicator.getVolatileBaboons())
 		{
-			final Color color = Color.ORANGE;
-
 			final LocalPoint localPoint = npc.getLocalLocation();
 
 			if (localPoint == null)
@@ -141,6 +157,8 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 			{
 				continue;
 			}
+
+			final Color color = config.apmekenBaboonColorVolatile();
 
 			OverlayUtil.drawOutlineAndFill(graphics2D, color, new Color(color.getRed(), color.getGreen(),
 				color.getBlue(), 20), 1, polygon);
