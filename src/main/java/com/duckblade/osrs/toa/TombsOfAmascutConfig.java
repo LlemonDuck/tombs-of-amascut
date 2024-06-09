@@ -93,7 +93,8 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
-		position = 100
+		position = 100,
+		closedByDefault = true
 	)
 	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
 
@@ -124,8 +125,8 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Screenshot",
 		description = "All config options related to the Invocation Screenshot functionality",
-		closedByDefault = true,
-		position = 200
+		position = 200,
+		closedByDefault = true
 	)
 	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
 
@@ -168,7 +169,8 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Scabaras",
 		description = "Options for the puzzles in the Path of Scabaras.",
-		position = 300
+		position = 300,
+		closedByDefault = true
 	)
 	String SECTION_SCABARAS = "sectionScabaras";
 
@@ -312,7 +314,8 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Het",
 		description = "Helpers for the Path of Het.",
-		position = 400
+		position = 400,
+		closedByDefault = true
 	)
 	String SECTION_HET = "sectionHet";
 
@@ -409,7 +412,8 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Points Tracker",
 		description = "<html>Tracks points for the raid, used in calculating drop chance." +
 			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
-		position = 500
+		position = 500,
+		closedByDefault = true
 	)
 	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
 
@@ -615,8 +619,8 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Time Tracking",
 		description = "Time tracking and splits.",
-		closedByDefault = true,
-		position = 700
+		position = 700,
+		closedByDefault = true
 	)
 	String SECTION_TIME_TRACKING = "sectionTimeTracking";
 
