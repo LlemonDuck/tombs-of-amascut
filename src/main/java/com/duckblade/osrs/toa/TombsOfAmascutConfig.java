@@ -583,7 +583,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "targetTimeDisplay",
 		name = "Target Time in Timer",
 		description = "Expand the in-raid timer to also show the target time to beat.",
-		position = 701,
+		position = 0,
 		section = SECTION_TIME_TRACKING
 	)
 	default boolean targetTimeDisplay()
@@ -595,7 +595,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "splitsMessage",
 		name = "Splits Post-Raid Message",
 		description = "Show room splits in a chat message at the end of the raid. Path shows boss completion times, room shows each individual room (can be very long).",
-		position = 702,
+		position = 1,
 		section = SECTION_TIME_TRACKING
 	)
 	default SplitsMode splitsMessage()
@@ -607,7 +607,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "splitsOverlay",
 		name = "Splits Overlay",
 		description = "Show room splits in an on-screen overlay. Path shows boss completion times, room shows each individual room (can be very long).",
-		position = 703,
+		position = 2,
 		section = SECTION_TIME_TRACKING
 	)
 	default SplitsMode splitsOverlay()
