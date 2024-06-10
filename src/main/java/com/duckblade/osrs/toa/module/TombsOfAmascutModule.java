@@ -30,6 +30,7 @@ import com.duckblade.osrs.toa.features.timetracking.SplitsOverlay;
 import com.duckblade.osrs.toa.features.timetracking.SplitsTracker;
 import com.duckblade.osrs.toa.features.timetracking.TargetTimeManager;
 import com.duckblade.osrs.toa.features.tomb.CursedPhalanxDetector;
+import com.duckblade.osrs.toa.features.tomb.DryStreakTracker;
 import com.duckblade.osrs.toa.features.tomb.SarcophagusRecolorer;
 import com.duckblade.osrs.toa.features.tomb.SarcophagusOpeningSoundPlayer;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
@@ -57,6 +58,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(DepositPickaxeOverlay.class);
 		lifecycleComponents.addBinding().to(DepositPickaxePreventEntry.class);
 		lifecycleComponents.addBinding().to(DepositPickaxeSwap.class);
+		lifecycleComponents.addBinding().to(DryStreakTracker.class);
 		lifecycleComponents.addBinding().to(FadeDisabler.class);
 		lifecycleComponents.addBinding().to(HetSolver.class);
 		lifecycleComponents.addBinding().to(HetSolverOverlay.class);
