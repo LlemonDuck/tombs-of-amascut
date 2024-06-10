@@ -32,6 +32,8 @@ public class DryStreakTracker implements PluginLifecycleComponent
 	private final RaidStateTracker raidStateTracker;
 
 	private boolean chestOpened;
+	private boolean purple;
+	private int previousCount;
 
 	@Override
 	public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
@@ -49,9 +51,10 @@ public class DryStreakTracker implements PluginLifecycleComponent
 		{
 			clientThread.invokeLater(() ->
 			{
-				final boolean purple = client.getVarbitValue(VARBIT_ID_SARCOPHAGUS) % 2 != 0;
-				config.setPurpleDryStreakCount(purple ? 0 : config.getPurpleDryStreakCount() + 1);
 				chestOpened = false;
+				purple = client.getVarbitValue(VARBIT_ID_SARCOPHAGUS) % 2 != 0;
+				previousCount = config.getPurpleDryStreakCount();
+				config.setPurpleDryStreakCount(purple ? 0 : previousCount + 1);
 			});
 		}
 	}
@@ -74,7 +77,16 @@ public class DryStreakTracker implements PluginLifecycleComponent
 		{
 			chestOpened = true;
 
-			final String msg = String.format("<col=800080>Purple</col> Dry Streak: <col=ff0000>%d</col>", config.getPurpleDryStreakCount());
+			final String msg;
+
+			if (purple)
+			{
+				msg = String.format("<col=800080>Purple</col> Dry Streak Ended: <col=ff0000>%d</col>", previousCount);
+			}
+			else
+			{
+				msg = String.format("<col=800080>Purple</col> Dry Streak: <col=ff0000>%d</col>", config.getPurpleDryStreakCount());
+			}
 
 			chatMessageManager.queue(QueuedMessage.builder()
 				.type(ChatMessageType.GAMEMESSAGE)
