@@ -451,6 +451,18 @@ public interface TombsOfAmascutConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+		name = "Track Purple Dry Count",
+		description = "Show purple dry streak count in chat upon raid completion.",
+		position = 9,
+		keyName = "trackPurpleDryCount",
+		section = SECTION_BURIAL_TOMB
+	)
+	default boolean trackPurpleDryCount()
+	{
+		return false;
+	}
+
 	// Invocation Presets
 
 	@ConfigItem(
@@ -713,5 +725,24 @@ public interface TombsOfAmascutConfig extends Config
 		hidden = true
 	)
 	void updateNotifierLastVersion(int newVersion);
+
+	@ConfigItem(
+		keyName = "purpleDryStreakCount",
+		name = "",
+		description = "",
+		hidden = true
+	)
+	default int getPurpleDryStreakCount()
+	{
+		return 0;
+	}
+
+	@ConfigItem(
+		keyName = "purpleDryStreakCount",
+		name = "",
+		description = "",
+		hidden = true
+	)
+	void setPurpleDryStreakCount(int count);
 
 }
