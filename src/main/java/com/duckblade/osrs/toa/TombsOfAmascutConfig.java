@@ -7,6 +7,7 @@ import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import com.duckblade.osrs.toa.features.timetracking.SplitsMode;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
+import com.duckblade.osrs.toa.util.HighlightMode;
 import java.awt.Color;
 import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
@@ -24,9 +25,17 @@ public interface TombsOfAmascutConfig extends Config
 	// Sections
 
 	@ConfigSection(
+		name = "Path of Apmeken",
+		description = "Options for the Path of Apmeken.",
+		position = 0,
+		closedByDefault = true
+	)
+	String SECTION_APMEKEN = "sectionApmeken";
+
+	@ConfigSection(
 		name = "Path of Het",
 		description = "Helpers for the Path of Het.",
-		position = 0,
+		position = 1,
 		closedByDefault = true
 	)
 	String SECTION_HET = "sectionHet";
@@ -34,7 +43,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Scabaras",
 		description = "Options for the puzzles in the Path of Scabaras.",
-		position = 1,
+		position = 2,
 		closedByDefault = true
 	)
 	String SECTION_SCABARAS = "sectionScabaras";
@@ -42,7 +51,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Burial Tomb",
 		description = "Configuration for the burial tomb.",
-		position = 2,
+		position = 3,
 		closedByDefault = true
 	)
 	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
@@ -50,7 +59,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
-		position = 3,
+		position = 4,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
@@ -58,7 +67,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Screenshot",
 		description = "All config options related to the Invocation Screenshot functionality",
-		position = 4,
+		position = 5,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
@@ -67,7 +76,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Points Tracker",
 		description = "<html>Tracks points for the raid, used in calculating drop chance." +
 			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
-		position = 5,
+		position = 6,
 		closedByDefault = true
 	)
 	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
@@ -75,7 +84,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Time Tracking",
 		description = "Time tracking and splits.",
-		position = 6,
+		position = 7,
 		closedByDefault = true
 	)
 	String SECTION_TIME_TRACKING = "sectionTimeTracking";
@@ -83,10 +92,138 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Miscellaneous",
 		description = "Miscellaneous configurations.",
-		position = 7,
+		position = 8,
 		closedByDefault = true
 	)
 	String SECTION_MISCELLANEOUS = "sectionMiscellaneous";
+
+	// Apmeken
+
+	@ConfigItem(
+		keyName = "apmekenWaveHelper",
+		name = "Apmeken Wave Helper",
+		description = "When entering the Path of Apmeken, displays a list of the waves in the RuneLite side panel.",
+		position = 0,
+		section = SECTION_APMEKEN
+	)
+	default boolean apmekenWaveHelper()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		name = "Baboon Outline",
+		description = "Highlight baboons.",
+		position = 1,
+		keyName = "apmekenBaboonOutline",
+		section = SECTION_APMEKEN
+	)
+	default HighlightMode apmekenBaboonOutline()
+	{
+		return HighlightMode.OFF;
+	}
+
+	@ConfigItem(
+		name = "Volatile Baboon Tile",
+		description = "Highlight the tiles of the explode radius.",
+		position = 2,
+		keyName = "apmekenVolatileBaboonTiles",
+		section = SECTION_APMEKEN
+	)
+	default boolean apmekenVolatileBaboonTiles()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		name = "Outline Width",
+		description = "Highlight the tiles of the explode radius.",
+		position = 3,
+		keyName = "apmekenBaboonOutlineWidth",
+		section = SECTION_APMEKEN
+	)
+	default int apmekenBaboonOutlineWidth()
+	{
+		return 2;
+	}
+
+	@ConfigItem(
+		name = "Melee Baboon",
+		description = "Color to highlight the melee baboon.",
+		position = 4,
+		keyName = "apemekenBaboonColorMelee",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorMelee()
+	{
+		return new Color(0x40FF0000, true);
+	}
+
+	@ConfigItem(
+		name = "Range Baboon",
+		description = "Color to highlight the range baboon.",
+		position = 5,
+		keyName = "apemekenBaboonColorRange",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorRange()
+	{
+		return new Color(0x4000FF00, true);
+	}
+
+	@ConfigItem(
+		name = "Mage Baboon",
+		description = "Color to highlight the mage baboon.",
+		position = 6,
+		keyName = "apemekenBaboonColorMage",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorMage()
+	{
+		return new Color(0x400000FF, true);
+	}
+
+	@ConfigItem(
+		name = "Shaman Baboon",
+		description = "Color to highlight the shaman baboon.",
+		position = 7,
+		keyName = "apemekenBaboonColorShaman",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorShaman()
+	{
+		return new Color(0x4000FFFF, true);
+	}
+
+	@ConfigItem(
+		name = "Cursed Baboon",
+		description = "Color to highlight the cursed baboon.",
+		position = 8,
+		keyName = "apemekenBaboonColorCursed",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorCursed()
+	{
+		return new Color(0x40FF00FF, true);
+	}
+
+	@ConfigItem(
+		name = "Volatile Baboon",
+		description = "Color to highlight the volatile baboon.",
+		position = 9,
+		keyName = "apemekenBaboonColorVolatile",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorVolatile()
+	{
+		return new Color(0x40FFC800, true);
+	}
 
 	// Het
 
@@ -629,25 +766,13 @@ public interface TombsOfAmascutConfig extends Config
 
 	// Miscellaneous
 
-	@ConfigItem(
-		keyName = "apmekenWaveHelper",
-		name = "Apmeken Wave Helper",
-		description = "When entering the Path of Apmeken, displays a list of the waves in the RuneLite side panel.",
-		position = 0,
-		section = SECTION_MISCELLANEOUS
-	)
-	default boolean apmekenWaveHelper()
-	{
-		return true;
-	}
-
 	String KEY_QUICK_PROCEED_ENABLE_MODE = "quickProceedEnableMode";
 
 	@ConfigItem(
 		keyName = KEY_QUICK_PROCEED_ENABLE_MODE,
 		name = "Quick Proceed",
 		description = "Left click proceed/begin/leave on Osmumten and quick-enter/quick-use entryways and teleport crystals.",
-		position = 1,
+		position = 0,
 		section = SECTION_MISCELLANEOUS
 	)
 	default QuickProceedEnableMode quickProceedEnableMode()
@@ -661,7 +786,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = KEY_HP_ORB_MODE,
 		name = "HP Orbs",
 		description = "Removes HP orbs from the screen or replaces them with health bars.",
-		position = 2,
+		position = 1,
 		section = SECTION_MISCELLANEOUS
 	)
 	default HpOrbMode hpOrbsMode()
@@ -673,7 +798,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "leftClickBankAll",
 		name = "Bank-all Single Click",
 		description = "Allows you to Bank-all loot without requiring a second click on the minimenu.",
-		position = 3,
+		position = 2,
 		section = SECTION_MISCELLANEOUS
 	)
 	default boolean leftClickBankAll()
@@ -685,7 +810,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "showUpdateMessages",
 		name = "Show Updates",
 		description = "Opens a panel describing plugin updates after new features are added to the plugin.",
-		position = 4,
+		position = 3,
 		section = SECTION_MISCELLANEOUS
 	)
 	default boolean showUpdateMessages()
@@ -697,7 +822,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "hideFadeTransition",
 		name = "Hide Fade Transition",
 		description = "Hides the fade transition between loading zones.",
-		position = 5,
+		position = 4,
 		section = SECTION_MISCELLANEOUS
 	)
 	default boolean hideFadeTransition()
