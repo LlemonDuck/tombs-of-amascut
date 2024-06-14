@@ -2,6 +2,7 @@ package com.duckblade.osrs.toa.features.pointstracker;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateChanged;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
@@ -39,6 +40,13 @@ import net.runelite.client.util.ColorUtil;
 public class PointsTracker implements PluginLifecycleComponent
 {
 
+	/* I have some insider knowledge here that the blog was describing points earning slightly wrong wrt deaths.
+	 * Points are earned to both total and room points at the same time,
+	 * rather than being queued up in room points and added onto total after the room.
+	 * When dying, you preserve the room points amount toward cap, but subtract 20% from total.
+	 * There is no special behaviour when wiping a room; the 20% points lost is intended to account for that.
+	 */
+
 	static final NumberFormat POINTS_FORMAT = NumberFormat.getInstance();
 	static final NumberFormat PERCENT_FORMAT = new DecimalFormat("#.##%");
 
@@ -49,10 +57,9 @@ public class PointsTracker implements PluginLifecycleComponent
 
 	private static final int BASE_POINTS = 5000;
 	private static final int MAX_ROOM_POINTS = 20_000;
+	private static final int CRONDIS_MAX_ROOM_POINTS = 10_000;
 
-	// i'm not sure whether BASE_POINTS should be added
-	// i.e. is it 64k available to earn pre- or post- 5000 pt subtraction
-	private static final int MAX_TOTAL_POINTS = 64_000 + BASE_POINTS;
+	private static final int MAX_TOTAL_POINTS = 64_000;
 
 	private static final int ANIMATION_ID_WARDEN_DOWN = 9670;
 
@@ -121,11 +128,6 @@ public class PointsTracker implements PluginLifecycleComponent
 		ItemID.ELDRITCH_ASHES
 	);
 
-	private static final ImmutableSet<Integer> WARDEN_HITSPLAT_TYPES = ImmutableSet.of(
-		53, // hit
-		55 // max hit
-	);
-
 	private final EventBus eventBus;
 	private final Client client;
 	private final TombsOfAmascutConfig config;
@@ -180,6 +182,13 @@ public class PointsTracker implements PluginLifecycleComponent
 
 		switch (e.getPreviousState().getCurrentRoom())
 		{
+			case TOMB:
+				if (config.pointsTrackerPostRaidMessage())
+				{
+					client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", buildPointsMessage(), "", false);
+				}
+				break;
+
 			// puzzle estimates
 			case SCABARAS:
 				personalTotalPoints += 300;
@@ -231,21 +240,13 @@ public class PointsTracker implements PluginLifecycleComponent
 		else if (e.getMessage().startsWith(ROOM_FAIL_MESSAGE))
 		{
 			wardenDowns = 0;
-			personalRoomPoints = 0;
-			updatePersonalPartyPoints(false);
 		}
 		else if (e.getMessage().startsWith(ROOM_FINISH_MESSAGE))
 		{
-			personalTotalPoints = Math.min(MAX_TOTAL_POINTS, personalTotalPoints + personalRoomPoints);
 			personalRoomPoints = 0;
 
-			boolean wardens = e.getMessage().contains("Wardens");
-			updatePersonalPartyPoints(wardens);
-
-			if (wardens && config.pointsTrackerPostRaidMessage())
-			{
-				client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", buildPointsMessage(), "", false);
-			}
+			boolean isWardens = e.getMessage().contains("Wardens");
+			updatePersonalPartyPoints(isWardens);
 		}
 	}
 
@@ -265,9 +266,18 @@ public class PointsTracker implements PluginLifecycleComponent
 		}
 
 		double factor = DAMAGE_POINTS_FACTORS.getOrDefault(target.getId(), 1.0);
-		if (e.getHitsplat().isMine() || WARDEN_HITSPLAT_TYPES.contains(e.getHitsplat().getHitsplatType()))
+		if (e.getHitsplat().isMine())
 		{
-			this.personalRoomPoints = (int) Math.min(MAX_ROOM_POINTS, personalRoomPoints + e.getHitsplat().getAmount() * factor);
+			int pointsEarned = (int) (e.getHitsplat().getAmount() * factor);
+			int roomMax = raidStateTracker.getCurrentState().getCurrentRoom() == RaidRoom.CRONDIS ? CRONDIS_MAX_ROOM_POINTS : MAX_ROOM_POINTS;
+			if (personalRoomPoints + pointsEarned > roomMax)
+			{
+				pointsEarned = roomMax - personalRoomPoints;
+			}
+
+			this.personalRoomPoints = Math.min(roomMax, personalRoomPoints + pointsEarned);
+			this.personalTotalPoints = Math.min(MAX_TOTAL_POINTS, personalTotalPoints + pointsEarned);
+
 			updatePersonalPartyPoints(false);
 		}
 	}
@@ -299,7 +309,7 @@ public class PointsTracker implements PluginLifecycleComponent
 
 	public int getPersonalTotalPoints()
 	{
-		return this.personalTotalPoints + this.personalRoomPoints - BASE_POINTS;
+		return this.personalTotalPoints - BASE_POINTS;
 	}
 
 	public double getPersonalPercent()
@@ -347,7 +357,7 @@ public class PointsTracker implements PluginLifecycleComponent
 
 	private void updatePersonalPartyPoints(boolean sendNow)
 	{
-		int points = Math.min(MAX_TOTAL_POINTS, personalTotalPoints + personalRoomPoints) - BASE_POINTS;
+		int points = getPersonalTotalPoints();
 		if (sendNow)
 		{
 			partyPointsTracker.sendPointsUpdate(points);
