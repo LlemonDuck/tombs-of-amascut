@@ -7,6 +7,7 @@ import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import com.duckblade.osrs.toa.features.timetracking.SplitsMode;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
+import com.duckblade.osrs.toa.util.HighlightMode;
 import java.awt.Color;
 import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
@@ -667,6 +668,128 @@ public interface TombsOfAmascutConfig extends Config
 	default SplitsMode splitsOverlay()
 	{
 		return SplitsMode.OFF;
+	}
+
+	@ConfigSection(
+		name = "Path of Apmeken",
+		description = "Options for the Path of Apmeken.",
+		position = 900,
+		closedByDefault = true
+	)
+	String SECTION_APMEKEN = "sectionApmeken";
+
+	@ConfigItem(
+		name = "Baboon Outline",
+		description = "Highlight baboons.",
+		position = 901,
+		keyName = "apmekenBaboonOutline",
+		section = SECTION_APMEKEN
+	)
+	default HighlightMode apmekenBaboonOutline()
+	{
+		return HighlightMode.OFF;
+	}
+
+	@ConfigItem(
+		name = "Volatile Baboon Tile",
+		description = "Highlight the tiles of the explode radius.",
+		position = 902,
+		keyName = "apmekenVolatileBaboonTiles",
+		section = SECTION_APMEKEN
+	)
+	default boolean apmekenVolatileBaboonTiles()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		name = "Outline Width",
+		description = "Highlight the tiles of the explode radius.",
+		position = 903,
+		keyName = "apmekenBaboonOutlineWidth",
+		section = SECTION_APMEKEN
+	)
+	default int apmekenBaboonOutlineWidth()
+	{
+		return 2;
+	}
+
+	@ConfigItem(
+		name = "Melee Baboon",
+		description = "Color to highlight the melee baboon.",
+		position = 904,
+		keyName = "apemekenBaboonColorMelee",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorMelee()
+	{
+		return new Color(0x40FF0000, true);
+	}
+
+	@ConfigItem(
+		name = "Range Baboon",
+		description = "Color to highlight the range baboon.",
+		position = 905,
+		keyName = "apemekenBaboonColorRange",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorRange()
+	{
+		return new Color(0x4000FF00, true);
+	}
+
+	@ConfigItem(
+		name = "Mage Baboon",
+		description = "Color to highlight the mage baboon.",
+		position = 906,
+		keyName = "apemekenBaboonColorMage",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorMage()
+	{
+		return new Color(0x400000FF, true);
+	}
+
+	@ConfigItem(
+		name = "Shaman Baboon",
+		description = "Color to highlight the shaman baboon.",
+		position = 907,
+		keyName = "apemekenBaboonColorShaman",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorShaman()
+	{
+		return new Color(0x4000FFFF, true);
+	}
+
+	@ConfigItem(
+		name = "Cursed Baboon",
+		description = "Color to highlight the cursed baboon.",
+		position = 908,
+		keyName = "apemekenBaboonColorCursed",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorCursed()
+	{
+		return new Color(0x40FF00FF, true);
+	}
+
+	@ConfigItem(
+		name = "Volatile Baboon",
+		description = "Color to highlight the volatile baboon.",
+		position = 909,
+		keyName = "apemekenBaboonColorVolatile",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorVolatile()
+	{
+		return new Color(0x40FFC800, true);
 	}
 
 	@ConfigItem(
