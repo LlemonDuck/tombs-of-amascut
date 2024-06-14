@@ -7,6 +7,7 @@ import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import com.duckblade.osrs.toa.features.timetracking.SplitsMode;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
+import com.duckblade.osrs.toa.util.FontStyle;
 import com.duckblade.osrs.toa.util.HighlightMode;
 import java.awt.Color;
 import net.runelite.client.config.Alpha;
@@ -15,6 +16,7 @@ import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
 import net.runelite.client.config.Range;
+import net.runelite.client.config.Units;
 
 @ConfigGroup(TombsOfAmascutConfig.CONFIG_GROUP)
 public interface TombsOfAmascutConfig extends Config
@@ -25,9 +27,17 @@ public interface TombsOfAmascutConfig extends Config
 	// Sections
 
 	@ConfigSection(
+		name = "Akkha",
+		description = "Configuration for Akkha boss room.",
+		position = 0,
+		closedByDefault = true
+	)
+	String SECTION_AKKHA = "sectionAkkha";
+
+	@ConfigSection(
 		name = "Path of Apmeken",
 		description = "Options for the Path of Apmeken.",
-		position = 0,
+		position = 1,
 		closedByDefault = true
 	)
 	String SECTION_APMEKEN = "sectionApmeken";
@@ -35,7 +45,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Het",
 		description = "Helpers for the Path of Het.",
-		position = 1,
+		position = 2,
 		closedByDefault = true
 	)
 	String SECTION_HET = "sectionHet";
@@ -43,7 +53,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Scabaras",
 		description = "Options for the puzzles in the Path of Scabaras.",
-		position = 2,
+		position = 3,
 		closedByDefault = true
 	)
 	String SECTION_SCABARAS = "sectionScabaras";
@@ -51,7 +61,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Burial Tomb",
 		description = "Configuration for the burial tomb.",
-		position = 3,
+		position = 4,
 		closedByDefault = true
 	)
 	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
@@ -59,7 +69,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
-		position = 4,
+		position = 5,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
@@ -67,7 +77,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Screenshot",
 		description = "All config options related to the Invocation Screenshot functionality",
-		position = 5,
+		position = 6,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
@@ -76,7 +86,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Points Tracker",
 		description = "<html>Tracks points for the raid, used in calculating drop chance." +
 			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
-		position = 6,
+		position = 7,
 		closedByDefault = true
 	)
 	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
@@ -84,7 +94,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Time Tracking",
 		description = "Time tracking and splits.",
-		position = 7,
+		position = 8,
 		closedByDefault = true
 	)
 	String SECTION_TIME_TRACKING = "sectionTimeTracking";
@@ -92,10 +102,50 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Miscellaneous",
 		description = "Miscellaneous configurations.",
-		position = 8,
+		position = 9,
 		closedByDefault = true
 	)
 	String SECTION_MISCELLANEOUS = "sectionMiscellaneous";
+
+	// Akkha
+
+	@ConfigItem(
+		name = "Shadows Hp Overlay",
+		description = "Overlay Akkha's Shadows Hp.",
+		position = 0,
+		keyName = "akkhaShadowHpOverlay",
+		section = SECTION_AKKHA
+	)
+	default boolean akkhaShadowHpOverlay()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		name = "Font Style",
+		description = "Font style of text overlay.",
+		position = 1,
+		keyName = "akkhaFontStyle",
+		section = SECTION_AKKHA
+	)
+	default FontStyle akkhaFontStyle()
+	{
+		return FontStyle.PLAIN;
+	}
+
+	@ConfigItem(
+		name = "Font Size",
+		description = "Font size of text overlay.",
+		position = 2,
+		keyName = "akkhaFontSize",
+		section = SECTION_AKKHA
+	)
+	@Units(Units.PIXELS)
+	@Range(min = 12)
+	default int akkhaFontSize()
+	{
+		return 12;
+	}
 
 	// Apmeken
 
