@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 7;
+	public static final int TARGET_VERSION = 8;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -106,6 +106,17 @@ public class UpdateNotifier implements PluginLifecycleComponent
 
 			case 6:
 				updates.add("The Path of Het mirror puzzle now has a full overlay solver.");
+
+			case 7:
+				updates.add("This is a big update, so first a special thanks to @rdutta for submitting many features! Some config options have been moved into new sections.");
+				updates.add("<strong>(Miscellaneous -> Hide Fade Transition)</strong> can remove the fade to black between rooms. Visual artifacts that are normally hidden may be visible.");
+				updates.add("<strong>(Akkha -> Shadows Hp Overlay)</strong> can provide a numerical HP overlay on each shadow.");
+				updates.add("<strong>(Burial Tomb -> Detect Cursed Phalanx)</strong> can now prevent you from opening the loot chest on raid level 500+ if you have a cursed phalanx equipped or in your inventory.");
+				updates.add("<strong>(Burial Tomb -> Track Purple Dry Count)</strong> can provide a chat message indicating how many raids you have gone without seeing a unique drop.");
+				updates.add("<strong>(Path of Apmeken -> Baboon Outline)</strong> can automatically highlight each baboon type a unique colour.");
+				updates.add("<strong>(Path of Apmeken -> Volatile Baboon Tile)</strong> can draw a 3x3 box around volatile baboons.");
+				updates.add("The Path of Het solver will no longer continue to show the solution when the seal is weakened.");
+				updates.add("The points tracker has been updated to account for deaths more accurately. If you have Separate Room Points enabled, you will begin to see that room points are preserved after wipes, this is intentional and accounted for.");
 		}
 
 		return updates;
