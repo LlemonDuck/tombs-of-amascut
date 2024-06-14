@@ -57,7 +57,8 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 	@Override
 	public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
 	{
-		return apmekenBaboonIndicator.isEnabled(config, raidState);
+		return (config.apmekenBaboonOutline() != HighlightMode.OFF || config.apmekenVolatileBaboonTiles()) &&
+			apmekenBaboonIndicator.isEnabled(config, raidState);
 	}
 
 	@Override
@@ -120,22 +121,30 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 					continue;
 			}
 
+			final Color noAlpha = new Color((0xFF << 24) | color.getRGB(), true);
+
+			Polygon polygon = null;
 			switch (config.apmekenBaboonOutline())
 			{
 				case OUTLINE:
-					modelOutlineRenderer.drawOutline(npc, 1, color, 0);
+					modelOutlineRenderer.drawOutline(npc, config.apmekenBaboonOutlineWidth(), color, 0);
 					break;
 				case TILE:
-					final Polygon polygon = npc.getCanvasTilePoly();
-
-					if (polygon != null)
-					{
-						OverlayUtil.drawOutlineAndFill(graphics2D, color, new Color(color.getRed(), color.getGreen(),
-							color.getBlue(), 10), 1, polygon);
-					}
+					polygon = npc.getCanvasTilePoly();
 					break;
+				case TRUE_TILE:
+					LocalPoint lp = LocalPoint.fromWorld(npc.getWorldView(), npc.getWorldLocation()); // centered on sw tile
+					if (lp != null)
+					{
+						polygon = Perspective.getCanvasTileAreaPoly(client, lp, 1);
+					}
 				default:
 					break;
+			}
+
+			if (polygon != null)
+			{
+				OverlayUtil.drawOutlineAndFill(graphics2D, noAlpha, color, config.apmekenBaboonOutlineWidth(), polygon);
 			}
 		}
 	}
@@ -159,9 +168,9 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 			}
 
 			final Color color = config.apmekenBaboonColorVolatile();
+			final Color noAlpha = new Color((0xFF << 24) | color.getRGB(), true);
 
-			OverlayUtil.drawOutlineAndFill(graphics2D, color, new Color(color.getRed(), color.getGreen(),
-				color.getBlue(), 20), 1, polygon);
+			OverlayUtil.drawOutlineAndFill(graphics2D, noAlpha, color, config.apmekenBaboonOutlineWidth(), polygon);
 		}
 	}
 

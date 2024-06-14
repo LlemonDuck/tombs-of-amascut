@@ -667,75 +667,93 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
+		name = "Outline Width",
+		description = "Highlight the tiles of the explode radius.",
+		position = 903,
+		keyName = "apmekenBaboonOutlineWidth",
+		section = SECTION_APMEKEN
+	)
+	default int apmekenBaboonOutlineWidth()
+	{
+		return 2;
+	}
+
+	@ConfigItem(
 		name = "Melee Baboon",
 		description = "Color to highlight the melee baboon.",
-		position = 903,
+		position = 904,
 		keyName = "apemekenBaboonColorMelee",
 		section = SECTION_APMEKEN
 	)
+	@Alpha
 	default Color apmekenBaboonColorMelee()
 	{
-		return Color.RED;
+		return new Color(0x40FF0000, true);
 	}
 
 	@ConfigItem(
 		name = "Range Baboon",
 		description = "Color to highlight the range baboon.",
-		position = 904,
+		position = 905,
 		keyName = "apemekenBaboonColorRange",
 		section = SECTION_APMEKEN
 	)
+	@Alpha
 	default Color apmekenBaboonColorRange()
 	{
-		return Color.GREEN;
+		return new Color(0x4000FF00, true);
 	}
 
 	@ConfigItem(
 		name = "Mage Baboon",
 		description = "Color to highlight the mage baboon.",
-		position = 905,
+		position = 906,
 		keyName = "apemekenBaboonColorMage",
 		section = SECTION_APMEKEN
 	)
+	@Alpha
 	default Color apmekenBaboonColorMage()
 	{
-		return Color.BLUE;
+		return new Color(0x400000FF, true);
 	}
 
 	@ConfigItem(
 		name = "Shaman Baboon",
 		description = "Color to highlight the shaman baboon.",
-		position = 906,
+		position = 907,
 		keyName = "apemekenBaboonColorShaman",
 		section = SECTION_APMEKEN
 	)
+	@Alpha
 	default Color apmekenBaboonColorShaman()
 	{
-		return Color.CYAN;
+		return new Color(0x4000FFFF, true);
 	}
 
 	@ConfigItem(
 		name = "Cursed Baboon",
 		description = "Color to highlight the cursed baboon.",
-		position = 907,
+		position = 908,
 		keyName = "apemekenBaboonColorCursed",
 		section = SECTION_APMEKEN
 	)
+	@Alpha
 	default Color apmekenBaboonColorCursed()
 	{
-		return Color.MAGENTA;
+		return new Color(0x40FF00FF, true);
 	}
 
 	@ConfigItem(
 		name = "Volatile Baboon",
 		description = "Color to highlight the volatile baboon.",
-		position = 908,
+		position = 909,
 		keyName = "apemekenBaboonColorVolatile",
 		section = SECTION_APMEKEN
 	)
+	@Alpha
 	default Color apmekenBaboonColorVolatile()
 	{
-		return Color.ORANGE;
+		return new Color(0x40FFC800, true);
 	}
 
 	@ConfigItem(

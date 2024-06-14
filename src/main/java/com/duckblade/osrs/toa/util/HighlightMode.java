@@ -9,7 +9,9 @@ public enum HighlightMode
 {
 	OFF("Off"),
 	OUTLINE("Outline"),
-	TILE("Tile");
+	TILE("Tile"),
+	TRUE_TILE("True Tile"),
+	;
 
 	private final String name;
 
