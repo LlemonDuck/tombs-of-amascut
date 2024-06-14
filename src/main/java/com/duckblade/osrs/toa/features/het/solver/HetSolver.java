@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.GameObject;
 import net.runelite.api.GameState;
+import net.runelite.api.NullObjectID;
 import net.runelite.api.ObjectID;
 import net.runelite.api.Point;
 import net.runelite.api.events.ChatMessage;
@@ -84,15 +85,24 @@ public class HetSolver implements PluginLifecycleComponent
 	@Subscribe
 	public void onChatMessage(ChatMessage e)
 	{
-		if (e.getMessage().startsWith("Your party failed to complete the challenge"))
+		if (e.getMessage().startsWith("Your party failed to complete the challenge") || e.getMessage().endsWith("violently!"))
 		{
 			clearSolve();
+		}
+		else if (e.getMessage().startsWith("Challenge complete"))
+		{
+			shutDown();
 		}
 	}
 
 	@Subscribe
 	public void onGameObjectSpawned(GameObjectSpawned e)
 	{
+		if (solution == null && e.getGameObject().getId() == NullObjectID.NULL_29733)
+		{
+			return;
+		}
+
 		onGameObjectSpawned(e, true);
 	}
 
