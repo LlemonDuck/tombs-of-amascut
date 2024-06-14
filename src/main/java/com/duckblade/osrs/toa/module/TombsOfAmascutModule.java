@@ -4,6 +4,8 @@ import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.features.FadeDisabler;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.LeftClickBankAll;
+import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealth;
+import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealthOverlay;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicator;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicatorOverlay;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeOverlay;
@@ -17,6 +19,7 @@ import com.duckblade.osrs.toa.features.het.beamtimer.BeamTimerOverlay;
 import com.duckblade.osrs.toa.features.het.beamtimer.BeamTimerTracker;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeSwap;
 import com.duckblade.osrs.toa.features.invocationpresets.InvocationPresetsManager;
+import com.duckblade.osrs.toa.features.PathLevelTracker;
 import com.duckblade.osrs.toa.features.pointstracker.PartyPointsTracker;
 import com.duckblade.osrs.toa.features.pointstracker.PointsOverlay;
 import com.duckblade.osrs.toa.features.pointstracker.PointsTracker;
@@ -53,6 +56,8 @@ public class TombsOfAmascutModule extends AbstractModule
 	{
 		Multibinder<PluginLifecycleComponent> lifecycleComponents = Multibinder.newSetBinder(binder(), PluginLifecycleComponent.class);
 		lifecycleComponents.addBinding().to(AdditionPuzzleSolver.class);
+		lifecycleComponents.addBinding().to(AkkhaShadowHealth.class);
+		lifecycleComponents.addBinding().to(AkkhaShadowHealthOverlay.class);
 		lifecycleComponents.addBinding().to(ApmekenBaboonIndicator.class);
 		lifecycleComponents.addBinding().to(ApmekenBaboonIndicatorOverlay.class);
 		lifecycleComponents.addBinding().to(ApmekenWaveInstaller.class);
@@ -74,6 +79,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(MatchingPuzzleSolver.class);
 		lifecycleComponents.addBinding().to(ObeliskPuzzleSolver.class);
 		lifecycleComponents.addBinding().to(PartyPointsTracker.class);
+		lifecycleComponents.addBinding().to(PathLevelTracker.class);
 		lifecycleComponents.addBinding().to(PointsOverlay.class);
 		lifecycleComponents.addBinding().to(PointsTracker.class);
 		lifecycleComponents.addBinding().to(QuickProceedSwaps.class);
