@@ -2,6 +2,7 @@ package com.duckblade.osrs.toa.features.pointstracker;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateChanged;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
@@ -49,6 +50,7 @@ public class PointsTracker implements PluginLifecycleComponent
 
 	private static final int BASE_POINTS = 5000;
 	private static final int MAX_ROOM_POINTS = 20_000;
+	private static final int CRONDIS_MAX_ROOM_POINTS = 10_000;
 
 	// i'm not sure whether BASE_POINTS should be added
 	// i.e. is it 64k available to earn pre- or post- 5000 pt subtraction
@@ -267,7 +269,8 @@ public class PointsTracker implements PluginLifecycleComponent
 		double factor = DAMAGE_POINTS_FACTORS.getOrDefault(target.getId(), 1.0);
 		if (e.getHitsplat().isMine() || WARDEN_HITSPLAT_TYPES.contains(e.getHitsplat().getHitsplatType()))
 		{
-			this.personalRoomPoints = (int) Math.min(MAX_ROOM_POINTS, personalRoomPoints + e.getHitsplat().getAmount() * factor);
+			int localMax = raidStateTracker.getCurrentState().getCurrentRoom() == RaidRoom.CRONDIS ? CRONDIS_MAX_ROOM_POINTS : MAX_ROOM_POINTS;
+			this.personalRoomPoints = (int) Math.min(localMax, personalRoomPoints + e.getHitsplat().getAmount() * factor);
 			updatePersonalPartyPoints(false);
 		}
 	}
