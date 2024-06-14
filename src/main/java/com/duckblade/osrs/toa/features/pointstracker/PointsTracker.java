@@ -123,11 +123,6 @@ public class PointsTracker implements PluginLifecycleComponent
 		ItemID.ELDRITCH_ASHES
 	);
 
-	private static final ImmutableSet<Integer> WARDEN_HITSPLAT_TYPES = ImmutableSet.of(
-		53, // hit
-		55 // max hit
-	);
-
 	private final EventBus eventBus;
 	private final Client client;
 	private final TombsOfAmascutConfig config;
@@ -267,7 +262,7 @@ public class PointsTracker implements PluginLifecycleComponent
 		}
 
 		double factor = DAMAGE_POINTS_FACTORS.getOrDefault(target.getId(), 1.0);
-		if (e.getHitsplat().isMine() || WARDEN_HITSPLAT_TYPES.contains(e.getHitsplat().getHitsplatType()))
+		if (e.getHitsplat().isMine())
 		{
 			int localMax = raidStateTracker.getCurrentState().getCurrentRoom() == RaidRoom.CRONDIS ? CRONDIS_MAX_ROOM_POINTS : MAX_ROOM_POINTS;
 			this.personalRoomPoints = (int) Math.min(localMax, personalRoomPoints + e.getHitsplat().getAmount() * factor);
