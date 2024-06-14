@@ -27,9 +27,17 @@ public interface TombsOfAmascutConfig extends Config
 	// Sections
 
 	@ConfigSection(
+		name = "Miscellaneous",
+		description = "Miscellaneous configurations.",
+		position = 0,
+		closedByDefault = false
+	)
+	String SECTION_MISCELLANEOUS = "sectionMiscellaneous";
+
+	@ConfigSection(
 		name = "Akkha",
 		description = "Configuration for Akkha boss room.",
-		position = 0,
+		position = 1,
 		closedByDefault = true
 	)
 	String SECTION_AKKHA = "sectionAkkha";
@@ -37,7 +45,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Apmeken",
 		description = "Options for the Path of Apmeken.",
-		position = 1,
+		position = 2,
 		closedByDefault = true
 	)
 	String SECTION_APMEKEN = "sectionApmeken";
@@ -45,7 +53,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Het",
 		description = "Helpers for the Path of Het.",
-		position = 2,
+		position = 3,
 		closedByDefault = true
 	)
 	String SECTION_HET = "sectionHet";
@@ -53,7 +61,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Scabaras",
 		description = "Options for the puzzles in the Path of Scabaras.",
-		position = 3,
+		position = 4,
 		closedByDefault = true
 	)
 	String SECTION_SCABARAS = "sectionScabaras";
@@ -61,15 +69,24 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Burial Tomb",
 		description = "Configuration for the burial tomb.",
-		position = 4,
+		position = 5,
 		closedByDefault = true
 	)
 	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
 
 	@ConfigSection(
+		name = "Points Tracker",
+		description = "<html>Tracks points for the raid, used in calculating drop chance." +
+			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
+		position = 6,
+		closedByDefault = true
+	)
+	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
+
+	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
-		position = 5,
+		position = 7,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
@@ -77,35 +94,18 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Screenshot",
 		description = "All config options related to the Invocation Screenshot functionality",
-		position = 6,
+		position = 8,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
 
 	@ConfigSection(
-		name = "Points Tracker",
-		description = "<html>Tracks points for the raid, used in calculating drop chance." +
-			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
-		position = 7,
-		closedByDefault = true
-	)
-	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
-
-	@ConfigSection(
 		name = "Time Tracking",
 		description = "Time tracking and splits.",
-		position = 8,
-		closedByDefault = true
-	)
-	String SECTION_TIME_TRACKING = "sectionTimeTracking";
-
-	@ConfigSection(
-		name = "Miscellaneous",
-		description = "Miscellaneous configurations.",
 		position = 9,
 		closedByDefault = true
 	)
-	String SECTION_MISCELLANEOUS = "sectionMiscellaneous";
+	String SECTION_TIME_TRACKING = "sectionTimeTracking";
 
 	// Akkha
 
@@ -508,12 +508,24 @@ public interface TombsOfAmascutConfig extends Config
 	// Burial Tomb
 
 	@ConfigItem(
+		keyName = "leftClickBankAll",
+		name = "Bank-all Single Click",
+		description = "Allows you to Bank-all loot without requiring a second click on the minimenu.",
+		section = SECTION_BURIAL_TOMB,
+		position = 0
+	)
+	default boolean leftClickBankAll()
+	{
+		return false;
+	}
+
+	@ConfigItem(
 		keyName = "chestAudioEnable",
 		name = "Purple Chest Audio",
 		description = "<html>Either disables the feature or plays an audio file whenever the purple chest is opened." +
 			"<br/>The custom audio file should be named toa-chest.wav inside the .runelite/tombs-of-amascut folder</html>",
 		section = SECTION_BURIAL_TOMB,
-		position = 0
+		position = 1
 	)
 	default boolean chestAudioEnable()
 	{
@@ -530,7 +542,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Audio Volume",
 		description = "Adjusts how loud the chest audio is when played. 100 is no change to file volume.",
 		section = SECTION_BURIAL_TOMB,
-		position = 1
+		position = 2
 	)
 	default int chestAudioVolume()
 	{
@@ -542,7 +554,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Recolour White Chest",
 		description = "Recolour the white sarcophagus.",
-		position = 2,
+		position = 3,
 		keyName = SARCOPHAGUS_RECOLOR_WHITE,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -556,7 +568,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "White Colour",
 		description = "Colour to replace the white sarcophagus.",
-		position = 3,
+		position = 4,
 		keyName = SARCOPHAGUS_WHITE_RECOLOR,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -571,7 +583,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Recolour Purple Chest (Mine)",
 		description = "Recolour the purple sarcophagus." +
 			"<br>When the loot is mine.",
-		position = 4,
+		position = 5,
 		keyName = SARCOPHAGUS_RECOLOR_MY_PURPLE,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -586,7 +598,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Purple Colour (Mine)",
 		description = "Colour to replace the purple sarcophagus." +
 			"<br>When the loot is mine.",
-		position = 5,
+		position = 6,
 		keyName = SARCOPHAGUS_MY_PURPLE_RECOLOR,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -601,7 +613,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Recolour Purple Chest (Other)",
 		description = "Recolour the purple sarcophagus." +
 			"<br>When the loot is NOT mine.",
-		position = 6,
+		position = 7,
 		keyName = SARCOPHAGUS_RECOLOR_OTHER_PURPLE,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -616,7 +628,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Purple Colour (Other)",
 		description = "Colour to replace the purple sarcophagus." +
 			"<br>When the loot is NOT mine.",
-		position = 7,
+		position = 8,
 		keyName = SARCOPHAGUS_OTHER_PURPLE_RECOLOR,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -629,7 +641,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Detect Cursed Phalanx",
 		description = "Prevents opening chests if player is carrying a cursed phalanx" +
 			"<br>or Osmumten's fang (or).",
-		position = 8,
+		position = 9,
 		keyName = "cursedPhalanxDetect",
 		section = SECTION_BURIAL_TOMB
 	)
@@ -641,7 +653,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Track Purple Dry Count",
 		description = "Show purple dry streak count in chat upon raid completion.",
-		position = 9,
+		position = 10,
 		keyName = "trackPurpleDryCount",
 		section = SECTION_BURIAL_TOMB
 	)
@@ -842,18 +854,6 @@ public interface TombsOfAmascutConfig extends Config
 	default HpOrbMode hpOrbsMode()
 	{
 		return HpOrbMode.ORBS;
-	}
-
-	@ConfigItem(
-		keyName = "leftClickBankAll",
-		name = "Bank-all Single Click",
-		description = "Allows you to Bank-all loot without requiring a second click on the minimenu.",
-		position = 2,
-		section = SECTION_MISCELLANEOUS
-	)
-	default boolean leftClickBankAll()
-	{
-		return false;
 	}
 
 	@ConfigItem(
