@@ -24,163 +24,355 @@ public interface TombsOfAmascutConfig extends Config
 
 	String CONFIG_GROUP = "tombsofamascut";
 
+	// Sections
+
+	@ConfigSection(
+		name = "Miscellaneous",
+		description = "Miscellaneous configurations.",
+		position = 0,
+		closedByDefault = false
+	)
+	String SECTION_MISCELLANEOUS = "sectionMiscellaneous";
+
+	@ConfigSection(
+		name = "Akkha",
+		description = "Configuration for Akkha boss room.",
+		position = 1,
+		closedByDefault = true
+	)
+	String SECTION_AKKHA = "sectionAkkha";
+
+	@ConfigSection(
+		name = "Path of Apmeken",
+		description = "Options for the Path of Apmeken.",
+		position = 2,
+		closedByDefault = true
+	)
+	String SECTION_APMEKEN = "sectionApmeken";
+
+	@ConfigSection(
+		name = "Path of Het",
+		description = "Helpers for the Path of Het.",
+		position = 3,
+		closedByDefault = true
+	)
+	String SECTION_HET = "sectionHet";
+
+	@ConfigSection(
+		name = "Path of Scabaras",
+		description = "Options for the puzzles in the Path of Scabaras.",
+		position = 4,
+		closedByDefault = true
+	)
+	String SECTION_SCABARAS = "sectionScabaras";
+
+	@ConfigSection(
+		name = "Burial Tomb",
+		description = "Configuration for the burial tomb.",
+		position = 5,
+		closedByDefault = true
+	)
+	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
+
+	@ConfigSection(
+		name = "Points Tracker",
+		description = "<html>Tracks points for the raid, used in calculating drop chance." +
+			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
+		position = 6,
+		closedByDefault = true
+	)
+	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
+
+	@ConfigSection(
+		name = "Invocation Presets",
+		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
+		position = 7,
+		closedByDefault = true
+	)
+	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
+
+	@ConfigSection(
+		name = "Invocation Screenshot",
+		description = "All config options related to the Invocation Screenshot functionality",
+		position = 8,
+		closedByDefault = true
+	)
+	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
+
+	@ConfigSection(
+		name = "Time Tracking",
+		description = "Time tracking and splits.",
+		position = 9,
+		closedByDefault = true
+	)
+	String SECTION_TIME_TRACKING = "sectionTimeTracking";
+
+	// Akkha
+
+	@ConfigItem(
+		name = "Shadows Hp Overlay",
+		description = "Overlay Akkha's Shadows Hp.",
+		position = 0,
+		keyName = "akkhaShadowHpOverlay",
+		section = SECTION_AKKHA
+	)
+	default boolean akkhaShadowHpOverlay()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		name = "Font Style",
+		description = "Font style of text overlay.",
+		position = 1,
+		keyName = "akkhaFontStyle",
+		section = SECTION_AKKHA
+	)
+	default FontStyle akkhaFontStyle()
+	{
+		return FontStyle.PLAIN;
+	}
+
+	@ConfigItem(
+		name = "Font Size",
+		description = "Font size of text overlay.",
+		position = 2,
+		keyName = "akkhaFontSize",
+		section = SECTION_AKKHA
+	)
+	@Units(Units.PIXELS)
+	@Range(min = 12)
+	default int akkhaFontSize()
+	{
+		return 12;
+	}
+
+	// Apmeken
+
 	@ConfigItem(
 		keyName = "apmekenWaveHelper",
 		name = "Apmeken Wave Helper",
 		description = "When entering the Path of Apmeken, displays a list of the waves in the RuneLite side panel.",
-		position = 3
+		position = 0,
+		section = SECTION_APMEKEN
 	)
 	default boolean apmekenWaveHelper()
 	{
 		return true;
 	}
 
-	String KEY_QUICK_PROCEED_ENABLE_MODE = "quickProceedEnableMode";
-
 	@ConfigItem(
-		keyName = KEY_QUICK_PROCEED_ENABLE_MODE,
-		name = "Quick Proceed",
-		description = "Left click proceed/begin/leave on Osmumten and quick-enter/quick-use entryways and teleport crystals.",
-		position = 5
+		name = "Baboon Outline",
+		description = "Highlight baboons.",
+		position = 1,
+		keyName = "apmekenBaboonOutline",
+		section = SECTION_APMEKEN
 	)
-	default QuickProceedEnableMode quickProceedEnableMode()
+	default HighlightMode apmekenBaboonOutline()
 	{
-		return QuickProceedEnableMode.ALL;
-	}
-
-	String KEY_HP_ORB_MODE = "hpOrbsMode";
-
-	@ConfigItem(
-		keyName = KEY_HP_ORB_MODE,
-		name = "HP Orbs",
-		description = "Removes HP orbs from the screen or replaces them with health bars.",
-		position = 6
-	)
-	default HpOrbMode hpOrbsMode()
-	{
-		return HpOrbMode.ORBS;
+		return HighlightMode.OFF;
 	}
 
 	@ConfigItem(
-		keyName = "leftClickBankAll",
-		name = "Bank-all Single Click",
-		description = "Allows you to Bank-all loot without requiring a second click on the minimenu.",
-		position = 7
+		name = "Volatile Baboon Tile",
+		description = "Highlight the tiles of the explode radius.",
+		position = 2,
+		keyName = "apmekenVolatileBaboonTiles",
+		section = SECTION_APMEKEN
 	)
-	default boolean leftClickBankAll()
+	default boolean apmekenVolatileBaboonTiles()
 	{
 		return false;
 	}
 
 	@ConfigItem(
-		keyName = "showUpdateMessages",
-		name = "Show Updates",
-		description = "Opens a panel describing plugin updates after new features are added to the plugin.",
-		position = 7
+		name = "Outline Width",
+		description = "Highlight the tiles of the explode radius.",
+		position = 3,
+		keyName = "apmekenBaboonOutlineWidth",
+		section = SECTION_APMEKEN
 	)
-	default boolean showUpdateMessages()
+	default int apmekenBaboonOutlineWidth()
+	{
+		return 2;
+	}
+
+	@ConfigItem(
+		name = "Melee Baboon",
+		description = "Color to highlight the melee baboon.",
+		position = 4,
+		keyName = "apemekenBaboonColorMelee",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorMelee()
+	{
+		return new Color(0x40FF0000, true);
+	}
+
+	@ConfigItem(
+		name = "Range Baboon",
+		description = "Color to highlight the range baboon.",
+		position = 5,
+		keyName = "apemekenBaboonColorRange",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorRange()
+	{
+		return new Color(0x4000FF00, true);
+	}
+
+	@ConfigItem(
+		name = "Mage Baboon",
+		description = "Color to highlight the mage baboon.",
+		position = 6,
+		keyName = "apemekenBaboonColorMage",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorMage()
+	{
+		return new Color(0x400000FF, true);
+	}
+
+	@ConfigItem(
+		name = "Shaman Baboon",
+		description = "Color to highlight the shaman baboon.",
+		position = 7,
+		keyName = "apemekenBaboonColorShaman",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorShaman()
+	{
+		return new Color(0x4000FFFF, true);
+	}
+
+	@ConfigItem(
+		name = "Cursed Baboon",
+		description = "Color to highlight the cursed baboon.",
+		position = 8,
+		keyName = "apemekenBaboonColorCursed",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorCursed()
+	{
+		return new Color(0x40FF00FF, true);
+	}
+
+	@ConfigItem(
+		name = "Volatile Baboon",
+		description = "Color to highlight the volatile baboon.",
+		position = 9,
+		keyName = "apemekenBaboonColorVolatile",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorVolatile()
+	{
+		return new Color(0x40FFC800, true);
+	}
+
+	// Het
+
+	@ConfigItem(
+		keyName = "hetBeamTimerEnable",
+		name = "Beam Timer",
+		description = "<html>Display an overlay of when the Caster Statue will fire." +
+			"<br/>Click Het's Seal from one tile away when the indicator is GREEN to get an extra damage tick.</html>",
+		position = 0,
+		section = SECTION_HET
+	)
+	default boolean hetBeamTimerEnable()
 	{
 		return true;
 	}
 
 	@ConfigItem(
-		keyName = "hideFadeTransition",
-		name = "Hide Fade Transition",
-		description = "Hides the fade transition between loading zones.",
-		position = 9
+		keyName = "hetSolverEnable",
+		name = "Mirror Puzzle Solver",
+		description = "Show where to place/clean mirrors for the active puzzle layout.",
+		position = 1,
+		section = SECTION_HET
 	)
-	default boolean hideFadeTransition()
+	default boolean hetSolverEnable()
+	{
+		return true;
+	}
+
+	String KEY_HET_PICKAXE_MENU_SWAP = "hetPickaxeMenuSwap";
+
+	@ConfigItem(
+		keyName = KEY_HET_PICKAXE_MENU_SWAP,
+		name = "Deposit-Pickaxe",
+		description = "Automatically swap to Deposit-pickaxe when a pickaxe is in your inventory.",
+		position = 2,
+		section = SECTION_HET
+	)
+	default boolean hetPickaxeMenuSwap()
+	{
+		return true;
+	}
+
+	String KEY_HET_PICKAXE_PREVENT_EXIT = "hetPickaxePreventExit";
+
+	@ConfigItem(
+		keyName = KEY_HET_PICKAXE_PREVENT_EXIT,
+		name = "Prevent Room Exit",
+		description = "Deprioritize the option to leave the puzzle room until you have deposited your pickaxe in the statue.",
+		position = 3,
+		section = SECTION_HET
+	)
+	default boolean hetPickaxePreventExit()
 	{
 		return false;
 	}
 
-	@ConfigSection(
-		name = "Invocation Presets",
-		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
-		position = 100
-	)
-	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
-
 	@ConfigItem(
-		keyName = "invocationPresetsEnable",
-		name = "Enable Presets",
-		description = "Allows for saving and restoring of invocation presets. Right-click \"Preset\" button to save/load.",
-		section = SECTION_INVOCATION_PRESETS,
-		position = 101
+		keyName = "hetPickaxePreventRaidStart",
+		name = "Prevent Raid Start",
+		description = "Deprioritize the option to enter the raid until you have deposited your pickaxe in the lobby wall cavity.",
+		position = 4,
+		section = SECTION_HET
 	)
-	default boolean invocationPresetsEnable()
+	default boolean hetPickaxePreventRaidStart()
 	{
 		return false;
 	}
 
 	@ConfigItem(
-		keyName = "invocationPresetsScroll",
-		name = "Auto-Scroll",
-		description = "Automatically scroll to invocations which need to be changed for the current preset.",
-		section = SECTION_INVOCATION_PRESETS,
-		position = 102
+		keyName = "hetPickaxePuzzleOverlay",
+		name = "Puzzle Room Visual Warning",
+		description = "Add a visual warning reminder to deposit your pickaxe at the end of the mirror puzzle room.",
+		position = 5,
+		section = SECTION_HET
 	)
-	default boolean invocationPresetsScroll()
+	default boolean hetPickaxePuzzleOverlay()
 	{
-		return true;
-	}
-
-	@ConfigSection(
-		name = "Invocation Screenshot",
-		description = "All config options related to the Invocation Screenshot functionality",
-		closedByDefault = true,
-		position = 200
-	)
-	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
-
-	@ConfigItem(
-		keyName = "invocationScreenshotEnable",
-		name = "Enable Screenshot button",
-		description = "Adds a button to the ToA Invocation interface that will copy all invocations as an image to your system clipboard",
-		section = SECTION_INVOCATION_SCREENSHOT,
-		position = 201
-	)
-	default boolean invocationScreenshotEnable()
-	{
-		return true;
+		return false;
 	}
 
 	@ConfigItem(
-		keyName = "showRewardsSection",
-		name = "Show Rewards Section",
-		description = "<html>Should the rewards section be included<br/>(requires the Reward button to be selected within the interface)</html>",
-		section = SECTION_INVOCATION_SCREENSHOT,
-		position = 202
+		keyName = "hetPickaxeLobbyOverlay",
+		name = "Lobby Visual Warning",
+		description = "Add a visual warning reminder to deposit your pickaxe in the raid lobby.",
+		position = 6,
+		section = SECTION_HET
 	)
-	default boolean showRewardsSection()
+	default boolean hetPickaxeLobbyOverlay()
 	{
-		return true;
+		return false;
 	}
 
-	@ConfigItem(
-		keyName = "useResourcePack",
-		name = "Use Resource Pack",
-		description = "Use Resource Pack Theme for screenshot background",
-		section = SECTION_INVOCATION_SCREENSHOT,
-		position = 203
-	)
-	default boolean useResourcePack()
-	{
-		return true;
-	}
-
-	@ConfigSection(
-		name = "Path of Scabaras",
-		description = "Options for the puzzles in the Path of Scabaras.",
-		position = 300
-	)
-	String SECTION_SCABARAS = "sectionScabaras";
+	// Scabaras
 
 	@ConfigItem(
 		keyName = "scabarasHelperMode",
 		name = "Scabaras Helpers",
 		description = "Puzzle helpers for the Path of Scabaras (leading to Kephri).",
-		position = 301,
+		position = 0,
 		section = SECTION_SCABARAS
 	)
 	default ScabarasHelperMode scabarasHelperMode()
@@ -193,7 +385,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Addition Colour",
 		description = "Highlight colour for tiles in the addition puzzle." +
 			"<br/>Set alpha to 0 to disable.",
-		position = 302,
+		position = 1,
 		section = SECTION_SCABARAS
 	)
 	@Alpha
@@ -207,7 +399,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Light Flip Colour",
 		description = "Highlight colour for tiles in the light flips puzzle." +
 			"<br/>Set alpha to 0 to disable.",
-		position = 303,
+		position = 2,
 		section = SECTION_SCABARAS
 	)
 	@Alpha
@@ -221,7 +413,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Obelisk Start",
 		description = "Start colour for highlighting the obelisks in the obelisk puzzle." +
 			"<br/>Set alpha to 0 to disable.",
-		position = 304,
+		position = 3,
 		section = SECTION_SCABARAS
 	)
 	@Alpha
@@ -235,7 +427,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Obelisk End",
 		description = "End colour for highlighting the obelisks in the obelisk puzzle." +
 			"<br/>Set alpha to 0 to disable.",
-		position = 305,
+		position = 4,
 		section = SECTION_SCABARAS
 	)
 	@Alpha
@@ -249,7 +441,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Sequence Start",
 		description = "Start colour for highlighting the tiles in the sequence (simon says) puzzle." +
 			"<br/>Set alpha to 0 to disable.",
-		position = 306,
+		position = 5,
 		section = SECTION_SCABARAS
 	)
 	@Alpha
@@ -263,7 +455,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Sequence End",
 		description = "End colour for highlighting the tiles in the sequence (simon says) puzzle." +
 			"<br/>Set alpha to 0 to disable.",
-		position = 307,
+		position = 6,
 		section = SECTION_SCABARAS
 	)
 	@Alpha
@@ -276,7 +468,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "scabarasMatchingDisplayMode",
 		name = "Matching Display",
 		description = "Whether to show highlight tiles, show names of tiles, or both for the matching puzzle.",
-		position = 308,
+		position = 7,
 		section = SECTION_SCABARAS
 	)
 	default MatchingTileDisplayMode scabarasMatchingDisplayMode()
@@ -289,7 +481,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Matched Opacity",
 		description = "Opacity (transparency) of completed tiles in the matching puzzle." +
 			"<br/>Set to 0 to hide completed tiles completely.",
-		position = 309,
+		position = 8,
 		section = SECTION_SCABARAS
 	)
 	@Range(
@@ -305,7 +497,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "scabarasHighlightSkipObeliskEntry",
 		name = "Show Obelisk Skip",
 		description = "Highlight which entrance will skip requiring the obelisk puzzle.",
-		position = 310,
+		position = 9,
 		section = SECTION_SCABARAS
 	)
 	default SkipObeliskOverlay.EnableMode scabarasHighlightSkipObeliskEntry()
@@ -313,177 +505,19 @@ public interface TombsOfAmascutConfig extends Config
 		return SkipObeliskOverlay.EnableMode.OFF;
 	}
 
-	@ConfigSection(
-		name = "Path of Het",
-		description = "Helpers for the Path of Het.",
-		position = 400
-	)
-	String SECTION_HET = "sectionHet";
+	// Burial Tomb
 
 	@ConfigItem(
-		keyName = "hetBeamTimerEnable",
-		name = "Beam Timer",
-		description = "<html>Display an overlay of when the Caster Statue will fire." +
-			"<br/>Click Het's Seal from one tile away when the indicator is GREEN to get an extra damage tick.</html>",
-		position = 401,
-		section = SECTION_HET
+		keyName = "leftClickBankAll",
+		name = "Bank-all Single Click",
+		description = "Allows you to Bank-all loot without requiring a second click on the minimenu.",
+		section = SECTION_BURIAL_TOMB,
+		position = 0
 	)
-	default boolean hetBeamTimerEnable()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "hetSolverEnable",
-		name = "Mirror Puzzle Solver",
-		description = "Show where to place/clean mirrors for the active puzzle layout.",
-		position = 402,
-		section = SECTION_HET
-	)
-	default boolean hetSolverEnable()
-	{
-		return true;
-	}
-
-	String KEY_HET_PICKAXE_MENU_SWAP = "hetPickaxeMenuSwap";
-
-	@ConfigItem(
-		keyName = KEY_HET_PICKAXE_MENU_SWAP,
-		name = "Deposit-Pickaxe",
-		description = "Automatically swap to Deposit-pickaxe when a pickaxe is in your inventory.",
-		position = 403,
-		section = SECTION_HET
-	)
-	default boolean hetPickaxeMenuSwap()
-	{
-		return true;
-	}
-
-	String KEY_HET_PICKAXE_PREVENT_EXIT = "hetPickaxePreventExit";
-
-	@ConfigItem(
-		keyName = KEY_HET_PICKAXE_PREVENT_EXIT,
-		name = "Prevent Room Exit",
-		description = "Deprioritize the option to leave the puzzle room until you have deposited your pickaxe in the statue.",
-		position = 404,
-		section = SECTION_HET
-	)
-	default boolean hetPickaxePreventExit()
+	default boolean leftClickBankAll()
 	{
 		return false;
 	}
-
-	@ConfigItem(
-		keyName = "hetPickaxePreventRaidStart",
-		name = "Prevent Raid Start",
-		description = "Deprioritize the option to enter the raid until you have deposited your pickaxe in the lobby wall cavity.",
-		position = 405,
-		section = SECTION_HET
-	)
-	default boolean hetPickaxePreventRaidStart()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "hetPickaxePuzzleOverlay",
-		name = "Puzzle Room Visual Warning",
-		description = "Add a visual warning reminder to deposit your pickaxe at the end of the mirror puzzle room.",
-		position = 406,
-		section = SECTION_HET
-	)
-	default boolean hetPickaxePuzzleOverlay()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "hetPickaxeLobbyOverlay",
-		name = "Lobby Visual Warning",
-		description = "Add a visual warning reminder to deposit your pickaxe in the raid lobby.",
-		position = 407,
-		section = SECTION_HET
-	)
-	default boolean hetPickaxeLobbyOverlay()
-	{
-		return false;
-	}
-
-	@ConfigSection(
-		name = "Points Tracker",
-		description = "<html>Tracks points for the raid, used in calculating drop chance." +
-			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
-		position = 500
-	)
-	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
-
-	@ConfigItem(
-		keyName = "pointsTrackerOverlayEnable",
-		name = "Enable Overlay",
-		description = "Show points earned within the raid.",
-		position = 501,
-		section = SECTION_POINTS_TRACKER
-	)
-	default boolean pointsTrackerOverlayEnable()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "pointsTrackerShowRoomPoints",
-		name = "Separate Room Points",
-		description = "Show points for the current room separate from total points.",
-		position = 502,
-		section = SECTION_POINTS_TRACKER
-	)
-	default boolean pointsTrackerShowRoomPoints()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "pointsTrackerShowUniqueChance",
-		name = "Show Unique %",
-		description = "Show unique chance on the overlay.",
-		position = 503,
-		section = SECTION_POINTS_TRACKER
-	)
-	default boolean pointsTrackerShowUniqueChance()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "pointsTrackerShowPetChance",
-		name = "Show Pet %",
-		description = "Show pet chance on the overlay.",
-		position = 504,
-		section = SECTION_POINTS_TRACKER
-	)
-	default boolean pointsTrackerShowPetChance()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "pointsTrackerPostRaidMessage",
-		name = "Points Total Message",
-		description = "Show the total points in chat after the raid, akin to the Chambers of Xeric.",
-		position = 505,
-		section = SECTION_POINTS_TRACKER
-	)
-	default boolean pointsTrackerPostRaidMessage()
-	{
-		return true;
-	}
-
-	@ConfigSection(
-		name = "Burial Tomb",
-		description = "Configuration for the burial tomb.",
-		position = 600,
-		closedByDefault = true
-	)
-	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
 
 	@ConfigItem(
 		keyName = "chestAudioEnable",
@@ -491,7 +525,7 @@ public interface TombsOfAmascutConfig extends Config
 		description = "<html>Either disables the feature or plays an audio file whenever the purple chest is opened." +
 			"<br/>The custom audio file should be named toa-chest.wav inside the .runelite/tombs-of-amascut folder</html>",
 		section = SECTION_BURIAL_TOMB,
-		position = 601
+		position = 1
 	)
 	default boolean chestAudioEnable()
 	{
@@ -508,7 +542,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Audio Volume",
 		description = "Adjusts how loud the chest audio is when played. 100 is no change to file volume.",
 		section = SECTION_BURIAL_TOMB,
-		position = 602
+		position = 2
 	)
 	default int chestAudioVolume()
 	{
@@ -520,7 +554,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Recolour White Chest",
 		description = "Recolour the white sarcophagus.",
-		position = 603,
+		position = 3,
 		keyName = SARCOPHAGUS_RECOLOR_WHITE,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -534,7 +568,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "White Colour",
 		description = "Colour to replace the white sarcophagus.",
-		position = 604,
+		position = 4,
 		keyName = SARCOPHAGUS_WHITE_RECOLOR,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -549,7 +583,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Recolour Purple Chest (Mine)",
 		description = "Recolour the purple sarcophagus." +
 			"<br>When the loot is mine.",
-		position = 605,
+		position = 5,
 		keyName = SARCOPHAGUS_RECOLOR_MY_PURPLE,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -564,7 +598,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Purple Colour (Mine)",
 		description = "Colour to replace the purple sarcophagus." +
 			"<br>When the loot is mine.",
-		position = 606,
+		position = 6,
 		keyName = SARCOPHAGUS_MY_PURPLE_RECOLOR,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -579,7 +613,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Recolour Purple Chest (Other)",
 		description = "Recolour the purple sarcophagus." +
 			"<br>When the loot is NOT mine.",
-		position = 607,
+		position = 7,
 		keyName = SARCOPHAGUS_RECOLOR_OTHER_PURPLE,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -594,7 +628,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Purple Colour (Other)",
 		description = "Colour to replace the purple sarcophagus." +
 			"<br>When the loot is NOT mine.",
-		position = 608,
+		position = 8,
 		keyName = SARCOPHAGUS_OTHER_PURPLE_RECOLOR,
 		section = SECTION_BURIAL_TOMB
 	)
@@ -607,7 +641,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Detect Cursed Phalanx",
 		description = "Prevents opening chests if player is carrying a cursed phalanx" +
 			"<br>or Osmumten's fang (or).",
-		position = 609,
+		position = 9,
 		keyName = "cursedPhalanxDetect",
 		section = SECTION_BURIAL_TOMB
 	)
@@ -619,7 +653,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Track Purple Dry Count",
 		description = "Show purple dry streak count in chat upon raid completion.",
-		position = 610,
+		position = 10,
 		keyName = "trackPurpleDryCount",
 		section = SECTION_BURIAL_TOMB
 	)
@@ -628,19 +662,139 @@ public interface TombsOfAmascutConfig extends Config
 		return false;
 	}
 
-	@ConfigSection(
-		name = "Time Tracking",
-		description = "Time tracking and splits.",
-		closedByDefault = true,
-		position = 700
+	// Invocation Presets
+
+	@ConfigItem(
+		keyName = "invocationPresetsEnable",
+		name = "Enable Presets",
+		description = "Allows for saving and restoring of invocation presets. Right-click \"Preset\" button to save/load.",
+		section = SECTION_INVOCATION_PRESETS,
+		position = 0
 	)
-	String SECTION_TIME_TRACKING = "sectionTimeTracking";
+	default boolean invocationPresetsEnable()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "invocationPresetsScroll",
+		name = "Auto-Scroll",
+		description = "Automatically scroll to invocations which need to be changed for the current preset.",
+		section = SECTION_INVOCATION_PRESETS,
+		position = 1
+	)
+	default boolean invocationPresetsScroll()
+	{
+		return true;
+	}
+
+	// Invocation Screenshot
+
+	@ConfigItem(
+		keyName = "invocationScreenshotEnable",
+		name = "Enable Screenshot button",
+		description = "Adds a button to the ToA Invocation interface that will copy all invocations as an image to your system clipboard",
+		section = SECTION_INVOCATION_SCREENSHOT,
+		position = 0
+	)
+	default boolean invocationScreenshotEnable()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showRewardsSection",
+		name = "Show Rewards Section",
+		description = "<html>Should the rewards section be included<br/>(requires the Reward button to be selected within the interface)</html>",
+		section = SECTION_INVOCATION_SCREENSHOT,
+		position = 1
+	)
+	default boolean showRewardsSection()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "useResourcePack",
+		name = "Use Resource Pack",
+		description = "Use Resource Pack Theme for screenshot background",
+		section = SECTION_INVOCATION_SCREENSHOT,
+		position = 2
+	)
+	default boolean useResourcePack()
+	{
+		return true;
+	}
+
+	// Points Tracker
+
+	@ConfigItem(
+		keyName = "pointsTrackerOverlayEnable",
+		name = "Enable Overlay",
+		description = "Show points earned within the raid.",
+		position = 0,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerOverlayEnable()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "pointsTrackerShowRoomPoints",
+		name = "Separate Room Points",
+		description = "Show points for the current room separate from total points.",
+		position = 1,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerShowRoomPoints()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "pointsTrackerShowUniqueChance",
+		name = "Show Unique %",
+		description = "Show unique chance on the overlay.",
+		position = 2,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerShowUniqueChance()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "pointsTrackerShowPetChance",
+		name = "Show Pet %",
+		description = "Show pet chance on the overlay.",
+		position = 3,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerShowPetChance()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "pointsTrackerPostRaidMessage",
+		name = "Points Total Message",
+		description = "Show the total points in chat after the raid, akin to the Chambers of Xeric.",
+		position = 4,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerPostRaidMessage()
+	{
+		return true;
+	}
+
+	// Time Tracking
 
 	@ConfigItem(
 		keyName = "targetTimeDisplay",
 		name = "Target Time in Timer",
 		description = "Expand the in-raid timer to also show the target time to beat.",
-		position = 701,
+		position = 0,
 		section = SECTION_TIME_TRACKING
 	)
 	default boolean targetTimeDisplay()
@@ -652,7 +806,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "splitsMessage",
 		name = "Splits Post-Raid Message",
 		description = "Show room splits in a chat message at the end of the raid. Path shows boss completion times, room shows each individual room (can be very long).",
-		position = 702,
+		position = 1,
 		section = SECTION_TIME_TRACKING
 	)
 	default SplitsMode splitsMessage()
@@ -664,7 +818,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "splitsOverlay",
 		name = "Splits Overlay",
 		description = "Show room splits in an on-screen overlay. Path shows boss completion times, room shows each individual room (can be very long).",
-		position = 703,
+		position = 2,
 		section = SECTION_TIME_TRACKING
 	)
 	default SplitsMode splitsOverlay()
@@ -672,173 +826,61 @@ public interface TombsOfAmascutConfig extends Config
 		return SplitsMode.OFF;
 	}
 
-	@ConfigSection(
-		name = "Akkha",
-		description = "Configuration for Akkha boss room.",
-		closedByDefault = true,
-		position = 800
-	)
-	String SECTION_AKKHA = "sectionAkkha";
+	// Miscellaneous
+
+	String KEY_QUICK_PROCEED_ENABLE_MODE = "quickProceedEnableMode";
 
 	@ConfigItem(
-		name = "Shadows Hp Overlay",
-		description = "Overlay Akkha's Shadows Hp.",
-		position = 801,
-		keyName = "akkhaShadowHpOverlay",
-		section = SECTION_AKKHA
+		keyName = KEY_QUICK_PROCEED_ENABLE_MODE,
+		name = "Quick Proceed",
+		description = "Left click proceed/begin/leave on Osmumten and quick-enter/quick-use entryways and teleport crystals.",
+		position = 0,
+		section = SECTION_MISCELLANEOUS
 	)
-	default boolean akkhaShadowHpOverlay()
+	default QuickProceedEnableMode quickProceedEnableMode()
+	{
+		return QuickProceedEnableMode.ALL;
+	}
+
+	String KEY_HP_ORB_MODE = "hpOrbsMode";
+
+	@ConfigItem(
+		keyName = KEY_HP_ORB_MODE,
+		name = "HP Orbs",
+		description = "Removes HP orbs from the screen or replaces them with health bars.",
+		position = 1,
+		section = SECTION_MISCELLANEOUS
+	)
+	default HpOrbMode hpOrbsMode()
+	{
+		return HpOrbMode.ORBS;
+	}
+
+	@ConfigItem(
+		keyName = "showUpdateMessages",
+		name = "Show Updates",
+		description = "Opens a panel describing plugin updates after new features are added to the plugin.",
+		position = 3,
+		section = SECTION_MISCELLANEOUS
+	)
+	default boolean showUpdateMessages()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "hideFadeTransition",
+		name = "Hide Fade Transition",
+		description = "Hides the fade transition between loading zones.",
+		position = 4,
+		section = SECTION_MISCELLANEOUS
+	)
+	default boolean hideFadeTransition()
 	{
 		return false;
 	}
 
-	@ConfigItem(
-		name = "Font Style",
-		description = "Font style of text overlay.",
-		position = 802,
-		keyName = "akkhaFontStyle",
-		section = SECTION_AKKHA
-	)
-	default FontStyle akkhaFontStyle()
-	{
-		return FontStyle.PLAIN;
-	}
-
-	@ConfigItem(
-		name = "Font Size",
-		description = "Font size of text overlay.",
-		position = 803,
-		keyName = "akkhaFontSize",
-		section = SECTION_AKKHA
-	)
-	@Units(Units.PIXELS)
-	@Range(min = 12)
-	default int akkhaFontSize()
-	{
-		return 12;
-	}
-
-	@ConfigSection(
-		name = "Path of Apmeken",
-		description = "Options for the Path of Apmeken.",
-		position = 900,
-		closedByDefault = true
-	)
-	String SECTION_APMEKEN = "sectionApmeken";
-
-	@ConfigItem(
-		name = "Baboon Outline",
-		description = "Highlight baboons.",
-		position = 901,
-		keyName = "apmekenBaboonOutline",
-		section = SECTION_APMEKEN
-	)
-	default HighlightMode apmekenBaboonOutline()
-	{
-		return HighlightMode.OFF;
-	}
-
-	@ConfigItem(
-		name = "Volatile Baboon Tile",
-		description = "Highlight the tiles of the explode radius.",
-		position = 902,
-		keyName = "apmekenVolatileBaboonTiles",
-		section = SECTION_APMEKEN
-	)
-	default boolean apmekenVolatileBaboonTiles()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		name = "Outline Width",
-		description = "Highlight the tiles of the explode radius.",
-		position = 903,
-		keyName = "apmekenBaboonOutlineWidth",
-		section = SECTION_APMEKEN
-	)
-	default int apmekenBaboonOutlineWidth()
-	{
-		return 2;
-	}
-
-	@ConfigItem(
-		name = "Melee Baboon",
-		description = "Color to highlight the melee baboon.",
-		position = 904,
-		keyName = "apemekenBaboonColorMelee",
-		section = SECTION_APMEKEN
-	)
-	@Alpha
-	default Color apmekenBaboonColorMelee()
-	{
-		return new Color(0x40FF0000, true);
-	}
-
-	@ConfigItem(
-		name = "Range Baboon",
-		description = "Color to highlight the range baboon.",
-		position = 905,
-		keyName = "apemekenBaboonColorRange",
-		section = SECTION_APMEKEN
-	)
-	@Alpha
-	default Color apmekenBaboonColorRange()
-	{
-		return new Color(0x4000FF00, true);
-	}
-
-	@ConfigItem(
-		name = "Mage Baboon",
-		description = "Color to highlight the mage baboon.",
-		position = 906,
-		keyName = "apemekenBaboonColorMage",
-		section = SECTION_APMEKEN
-	)
-	@Alpha
-	default Color apmekenBaboonColorMage()
-	{
-		return new Color(0x400000FF, true);
-	}
-
-	@ConfigItem(
-		name = "Shaman Baboon",
-		description = "Color to highlight the shaman baboon.",
-		position = 907,
-		keyName = "apemekenBaboonColorShaman",
-		section = SECTION_APMEKEN
-	)
-	@Alpha
-	default Color apmekenBaboonColorShaman()
-	{
-		return new Color(0x4000FFFF, true);
-	}
-
-	@ConfigItem(
-		name = "Cursed Baboon",
-		description = "Color to highlight the cursed baboon.",
-		position = 908,
-		keyName = "apemekenBaboonColorCursed",
-		section = SECTION_APMEKEN
-	)
-	@Alpha
-	default Color apmekenBaboonColorCursed()
-	{
-		return new Color(0x40FF00FF, true);
-	}
-
-	@ConfigItem(
-		name = "Volatile Baboon",
-		description = "Color to highlight the volatile baboon.",
-		position = 909,
-		keyName = "apemekenBaboonColorVolatile",
-		section = SECTION_APMEKEN
-	)
-	@Alpha
-	default Color apmekenBaboonColorVolatile()
-	{
-		return new Color(0x40FFC800, true);
-	}
+	// Hidden
 
 	@ConfigItem(
 		keyName = "updateNotifierLastVersion",
@@ -877,4 +919,5 @@ public interface TombsOfAmascutConfig extends Config
 		hidden = true
 	)
 	void setPurpleDryStreakCount(int count);
+
 }
