@@ -5,9 +5,11 @@ import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_MENU_S
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_PREVENT_EXIT;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HP_ORB_MODE;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_QUICK_PROCEED_ENABLE_MODE;
+import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_TRACK_PURPLE_DRY_COUNT_MODE;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
+import com.duckblade.osrs.toa.features.tomb.PurpleTrackingMode;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
@@ -29,6 +31,7 @@ public class ConfigMigrationService
 		migrateQuickProceedEnable();
 		migrateHideHpOrbs();
 		migratePickaxeReminder();
+		migrateTrackPurpleDryCount();
 	}
 
 	@VisibleForTesting
@@ -64,6 +67,17 @@ public class ConfigMigrationService
 				KEY_HET_PICKAXE_MENU_SWAP, mode.isSwapStatue(),
 				KEY_HET_PICKAXE_PREVENT_EXIT, mode.isSwapExit()
 			)
+		);
+	}
+
+	@VisibleForTesting
+	void migrateTrackPurpleDryCount()
+	{
+		migrate(
+			"trackPurpleDryCount",
+			KEY_TRACK_PURPLE_DRY_COUNT_MODE,
+			Boolean.class,
+			enabled -> enabled ? PurpleTrackingMode.ANY : PurpleTrackingMode.OFF
 		);
 	}
 

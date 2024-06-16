@@ -9,6 +9,7 @@ import com.duckblade.osrs.toa.features.timetracking.SplitsMode;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
 import com.duckblade.osrs.toa.util.FontStyle;
 import com.duckblade.osrs.toa.util.HighlightMode;
+import com.duckblade.osrs.toa.features.tomb.PurpleTrackingMode;
 import java.awt.Color;
 import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
@@ -650,16 +651,20 @@ public interface TombsOfAmascutConfig extends Config
 		return false;
 	}
 
+	String KEY_TRACK_PURPLE_DRY_COUNT_MODE = "trackPurpleDryCountMode";
+
 	@ConfigItem(
 		name = "Track Purple Dry Count",
-		description = "Show purple dry streak count in chat upon raid completion.",
+		description = "Show purple dry streak count in chat upon raid completion." +
+			"<br>Any Purple = reset count on any purple chest." +
+			"<br>My Purple = reset count on my purple chest only.",
 		position = 10,
-		keyName = "trackPurpleDryCount",
+		keyName = KEY_TRACK_PURPLE_DRY_COUNT_MODE,
 		section = SECTION_BURIAL_TOMB
 	)
-	default boolean trackPurpleDryCount()
+	default PurpleTrackingMode trackPurpleDryCountMode()
 	{
-		return false;
+		return PurpleTrackingMode.OFF;
 	}
 
 	// Invocation Presets

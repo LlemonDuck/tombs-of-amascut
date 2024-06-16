@@ -5,9 +5,11 @@ import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_MENU_S
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_PREVENT_EXIT;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HP_ORB_MODE;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_QUICK_PROCEED_ENABLE_MODE;
+import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_TRACK_PURPLE_DRY_COUNT_MODE;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
+import com.duckblade.osrs.toa.features.tomb.PurpleTrackingMode;
 import net.runelite.client.config.ConfigManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -152,4 +154,34 @@ class ConfigMigrationServiceTest
 		verifyNoMoreInteractions(configManager);
 	}
 
+	@Test
+	void trackPurpleDryCountFalse()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "trackPurpleDryCount", Boolean.class)).thenReturn(false);
+		configMigrationService.migrateTrackPurpleDryCount();
+
+		verify(configManager).unsetConfiguration(CONFIG_GROUP, "trackPurpleDryCount");
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_TRACK_PURPLE_DRY_COUNT_MODE, PurpleTrackingMode.OFF);
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@Test
+	void trackPurpleDryCountTrue()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "trackPurpleDryCount", Boolean.class)).thenReturn(true);
+		configMigrationService.migrateTrackPurpleDryCount();
+
+		verify(configManager).unsetConfiguration(CONFIG_GROUP, "trackPurpleDryCount");
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_TRACK_PURPLE_DRY_COUNT_MODE, PurpleTrackingMode.ANY);
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@Test
+	void trackPurpleDryCountNull()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "trackPurpleDryCount", Boolean.class)).thenReturn(null);
+		configMigrationService.migrateTrackPurpleDryCount();
+
+		verifyNoMoreInteractions(configManager);
+	}
 }
