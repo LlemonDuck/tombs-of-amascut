@@ -23,6 +23,11 @@ import net.runelite.client.eventbus.Subscribe;
 public class DryStreakTracker implements PluginLifecycleComponent
 {
 	private static final int VARBIT_ID_SARCOPHAGUS = 14373;
+	private static final int VARBIT_VALUE_CHEST_KEY = 2;
+
+	private static final int[] VARBIT_MULTILOC_IDS_CHEST = new int[]{
+		14356, 14357, 14358, 14359, 14360, 14370, 14371, 14372
+	};
 
 	private final EventBus eventBus;
 	private final Client client;
@@ -33,12 +38,15 @@ public class DryStreakTracker implements PluginLifecycleComponent
 
 	private boolean chestOpened;
 	private boolean purple;
+	private boolean purpleIsMine;
+
 	private int previousCount;
 
 	@Override
 	public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
 	{
-		return config.trackPurpleDryCount() && (raidState.getCurrentRoom() == RaidRoom.TOMB || raidState.isInLobby());
+		return config.trackPurpleDryCountMode() != PurpleTrackingMode.OFF &&
+			(raidState.getCurrentRoom() == RaidRoom.TOMB || raidState.isInLobby());
 	}
 
 	@Override
@@ -52,9 +60,34 @@ public class DryStreakTracker implements PluginLifecycleComponent
 			clientThread.invokeLater(() ->
 			{
 				chestOpened = false;
-				purple = client.getVarbitValue(VARBIT_ID_SARCOPHAGUS) % 2 != 0;
+				purple = purpleIsMine = client.getVarbitValue(VARBIT_ID_SARCOPHAGUS) % 2 != 0;
+
+				for (final int varbitId : VARBIT_MULTILOC_IDS_CHEST)
+				{
+					if (client.getVarbitValue(varbitId) == VARBIT_VALUE_CHEST_KEY)
+					{
+						purpleIsMine = false;
+						break;
+					}
+				}
+
 				previousCount = config.getPurpleDryStreakCount();
-				config.setPurpleDryStreakCount(purple ? 0 : previousCount + 1);
+
+				final int count;
+
+				switch (config.trackPurpleDryCountMode())
+				{
+					case ANY:
+						count = purple ? 0 : previousCount + 1;
+						break;
+					case MINE:
+						count = purpleIsMine ? 0 : previousCount + 1;
+						break;
+					default:
+						return;
+				}
+
+				config.setPurpleDryStreakCount(count);
 			});
 		}
 	}
@@ -77,15 +110,23 @@ public class DryStreakTracker implements PluginLifecycleComponent
 		{
 			chestOpened = true;
 
+			final String fmt = "<col=800080>Purple</col> Dry Streak%s: <col=ff0000>%d</col>";
 			final String msg;
 
-			if (purple)
+			switch (config.trackPurpleDryCountMode())
 			{
-				msg = String.format("<col=800080>Purple</col> Dry Streak Ended: <col=ff0000>%d</col>", previousCount);
-			}
-			else
-			{
-				msg = String.format("<col=800080>Purple</col> Dry Streak: <col=ff0000>%d</col>", config.getPurpleDryStreakCount());
+				case ANY:
+					msg = String.format(fmt,
+						purple ? " Ended" : "",
+						purple ? previousCount : config.getPurpleDryStreakCount());
+					break;
+				case MINE:
+					msg = String.format(fmt,
+						purpleIsMine ? " Ended" : "",
+						purpleIsMine ? previousCount : config.getPurpleDryStreakCount());
+					break;
+				default:
+					return;
 			}
 
 			chatMessageManager.queue(QueuedMessage.builder()
