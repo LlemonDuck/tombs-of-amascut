@@ -97,7 +97,7 @@ public class SkipObeliskOverlay extends Overlay implements PluginLifecycleCompon
 	public void shutDown()
 	{
 		eventBus.unregister(this);
-		overlayManager.removeIf(o -> o instanceof SkipObeliskOverlay);
+		overlayManager.remove(this);
 	}
 
 	private void reset()

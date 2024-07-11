@@ -54,7 +54,7 @@ public class HpOrbManager implements PluginLifecycleComponent
 	public void shutDown()
 	{
 		eventBus.unregister(this);
-		overlayManager.removeIf(o -> o instanceof HealthBarsOverlay);
+		overlayManager.remove(healthBarsOverlay);
 	}
 
 	@Subscribe

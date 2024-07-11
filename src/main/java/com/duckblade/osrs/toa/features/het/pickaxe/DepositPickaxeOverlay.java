@@ -87,7 +87,7 @@ public class DepositPickaxeOverlay extends Overlay implements PluginLifecycleCom
 	public void shutDown()
 	{
 		eventBus.unregister(this);
-		overlayManager.removeIf(o -> o instanceof DepositPickaxeOverlay);
+		overlayManager.remove(this);
 	}
 
 	@Override

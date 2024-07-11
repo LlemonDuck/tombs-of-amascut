@@ -48,7 +48,7 @@ public class PointsOverlay extends OverlayPanel implements PluginLifecycleCompon
 	@Override
 	public void shutDown()
 	{
-		this.overlayManager.removeIf(o -> o instanceof PointsOverlay);
+		this.overlayManager.remove(this);
 	}
 
 	@Override

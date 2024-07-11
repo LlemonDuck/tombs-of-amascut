@@ -56,7 +56,7 @@ public class HetSolverOverlay extends Overlay implements PluginLifecycleComponen
 	@Override
 	public void shutDown()
 	{
-		overlayManager.removeIf(o -> o instanceof HetSolverOverlay);
+		overlayManager.remove(this);
 	}
 
 	@Override

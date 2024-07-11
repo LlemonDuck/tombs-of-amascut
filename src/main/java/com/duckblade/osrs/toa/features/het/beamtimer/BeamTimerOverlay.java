@@ -51,7 +51,7 @@ public class BeamTimerOverlay extends Overlay implements PluginLifecycleComponen
 	@Override
 	public void shutDown()
 	{
-		overlayManager.removeIf(o -> o instanceof BeamTimerOverlay);
+		overlayManager.remove(this);
 	}
 
 	@Override

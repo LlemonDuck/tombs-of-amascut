@@ -61,7 +61,7 @@ public class SplitsOverlay extends OverlayPanel implements PluginLifecycleCompon
 	@Override
 	public void shutDown()
 	{
-		overlayManager.removeIf(o -> o instanceof SplitsOverlay);
+		overlayManager.remove(this);
 	}
 
 	@Override
