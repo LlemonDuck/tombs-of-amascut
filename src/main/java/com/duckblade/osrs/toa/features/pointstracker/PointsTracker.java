@@ -309,7 +309,7 @@ public class PointsTracker implements PluginLifecycleComponent
 
 	public int getPersonalTotalPoints()
 	{
-		return this.personalTotalPoints;
+		return this.personalTotalPoints - BASE_POINTS;
 	}
 
 	public double getPersonalPercent()
