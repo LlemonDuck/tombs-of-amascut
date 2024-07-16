@@ -229,7 +229,7 @@ public class PointsTracker implements PluginLifecycleComponent
 		}
 		else if (e.getMessage().startsWith(DEATH_MESSAGE))
 		{
-			personalTotalPoints -= (int) Math.max(0.2 * personalTotalPoints, 1000);
+			personalTotalPoints -= (int) (0.2 * personalTotalPoints);
 			if (personalTotalPoints < 0)
 			{
 				personalTotalPoints = 0;
