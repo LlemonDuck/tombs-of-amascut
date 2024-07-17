@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -30,6 +31,7 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.ItemSpawned;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.util.ColorUtil;
@@ -134,6 +136,9 @@ public class PointsTracker implements PluginLifecycleComponent
 	private final PartyPointsTracker partyPointsTracker;
 	private final RaidStateTracker raidStateTracker;
 
+	@Inject
+	private ConfigManager configManager;
+
 	@Getter
 	private int personalRoomPoints;
 	private int personalTotalPoints;
@@ -143,6 +148,8 @@ public class PointsTracker implements PluginLifecycleComponent
 	private int teamSize;
 	private int raidLevel;
 	private int wardenDowns;
+
+	private final HashMap<String, Integer> pointsMap = new HashMap<>(2);
 
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
@@ -209,8 +216,14 @@ public class PointsTracker implements PluginLifecycleComponent
 				break;
 
 			case HET:
+				nonPartyPoints += 300;
+				break;
+
 			case WARDENS:
 				nonPartyPoints += 300;
+				pointsMap.put("personalPoints", getPersonalTotalPoints());
+				pointsMap.put("totalPoints", getTotalPoints());
+				configManager.setConfiguration(TombsOfAmascutConfig.CONFIG_GROUP, "points", pointsMap);
 				break;
 		}
 	}
