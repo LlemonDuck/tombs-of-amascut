@@ -788,6 +788,19 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "pointsTrackerAllowExternal",
+		name = "Send to External Plugins",
+		description = "Sends the points totals to other locally installed plugins on raid completion." +
+			"<br />Disabling this may prevent other plugins from working properly.",
+		position = 5,
+		section = SECTION_POINTS_TRACKER
+	)
+	default boolean pointsTrackerAllowExternal()
+	{
+		return true;
+	}
+
 	// Time Tracking
 
 	@ConfigItem(

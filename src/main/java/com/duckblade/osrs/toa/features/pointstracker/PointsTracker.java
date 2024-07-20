@@ -1,6 +1,7 @@
 package com.duckblade.osrs.toa.features.pointstracker;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
+import com.duckblade.osrs.toa.TombsOfAmascutPlugin;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
@@ -30,6 +31,7 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.ItemSpawned;
+import net.runelite.client.events.PluginMessage;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.util.ColorUtil;
@@ -39,6 +41,8 @@ import net.runelite.client.util.ColorUtil;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class PointsTracker implements PluginLifecycleComponent
 {
+
+	public static final String EVENT_NAME = "raidCompletedPoints";
 
 	/* I have some insider knowledge here that the blog was describing points earning slightly wrong wrt deaths.
 	 * Points are earned to both total and room points at the same time,
@@ -186,6 +190,10 @@ public class PointsTracker implements PluginLifecycleComponent
 				if (config.pointsTrackerPostRaidMessage())
 				{
 					client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", buildPointsMessage(), "", false);
+				}
+				if (config.pointsTrackerAllowExternal())
+				{
+					postPointsEvent();
 				}
 				break;
 
@@ -379,6 +387,19 @@ public class PointsTracker implements PluginLifecycleComponent
 		sb.append(ColorUtil.wrapWithColorTag(PERCENT_FORMAT.format(getPersonalPercent()), Color.red));
 		sb.append(")");
 		return sb.toString();
+	}
+
+	private void postPointsEvent()
+	{
+		eventBus.post(new PluginMessage(
+			TombsOfAmascutPlugin.EVENT_NAMESPACE,
+			EVENT_NAME,
+			ImmutableMap.<String, Object>builder()
+				.put("version", 1)
+				.put("totalPoints", getTotalPoints())
+				.put("personalPoints", getPersonalTotalPoints())
+				.build()
+		));
 	}
 
 }
