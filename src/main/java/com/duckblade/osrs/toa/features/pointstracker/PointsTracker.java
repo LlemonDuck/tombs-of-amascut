@@ -179,9 +179,17 @@ public class PointsTracker implements PluginLifecycleComponent
 	public void onRaidStateChanged(RaidStateChanged e)
 	{
 		teamSize = e.getNewState().getPlayerCount();
-		if (e.getPreviousState() == null || e.getPreviousState().getCurrentRoom() == null)
+		if (e.getPreviousState() == null
+			|| e.getPreviousState().getCurrentRoom() == null
+			|| e.getPreviousState().getCurrentRoom() == e.getNewState().getCurrentRoom())
 		{
 			return;
+		}
+
+		if (e.getNewState().getCurrentRoom() == RaidRoom.TOMB && config.pointsTrackerAllowExternal())
+		{
+			// this is used by raid data tracker, ping gh@null-zero (or team) before any changes
+			postPointsEvent();
 		}
 
 		switch (e.getPreviousState().getCurrentRoom())
@@ -190,10 +198,6 @@ public class PointsTracker implements PluginLifecycleComponent
 				if (config.pointsTrackerPostRaidMessage())
 				{
 					client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", buildPointsMessage(), "", false);
-				}
-				if (config.pointsTrackerAllowExternal())
-				{
-					postPointsEvent();
 				}
 				break;
 

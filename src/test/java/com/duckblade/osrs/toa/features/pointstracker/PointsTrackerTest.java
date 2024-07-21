@@ -90,8 +90,8 @@ public class PointsTrackerTest
 		ItemSpawned earnPointsEvent = new ItemSpawned(mock(Tile.class), bigBanana);
 		pointsTracker.onItemSpawned(earnPointsEvent);
 
-		RaidStateChanged raidLeaveEvent = new RaidStateChanged(new RaidState(false, true, RaidRoom.TOMB, 1), new RaidState(true, false, null, -1));
-		pointsTracker.onRaidStateChanged(raidLeaveEvent);
+		RaidStateChanged raidEndEvent = new RaidStateChanged(new RaidState(false, true, RaidRoom.WARDENS, 1), new RaidState(false, true, RaidRoom.TOMB, 1));
+		pointsTracker.onRaidStateChanged(raidEndEvent);
 
 		PluginMessage pointsEvent = subscriber.getCaptured();
 		assertNotNull(pointsEvent);
