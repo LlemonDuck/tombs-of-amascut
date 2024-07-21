@@ -923,6 +923,18 @@ public interface TombsOfAmascutConfig extends Config
 		return 15;
 	}
 
+	@ConfigItem(
+		keyName = "disableCameraShake",
+		name = "Disable Camera Shake",
+		description = "Disables camera shake effects at P4 Wardens.",
+		position = 6,
+		section = SECTION_MISCELLANEOUS
+	)
+	default boolean disableCameraShake()
+	{
+		return false;
+	}
+
 	// Hidden
 
 	@ConfigItem(
