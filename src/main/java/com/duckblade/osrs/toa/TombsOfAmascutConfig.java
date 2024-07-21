@@ -906,6 +906,23 @@ public interface TombsOfAmascutConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+		keyName = "smellingSaltsCooldown",
+		name = "Salts Cooldown",
+		description = "After using Smelling salts, prevents re-using them for this long.",
+		position = 5,
+		section = SECTION_MISCELLANEOUS
+	)
+	@Units(Units.SECONDS)
+	@Range(
+		min = 0,
+		max = 480
+	)
+	default int smellingSaltsCooldown()
+	{
+		return 15;
+	}
+
 	// Hidden
 
 	@ConfigItem(

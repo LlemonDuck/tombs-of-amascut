@@ -4,6 +4,7 @@ import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.features.FadeDisabler;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.LeftClickBankAll;
+import com.duckblade.osrs.toa.features.SmellingSaltsCooldown;
 import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealth;
 import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealthOverlay;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicator;
@@ -90,6 +91,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(ScabarasPanelManager.class);
 		lifecycleComponents.addBinding().to(SequencePuzzleSolver.class);
 		lifecycleComponents.addBinding().to(SkipObeliskOverlay.class);
+		lifecycleComponents.addBinding().to(SmellingSaltsCooldown.class);
 		lifecycleComponents.addBinding().to(SplitsOverlay.class);
 		lifecycleComponents.addBinding().to(SplitsTracker.class);
 		lifecycleComponents.addBinding().to(TargetTimeManager.class);
