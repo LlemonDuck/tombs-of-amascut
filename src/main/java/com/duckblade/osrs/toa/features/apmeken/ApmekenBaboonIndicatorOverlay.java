@@ -115,8 +115,10 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 				case NpcID.CURSED_BABOON:
 					color = config.apmekenBaboonColorCursed();
 					break;
-				case NpcID.VOLATILE_BABOON:
 				case NpcID.BABOON_THRALL:
+					color = config.apmekenBaboonColorThrall();
+					break;
+				case NpcID.VOLATILE_BABOON:
 				default:
 					continue;
 			}

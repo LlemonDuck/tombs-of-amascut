@@ -250,9 +250,22 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
+		name = "Thrall Baboon",
+		description = "Color to highlight the thrall baboon.",
+		position = 8,
+		keyName = "apemekenBaboonColorThrall",
+		section = SECTION_APMEKEN
+	)
+	@Alpha
+	default Color apmekenBaboonColorThrall()
+	{
+		return new Color(0x0000FFFF, true);
+	}
+
+	@ConfigItem(
 		name = "Cursed Baboon",
 		description = "Color to highlight the cursed baboon.",
-		position = 8,
+		position = 9,
 		keyName = "apemekenBaboonColorCursed",
 		section = SECTION_APMEKEN
 	)
@@ -265,7 +278,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Volatile Baboon",
 		description = "Color to highlight the volatile baboon.",
-		position = 9,
+		position = 10,
 		keyName = "apemekenBaboonColorVolatile",
 		section = SECTION_APMEKEN
 	)
