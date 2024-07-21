@@ -20,6 +20,8 @@ import net.runelite.client.plugins.PluginDescriptor;
 public class TombsOfAmascutPlugin extends Plugin
 {
 
+	public static final String EVENT_NAMESPACE = "tombs-of-amascut";
+
 	public static final File TOA_FOLDER = new File(RuneLite.RUNELITE_DIR, "tombs-of-amascut");
 
 	@Inject
