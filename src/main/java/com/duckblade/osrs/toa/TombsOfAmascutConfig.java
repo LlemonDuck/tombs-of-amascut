@@ -174,21 +174,9 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-		name = "Volatile Baboon Tile",
-		description = "Highlight the tiles of the explode radius.",
-		position = 2,
-		keyName = "apmekenVolatileBaboonTiles",
-		section = SECTION_APMEKEN
-	)
-	default boolean apmekenVolatileBaboonTiles()
-	{
-		return false;
-	}
-
-	@ConfigItem(
 		name = "Outline Width",
 		description = "Highlight the tiles of the explode radius.",
-		position = 3,
+		position = 2,
 		keyName = "apmekenBaboonOutlineWidth",
 		section = SECTION_APMEKEN
 	)
@@ -200,7 +188,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Melee Baboon",
 		description = "Color to highlight the melee baboon.",
-		position = 4,
+		position = 3,
 		keyName = "apemekenBaboonColorMelee",
 		section = SECTION_APMEKEN
 	)
@@ -213,7 +201,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Range Baboon",
 		description = "Color to highlight the range baboon.",
-		position = 5,
+		position = 4,
 		keyName = "apemekenBaboonColorRange",
 		section = SECTION_APMEKEN
 	)
@@ -226,7 +214,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Mage Baboon",
 		description = "Color to highlight the mage baboon.",
-		position = 6,
+		position = 5,
 		keyName = "apemekenBaboonColorMage",
 		section = SECTION_APMEKEN
 	)
@@ -239,7 +227,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Shaman Baboon",
 		description = "Color to highlight the shaman baboon.",
-		position = 7,
+		position = 6,
 		keyName = "apemekenBaboonColorShaman",
 		section = SECTION_APMEKEN
 	)
@@ -252,7 +240,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Thrall Baboon",
 		description = "Color to highlight the thrall baboon.",
-		position = 8,
+		position = 7,
 		keyName = "apemekenBaboonColorThrall",
 		section = SECTION_APMEKEN
 	)
@@ -265,7 +253,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Cursed Baboon",
 		description = "Color to highlight the cursed baboon.",
-		position = 9,
+		position = 8,
 		keyName = "apemekenBaboonColorCursed",
 		section = SECTION_APMEKEN
 	)
@@ -273,6 +261,18 @@ public interface TombsOfAmascutConfig extends Config
 	default Color apmekenBaboonColorCursed()
 	{
 		return new Color(0x40FF00FF, true);
+	}
+
+	@ConfigItem(
+		name = "Volatile Baboon Radius",
+		description = "Highlight the tiles of the explode radius.",
+		position = 9,
+		keyName = "apmekenVolatileBaboonTiles",
+		section = SECTION_APMEKEN
+	)
+	default boolean apmekenVolatileBaboonTiles()
+	{
+		return false;
 	}
 
 	@ConfigItem(
