@@ -5,6 +5,7 @@ import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.InventoryUtil;
 import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
+import com.duckblade.osrs.toa.util.RaidStateTracker;
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import javax.inject.Inject;
@@ -16,6 +17,7 @@ import net.runelite.api.InventoryID;
 import net.runelite.api.ItemID;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.Varbits;
+import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -29,18 +31,23 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 		ItemID.OSMUMTENS_FANG_OR
 	);
 
+	private boolean isEligibleForKit = true;
+
 	private final EventBus eventBus;
 	private final Client client;
+	private final RaidStateTracker raidStateTracker;
 
 	@Override
 	public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
 	{
-		return raidState.getCurrentRoom() == RaidRoom.TOMB && config.cursedPhalanxDetect();
+		return raidState.isInRaid() &&
+			config.cursedPhalanxDetect();
 	}
 
 	@Override
 	public void startUp()
 	{
+		isEligibleForKit = true;
 		eventBus.register(this);
 	}
 
@@ -51,15 +58,30 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 	}
 
 	@Subscribe
+	private void onChatMessage(ChatMessage e)
+	{
+		if (e.getType() != ChatMessageType.GAMEMESSAGE || !isEligibleForKit)
+		{
+			return;
+		}
+
+		if (e.getMessage().contains("Total deaths"))
+		{
+			isEligibleForKit = false;
+		}
+	}
+
+	@Subscribe
 	private void onMenuOptionClicked(final MenuOptionClicked event)
 	{
-		if (client.getVarbitValue(Varbits.TOA_RAID_LEVEL) < 500)
+		if (!isEligibleForKit ||
+			raidStateTracker.getCurrentState().getCurrentRoom() != RaidRoom.TOMB ||
+			client.getVarbitValue(Varbits.TOA_RAID_LEVEL) < 500)
 		{
 			return;
 		}
 
 		final MenuEntry menuEntry = event.getMenuEntry();
-
 		if (!menuEntry.getOption().equals("Open"))
 		{
 			return;
