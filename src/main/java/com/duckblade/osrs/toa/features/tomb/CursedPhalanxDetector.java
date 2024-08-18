@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.InventoryID;
@@ -22,90 +23,89 @@ import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class CursedPhalanxDetector implements PluginLifecycleComponent
 {
-    private static final Set<Integer> CURSED_PHALANX_ITEM_IDS = ImmutableSet.of(
-            ItemID.CURSED_PHALANX,
-            ItemID.OSMUMTENS_FANG_OR
-    );
-    private boolean isEligibleForKit = true;
-    @Inject
-    private EventBus eventBus;
-    @Inject
-    private Client client;
+	private static final Set<Integer> CURSED_PHALANX_ITEM_IDS = ImmutableSet.of(
+		ItemID.CURSED_PHALANX,
+		ItemID.OSMUMTENS_FANG_OR
+	);
 
-    @Inject
-    private RaidStateTracker raidStateTracker;
+	private boolean isEligibleForKit = true;
 
-    @Override
-    public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
-    {
-        return config.cursedPhalanxDetect();
-    }
+	private final EventBus eventBus;
+	private final Client client;
+	private final RaidStateTracker raidStateTracker;
 
-    @Override
-    public void startUp()
-    {
-        eventBus.register(this);
-    }
+	@Override
+	public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
+	{
+		return config.cursedPhalanxDetect();
+	}
 
-    @Override
-    public void shutDown()
-    {
-        eventBus.unregister(this);
-    }
+	@Override
+	public void startUp()
+	{
+		eventBus.register(this);
+	}
 
-    @Subscribe
-    private void onGameTick(GameTick e)
-    {
-        if (raidStateTracker.getCurrentState().getCurrentRoom() == null) // reset when not in raid
-        {
-            isEligibleForKit = true;
-            return;
-        }
+	@Override
+	public void shutDown()
+	{
+		eventBus.unregister(this);
+	}
 
-        if ( isEligibleForKit && (
-                client.getVarbitValue(Varbits.TOA_MEMBER_0_HEALTH) == 30 ||
-                client.getVarbitValue(Varbits.TOA_MEMBER_1_HEALTH) == 30 ||
-                client.getVarbitValue(Varbits.TOA_MEMBER_2_HEALTH) == 30 ||
-                client.getVarbitValue(Varbits.TOA_MEMBER_3_HEALTH) == 30 ||
-                client.getVarbitValue(Varbits.TOA_MEMBER_4_HEALTH) == 30 ||
-                client.getVarbitValue(Varbits.TOA_MEMBER_5_HEALTH) == 30 ||
-                client.getVarbitValue(Varbits.TOA_MEMBER_6_HEALTH) == 30 ||
-                client.getVarbitValue(Varbits.TOA_MEMBER_7_HEALTH) == 30
-        ))
-        {
-            isEligibleForKit = false;
-        }
+	@Subscribe
+	private void onGameTick(GameTick e)
+	{
+		if (raidStateTracker.getCurrentState().getCurrentRoom() == null) // reset when not in raid
+		{
+			isEligibleForKit = true;
+			return;
+		}
 
-    }
+		if (isEligibleForKit && (
+			client.getVarbitValue(Varbits.TOA_MEMBER_0_HEALTH) == 30 ||
+				client.getVarbitValue(Varbits.TOA_MEMBER_1_HEALTH) == 30 ||
+				client.getVarbitValue(Varbits.TOA_MEMBER_2_HEALTH) == 30 ||
+				client.getVarbitValue(Varbits.TOA_MEMBER_3_HEALTH) == 30 ||
+				client.getVarbitValue(Varbits.TOA_MEMBER_4_HEALTH) == 30 ||
+				client.getVarbitValue(Varbits.TOA_MEMBER_5_HEALTH) == 30 ||
+				client.getVarbitValue(Varbits.TOA_MEMBER_6_HEALTH) == 30 ||
+				client.getVarbitValue(Varbits.TOA_MEMBER_7_HEALTH) == 30
+		))
+		{
+			isEligibleForKit = false;
+		}
 
-    @Subscribe
-    private void onMenuOptionClicked(final MenuOptionClicked event)
-    {
-        if (raidStateTracker.getCurrentState().getCurrentRoom() != RaidRoom.TOMB)
-        {
-            return;
-        }
-        if (client.getVarbitValue(Varbits.TOA_RAID_LEVEL) < 500)
-        {
-            return;
-        }
+	}
 
-        final MenuEntry menuEntry = event.getMenuEntry();
+	@Subscribe
+	private void onMenuOptionClicked(final MenuOptionClicked event)
+	{
+		if (raidStateTracker.getCurrentState().getCurrentRoom() != RaidRoom.TOMB)
+		{
+			return;
+		}
+		if (client.getVarbitValue(Varbits.TOA_RAID_LEVEL) < 500)
+		{
+			return;
+		}
 
-        if (!menuEntry.getOption().equals("Open"))
-        {
-            return;
-        }
+		final MenuEntry menuEntry = event.getMenuEntry();
 
-        boolean wearingPhalanx = InventoryUtil.containsAny(client.getItemContainer(InventoryID.EQUIPMENT), CURSED_PHALANX_ITEM_IDS);
-        boolean carryingPhalanx = InventoryUtil.containsAny(client.getItemContainer(InventoryID.INVENTORY), CURSED_PHALANX_ITEM_IDS);
+		if (!menuEntry.getOption().equals("Open"))
+		{
+			return;
+		}
 
-        if ((wearingPhalanx || carryingPhalanx) && isEligibleForKit)
-        {
-            event.consume();
-            client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Remove and/or drop cursed phalanx before doing that.", null);
-        }
-    }
+		boolean wearingPhalanx = InventoryUtil.containsAny(client.getItemContainer(InventoryID.EQUIPMENT), CURSED_PHALANX_ITEM_IDS);
+		boolean carryingPhalanx = InventoryUtil.containsAny(client.getItemContainer(InventoryID.INVENTORY), CURSED_PHALANX_ITEM_IDS);
+
+		if ((wearingPhalanx || carryingPhalanx) && isEligibleForKit)
+		{
+			event.consume();
+			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Remove and/or drop cursed phalanx before doing that.", null);
+		}
+	}
 }
