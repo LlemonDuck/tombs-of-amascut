@@ -1,6 +1,7 @@
 package com.duckblade.osrs.toa.module;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
+import com.duckblade.osrs.toa.features.CameraShakeDisabler;
 import com.duckblade.osrs.toa.features.FadeDisabler;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.LeftClickBankAll;
@@ -64,6 +65,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(ApmekenWaveInstaller.class);
 		lifecycleComponents.addBinding().to(BeamTimerOverlay.class);
 		lifecycleComponents.addBinding().to(BeamTimerTracker.class);
+		lifecycleComponents.addBinding().to(CameraShakeDisabler.class);
 		lifecycleComponents.addBinding().to(CursedPhalanxDetector.class);
 		lifecycleComponents.addBinding().to(DepositPickaxeOverlay.class);
 		lifecycleComponents.addBinding().to(DepositPickaxePreventEntry.class);
