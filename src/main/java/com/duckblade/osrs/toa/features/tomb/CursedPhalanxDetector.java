@@ -17,7 +17,7 @@ import net.runelite.api.InventoryID;
 import net.runelite.api.ItemID;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.Varbits;
-import net.runelite.api.events.GameTick;
+import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -40,12 +40,14 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 	@Override
 	public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
 	{
-		return config.cursedPhalanxDetect();
+		return raidState.isInRaid() &&
+			config.cursedPhalanxDetect();
 	}
 
 	@Override
 	public void startUp()
 	{
+		isEligibleForKit = true;
 		eventBus.register(this);
 	}
 
@@ -56,44 +58,30 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 	}
 
 	@Subscribe
-	private void onGameTick(GameTick e)
+	private void onChatMessage(ChatMessage e)
 	{
-		if (raidStateTracker.getCurrentState().getCurrentRoom() == null) // reset when not in raid
+		if (e.getType() != ChatMessageType.GAMEMESSAGE || !isEligibleForKit)
 		{
-			isEligibleForKit = true;
 			return;
 		}
 
-		if (isEligibleForKit && (
-			client.getVarbitValue(Varbits.TOA_MEMBER_0_HEALTH) == 30 ||
-				client.getVarbitValue(Varbits.TOA_MEMBER_1_HEALTH) == 30 ||
-				client.getVarbitValue(Varbits.TOA_MEMBER_2_HEALTH) == 30 ||
-				client.getVarbitValue(Varbits.TOA_MEMBER_3_HEALTH) == 30 ||
-				client.getVarbitValue(Varbits.TOA_MEMBER_4_HEALTH) == 30 ||
-				client.getVarbitValue(Varbits.TOA_MEMBER_5_HEALTH) == 30 ||
-				client.getVarbitValue(Varbits.TOA_MEMBER_6_HEALTH) == 30 ||
-				client.getVarbitValue(Varbits.TOA_MEMBER_7_HEALTH) == 30
-		))
+		if (e.getMessage().contains("Total deaths"))
 		{
 			isEligibleForKit = false;
 		}
-
 	}
 
 	@Subscribe
 	private void onMenuOptionClicked(final MenuOptionClicked event)
 	{
-		if (raidStateTracker.getCurrentState().getCurrentRoom() != RaidRoom.TOMB)
-		{
-			return;
-		}
-		if (client.getVarbitValue(Varbits.TOA_RAID_LEVEL) < 500)
+		if (!isEligibleForKit ||
+			raidStateTracker.getCurrentState().getCurrentRoom() != RaidRoom.TOMB ||
+			client.getVarbitValue(Varbits.TOA_RAID_LEVEL) < 500)
 		{
 			return;
 		}
 
 		final MenuEntry menuEntry = event.getMenuEntry();
-
 		if (!menuEntry.getOption().equals("Open"))
 		{
 			return;
@@ -102,7 +90,7 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 		boolean wearingPhalanx = InventoryUtil.containsAny(client.getItemContainer(InventoryID.EQUIPMENT), CURSED_PHALANX_ITEM_IDS);
 		boolean carryingPhalanx = InventoryUtil.containsAny(client.getItemContainer(InventoryID.INVENTORY), CURSED_PHALANX_ITEM_IDS);
 
-		if ((wearingPhalanx || carryingPhalanx) && isEligibleForKit)
+		if (wearingPhalanx || carryingPhalanx)
 		{
 			event.consume();
 			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Remove and/or drop cursed phalanx before doing that.", null);
