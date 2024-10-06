@@ -3,8 +3,8 @@
 Utilities and information for raiding the Tombs of Amascut.
 
 
-[![Active Installs](http://img.shields.io/endpoint?url=https://i.pluginhub.info/shields/installs/plugin/tombs-of-amascut)](https://runelite.net/plugin-hub/show/tombs-of-amascut)
-[![Plugin Rank](http://img.shields.io/endpoint?url=https://i.pluginhub.info/shields/rank/plugin/tombs-of-amascut)](https://runelite.net/plugin-hub/show/tombs-of-amascut)
+[![Active Installs](http://img.shields.io/endpoint?url=https://api.runelite.net/pluginhub/shields/installs/plugin/tombs-of-amascut)](https://runelite.net/plugin-hub/show/tombs-of-amascut)
+[![Plugin Rank](http://img.shields.io/endpoint?url=https://api.runelite.net/pluginhub/shields/rank/plugin/tombs-of-amascut)](https://runelite.net/plugin-hub/show/tombs-of-amascut)
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/LlemonDuck)
 
