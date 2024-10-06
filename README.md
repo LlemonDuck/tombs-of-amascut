@@ -3,8 +3,8 @@
 Utilities and information for raiding the Tombs of Amascut.
 
 
-[![Active Installs](http://img.shields.io/endpoint?url=https://i.pluginhub.info/shields/installs/plugin/tombs-of-amascut)](https://runelite.net/plugin-hub/show/tombs-of-amascut)
-[![Plugin Rank](http://img.shields.io/endpoint?url=https://i.pluginhub.info/shields/rank/plugin/tombs-of-amascut)](https://runelite.net/plugin-hub/show/tombs-of-amascut)
+[![Active Installs](http://img.shields.io/endpoint?url=https://api.runelite.net/pluginhub/shields/installs/plugin/tombs-of-amascut)](https://runelite.net/plugin-hub/show/tombs-of-amascut)
+[![Plugin Rank](http://img.shields.io/endpoint?url=https://api.runelite.net/pluginhub/shields/rank/plugin/tombs-of-amascut)](https://runelite.net/plugin-hub/show/tombs-of-amascut)
 
 **Note: While Tombs of Amascut is new, Jagex will be quite strict on what is and is not allowed in ToA plugins.**
 Feel free to request new features in the Issues tab (after searching for an existing matching issue),
