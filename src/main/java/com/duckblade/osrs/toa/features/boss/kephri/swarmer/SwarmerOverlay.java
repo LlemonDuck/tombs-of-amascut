@@ -23,11 +23,9 @@ import java.util.stream.IntStream;
 @Singleton
 public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 {
-    private static final Logger log = LoggerFactory.getLogger(SwarmerOverlay.class);
     private final TombsOfAmascutConfig config;
     private final OverlayManager overlayManager;
     private final Swarmer swarmer;
-    private final NpcUtil npcUtil;
 
     public ArrayListMultimap<WorldPoint, SwarmNpc> renderedSwarms;
 
@@ -35,15 +33,13 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
     protected SwarmerOverlay(
             final TombsOfAmascutConfig config,
             final OverlayManager overlayManager,
-            final Swarmer swarmer,
-            final NpcUtil npcUtil
+            final Swarmer swarmer
     )
     {
         this.config = config;
         this.overlayManager = overlayManager;
         this.swarmer = swarmer;
         this.renderedSwarms = ArrayListMultimap.create();
-        this.npcUtil = npcUtil;
 
         setPriority(Overlay.PRIORITY_HIGH);
         setPosition(OverlayPosition.DYNAMIC);

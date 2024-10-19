@@ -10,14 +10,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class SwarmerPanel extends PluginPanel
 {
-    private static final Logger log = LoggerFactory.getLogger(SwarmerPanel.class);
-
     private final Color textColor = Color.WHITE;
     private final Color sidePanelColor = new Color(0x282828);
     private final Color backgroundColor = new Color(0x161616);
@@ -218,38 +215,5 @@ public class SwarmerPanel extends PluginPanel
 
         return raids.toArray(new String[0]);
     }
-
-    private void _copyToClipboard(JTable table)
-    {
-        StringBuffer sbf = new StringBuffer();
-        table.selectAll();
-        int numCols = table.getSelectedColumnCount();
-        int numRows = table.getSelectedRowCount();
-        int[] selectedRows = table.getSelectedRows();
-        int[] selectsColumns = table.getSelectedColumns();
-        table.clearSelection();
-        for (int i = 0; i < numCols; i++)
-        {
-            sbf.append(statsTable.getModel().getColumnName(i));
-            sbf.append("\t");
-        }
-        sbf.append("\n");
-        for (int i = 0; i < numRows; i++)
-        {
-            for (int j = 0; j < numCols; j++)
-            {
-                sbf.append(table.getValueAt(selectedRows[i], selectsColumns[j]));
-                if (j < numCols - 1)
-                {
-                    sbf.append("\t");
-                }
-            }
-            sbf.append("\n");
-        }
-        StringSelection data = new StringSelection(sbf.toString());
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(data, data);
-    }
-
-
 
 }

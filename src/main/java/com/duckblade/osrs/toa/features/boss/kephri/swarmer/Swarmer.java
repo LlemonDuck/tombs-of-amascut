@@ -25,7 +25,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Singleton
@@ -136,7 +135,7 @@ public class Swarmer implements PluginLifecycleComponent
     }
 
     @Subscribe
-    public void onGameTick(GameTick event)
+    public void onGameTick(GameTick ignoredEvent)
     {
         for (SwarmNpc swarm : allSwarms)
         {
@@ -211,17 +210,17 @@ public class Swarmer implements PluginLifecycleComponent
         WorldPoint npcLocation = npc.getWorldLocation();
         int npcX = npcLocation.getX();
         int npcY = npcLocation.getY();
-        WorldPoint north = new WorldPoint(npcX, npcY - 1, client.getPlane());
-        WorldPoint south = new WorldPoint(npcX, npcY + 1, client.getPlane());
-        WorldPoint east = new WorldPoint(npcX + 1, npcY, client.getPlane());
-        WorldPoint west = new WorldPoint(npcX - 1, npcY, client.getPlane());
+        WorldPoint north = new WorldPoint(npcX, npcY - 1, client.getTopLevelWorldView().getPlane());
+        WorldPoint south = new WorldPoint(npcX, npcY + 1, client.getTopLevelWorldView().getPlane());
+        WorldPoint east = new WorldPoint(npcX + 1, npcY, client.getTopLevelWorldView().getPlane());
+        WorldPoint west = new WorldPoint(npcX - 1, npcY, client.getTopLevelWorldView().getPlane());
 
         NPC northNpc = getNpcOnTile(north);
         NPC southNpc = getNpcOnTile(south);
         NPC eastNpc = getNpcOnTile(east);
         NPC westNpc = getNpcOnTile(west);
 
-        List<NPC> cardinalNpcs = new ArrayList<NPC>();
+        List<NPC> cardinalNpcs = new ArrayList<>();
         if (northNpc != null)
             cardinalNpcs.add(northNpc);
         if (southNpc != null)
@@ -236,12 +235,12 @@ public class Swarmer implements PluginLifecycleComponent
 
     private NPC getNpcOnTile(WorldPoint worldPoint)
     {
-        List<NPC> npcs = client.getNpcs();
+        IndexedObjectSet<? extends NPC> npcs = client.getTopLevelWorldView().npcs();
 
         for (NPC npc : npcs) {
             if (
-                    npc.getId() == SWARM_NPC_ID &&
-                            npc.getWorldLocation().getX() == worldPoint.getX() && npc.getWorldLocation().getY() == worldPoint.getY()
+                npc.getId() == SWARM_NPC_ID &&
+                npc.getWorldLocation().getX() == worldPoint.getX() && npc.getWorldLocation().getY() == worldPoint.getY()
             ) {
                 return npc;
             }

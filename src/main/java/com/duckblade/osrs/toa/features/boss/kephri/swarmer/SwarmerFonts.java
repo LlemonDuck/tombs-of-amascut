@@ -20,7 +20,7 @@ public enum SwarmerFonts {
         return this.name;
     }
 
-    private SwarmerFonts(String name) {
+    SwarmerFonts(String name) {
         this.name = name;
     }
 
