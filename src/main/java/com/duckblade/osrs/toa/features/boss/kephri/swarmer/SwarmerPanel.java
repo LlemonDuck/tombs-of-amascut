@@ -1,15 +1,12 @@
 package com.duckblade.osrs.toa.features.boss.kephri.swarmer;
 
 import net.runelite.client.ui.PluginPanel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.datatransfer.StringSelection;
 import java.util.List;
 
 @Singleton
@@ -41,7 +38,8 @@ public class SwarmerPanel extends PluginPanel
 
     private void renderSidePanel(String[] rList, DefaultTableModel leaksTableModel)
     {
-        if (mainPanel != null) {
+        if (mainPanel != null)
+        {
             remove(mainPanel);
         }
 
@@ -71,7 +69,8 @@ public class SwarmerPanel extends PluginPanel
 
         recentRaidsPanel.add(recentRaidsLabel);
 
-        if (rList == null) {
+        if (rList == null)
+        {
             rList = new String[0];
         }
 
@@ -81,18 +80,23 @@ public class SwarmerPanel extends PluginPanel
         raidsList.setFont(tableFont);
         raidsList.setSelectionBackground(tableColor2);
         raidsList.setSelectionForeground(textColor);
-        raidsList.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
+        raidsList.addListSelectionListener(e ->
+        {
+            if (!e.getValueIsAdjusting())
+            {
                 String selectedRaid = raidsList.getSelectedValue();
-                if (selectedRaid != null) {
+                if (selectedRaid != null)
+                {
                     this.selectedRaid = selectedRaid;
                     loadRaidData(selectedRaid);
                 }
             }
         });
-        raidsList.setCellRenderer(new DefaultListCellRenderer() {
+        raidsList.setCellRenderer(new DefaultListCellRenderer()
+        {
             @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+            {
                 JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 label.setBackground(value.equals(selectedRaid) ? tableColor2 : tableColor1);
@@ -119,12 +123,15 @@ public class SwarmerPanel extends PluginPanel
         leaksLabel.setPreferredSize(new Dimension(150, 20));
         leaksPanel.add(leaksLabel);
 
-        if (leaksTableModel == null) {
+        if (leaksTableModel == null)
+        {
             String[] columnNames = { "Down", "Wave", "Leaks" };
             Object[][] data = new Object[0][3];
-            leaksTableModel = new DefaultTableModel(data, columnNames) {
+            leaksTableModel = new DefaultTableModel(data, columnNames)
+            {
                 @Override
-                public boolean isCellEditable(int row, int column) {
+                public boolean isCellEditable(int row, int column)
+                {
                     return false;
                 }
             };
@@ -140,9 +147,11 @@ public class SwarmerPanel extends PluginPanel
         leaksTable.setFont(tableFont);
 
         // Alternate row colors
-        leaksTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+        leaksTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
+        {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+            {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             c.setBackground(row % 2 == 0 ? tableColor1 : tableColor2);
             c.setForeground(textColor);
@@ -155,7 +164,8 @@ public class SwarmerPanel extends PluginPanel
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Apply the renderer to each column
-        for (int i = 0; i < leaksTable.getColumnCount(); i++) {
+        for (int i = 0; i < leaksTable.getColumnCount(); i++)
+        {
             leaksTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
 
@@ -173,16 +183,19 @@ public class SwarmerPanel extends PluginPanel
 
     public void loadRaidData(String raid)
     {
-        if (raid == null || raid.equals(loadedRaidData)) {
+        if (raid == null || raid.equals(loadedRaidData))
+        {
             return;
         }
         List<KephriRoomData> raidDataList = KephriRoomData.getRaidData(raid);
 
         String[] columnNames = { "Down", "Wave", "Leaks" };
         Object[][] data = new Object[raidDataList.size()][3];
-        DefaultTableModel leaksTableModel = new DefaultTableModel(data, columnNames) {
+        DefaultTableModel leaksTableModel = new DefaultTableModel(data, columnNames)
+        {
             @Override
-            public boolean isCellEditable(int row, int column) {
+            public boolean isCellEditable(int row, int column)
+            {
                 return false;
             }
         };

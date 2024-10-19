@@ -123,9 +123,11 @@ public class Swarmer implements PluginLifecycleComponent
             if (aliveSwarms.stream().noneMatch(s -> s.getIndex() == swarm.getIndex()))
             {
                 aliveSwarms.add(swarm);
-                getCardinalNpcs(npc).forEach(cardinalNpc -> {
+                getCardinalNpcs(npc).forEach(cardinalNpc ->
+                {
                     SwarmNpc cardinalSwarm = new SwarmNpc(cardinalNpc);
-                    if (aliveSwarms.stream().noneMatch(s -> s.getIndex() == cardinalSwarm.getIndex())) {
+                    if (aliveSwarms.stream().noneMatch(s -> s.getIndex() == cardinalSwarm.getIndex()))
+                    {
                         aliveSwarms.add(cardinalSwarm);
                     }
                 });
@@ -237,11 +239,13 @@ public class Swarmer implements PluginLifecycleComponent
     {
         IndexedObjectSet<? extends NPC> npcs = client.getTopLevelWorldView().npcs();
 
-        for (NPC npc : npcs) {
+        for (NPC npc : npcs)
+        {
             if (
                 npc.getId() == SWARM_NPC_ID &&
                 npc.getWorldLocation().getX() == worldPoint.getX() && npc.getWorldLocation().getY() == worldPoint.getY()
-            ) {
+            )
+            {
                 return npc;
             }
         }

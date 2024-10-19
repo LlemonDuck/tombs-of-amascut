@@ -20,13 +20,15 @@ import static java.util.stream.Collectors.toList;
 
 @Getter
 @Setter
-public class KephriRoomData {
+public class KephriRoomData
+{
     private static final Logger log = LoggerFactory.getLogger(KephriRoomData.class);
     private int down;
     private int wave;
     private int leaks;
 
-    public KephriRoomData(int down, int wave, int leaks) {
+    public KephriRoomData(int down, int wave, int leaks)
+    {
         this.down = down;
         this.wave = wave;
         this.leaks = leaks;
@@ -36,7 +38,8 @@ public class KephriRoomData {
 
     public static final String PLUGIN_DIRECTORY = System.getProperty("user.home").replace("\\", "/") + "/.runelite/tombs-of-amascut/swarmer";
 
-    public static List<String> getRaidList() {
+    public static List<String> getRaidList()
+    {
         try {
             if (!Files.exists(Path.of(PLUGIN_DIRECTORY))) {
                 Files.createDirectories(Path.of(PLUGIN_DIRECTORY));
@@ -64,8 +67,9 @@ public class KephriRoomData {
 
     }
 
-    public static List<KephriRoomData> getRaidData(String raid) {
-        raid = String.valueOf(java.sql.Timestamp.valueOf(raid).getTime() / 1000);
+    public static List<KephriRoomData> getRaidData(String raid)
+    {
+        raid = String.valueOf(java.sql.Timestamp.valueOf(raid).getTime()/1000);
         try {
             if (!Files.exists(Path.of(PLUGIN_DIRECTORY))) {
                 Files.createDirectories(Path.of(PLUGIN_DIRECTORY));
@@ -85,7 +89,8 @@ public class KephriRoomData {
         return new ArrayList<>();
     }
 
-    public static void saveRaidData(List<KephriRoomData> raidDataList) {
+    public static void saveRaidData(List<KephriRoomData> raidDataList)
+    {
         String raidName = String.valueOf((int)(System.currentTimeMillis()/1000));
         Gson gson = new Gson();
         try {

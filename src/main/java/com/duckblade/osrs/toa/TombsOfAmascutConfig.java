@@ -178,7 +178,8 @@ public interface TombsOfAmascutConfig extends Config
 			keyName = "fontType",
 			section = SECTION_KEPHRI
 	)
-	default SwarmerFonts swarmerFontType() {
+	default SwarmerFonts swarmerFontType()
+	{
 		return SwarmerFonts.ARIAL;
 	}
 

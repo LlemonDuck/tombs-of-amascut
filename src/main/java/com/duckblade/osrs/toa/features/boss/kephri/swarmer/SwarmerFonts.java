@@ -16,11 +16,13 @@ public enum SwarmerFonts {
 
     private final String name;
 
-    public String toString() {
+    public String toString()
+    {
         return this.name;
     }
 
-    SwarmerFonts(String name) {
+    SwarmerFonts(String name)
+    {
         this.name = name;
     }
 

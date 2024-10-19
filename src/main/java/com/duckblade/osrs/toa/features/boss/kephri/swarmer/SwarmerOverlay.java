@@ -8,13 +8,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.runelite.api.Point;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.client.game.NpcUtil;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.List;
@@ -80,7 +77,8 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
         {
             graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             this.renderedSwarms.asMap().forEach(
-                    (worldPoint, npcs) -> {
+                    (worldPoint, npcs) ->
+                    {
                         int offset = 0;
                         for (SwarmNpc swarm : npcs)
                         {
@@ -109,8 +107,10 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
         if (config.swarmerOverlay())
         {
             graphics.setColor(Color.BLACK); // outline color
-            IntStream.range(-1, 2).forEachOrdered(ex -> {
-                IntStream.range(-1, 2).forEachOrdered(ey -> {
+            IntStream.range(-1, 2).forEachOrdered(ex ->
+            {
+                IntStream.range(-1, 2).forEachOrdered(ey ->
+                {
                     if (ex != 0 && ey != 0)
                     {
                         graphics.drawString(text, x + ex, y + ey);
