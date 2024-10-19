@@ -50,6 +50,18 @@ Font style and size can be controlled by the matching options.
 </details>
 
 <details>
+<summary>Kephri</summary>
+
+### 🚀 Swarmer
+
+Displays wave numbers on scarab swarms in the kephri room as they spawn.
+The side panel will show logs of previous raid's leaked swarms.
+Font color, style and size can be controlled by the matching options.
+![Swarmer Example](https://imgur.com/msneEOQ.png "Swarmer Example")
+
+</details>
+
+<details>
 <summary>Path of Apmeken</summary>
 
 ### 🕰️ Apmeken Wave Helper (legacy)

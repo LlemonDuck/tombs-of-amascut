@@ -1,6 +1,7 @@
 package com.duckblade.osrs.toa;
 
 import com.duckblade.osrs.toa.features.QuickProceedSwaps.QuickProceedEnableMode;
+import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerFonts;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
@@ -9,7 +10,9 @@ import com.duckblade.osrs.toa.features.timetracking.SplitsMode;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
 import com.duckblade.osrs.toa.util.FontStyle;
 import com.duckblade.osrs.toa.util.HighlightMode;
-import java.awt.Color;
+
+import java.awt.*;
+
 import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
@@ -43,9 +46,17 @@ public interface TombsOfAmascutConfig extends Config
 	String SECTION_AKKHA = "sectionAkkha";
 
 	@ConfigSection(
+		name = "Kephri",
+		description = "Configuration for the Kephri room.",
+		position = 2,
+		closedByDefault = true
+	)
+	String SECTION_KEPHRI = "sectionKephri";
+
+	@ConfigSection(
 		name = "Path of Apmeken",
 		description = "Options for the Path of Apmeken.",
-		position = 2,
+		position = 3,
 		closedByDefault = true
 	)
 	String SECTION_APMEKEN = "sectionApmeken";
@@ -53,7 +64,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Het",
 		description = "Helpers for the Path of Het.",
-		position = 3,
+		position = 4,
 		closedByDefault = true
 	)
 	String SECTION_HET = "sectionHet";
@@ -61,7 +72,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Scabaras",
 		description = "Options for the puzzles in the Path of Scabaras.",
-		position = 4,
+		position = 5,
 		closedByDefault = true
 	)
 	String SECTION_SCABARAS = "sectionScabaras";
@@ -69,7 +80,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Burial Tomb",
 		description = "Configuration for the burial tomb.",
-		position = 5,
+		position = 6,
 		closedByDefault = true
 	)
 	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
@@ -78,7 +89,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Points Tracker",
 		description = "<html>Tracks points for the raid, used in calculating drop chance." +
 			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
-		position = 6,
+		position = 7,
 		closedByDefault = true
 	)
 	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
@@ -86,7 +97,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
-		position = 7,
+		position = 8,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
@@ -94,7 +105,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Screenshot",
 		description = "All config options related to the Invocation Screenshot functionality",
-		position = 8,
+		position = 9,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
@@ -102,7 +113,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Time Tracking",
 		description = "Time tracking and splits.",
-		position = 9,
+		position = 10,
 		closedByDefault = true
 	)
 	String SECTION_TIME_TRACKING = "sectionTimeTracking";
@@ -145,6 +156,68 @@ public interface TombsOfAmascutConfig extends Config
 	default int akkhaFontSize()
 	{
 		return 12;
+	}
+
+	// Kephri
+	@ConfigItem(
+		keyName = "swarmerOverlay",
+		name = "Swarmer Overlay",
+		description = "Overlay swarm wave number.",
+		position = 0,
+		section = SECTION_KEPHRI
+	)
+	default boolean swarmerOverlay()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			name = "Font Type",
+			description = "Type of font",
+			position = 1,
+			keyName = "fontType",
+			section = SECTION_KEPHRI
+	)
+	default SwarmerFonts swarmerFontType() {
+		return SwarmerFonts.ARIAL;
+	}
+
+	@ConfigItem(
+			name = "Use Bold Font",
+			description = "Font style of swarm overlay.",
+			position = 2,
+			keyName = "useBoldFont",
+			section = SECTION_KEPHRI
+	)
+	default boolean useBoldFont()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			name = "Font Size",
+			description = "Font size of swarm overlay.",
+			position = 3,
+			keyName = "swarmerFontSize",
+			section = SECTION_KEPHRI
+	)
+	@Units(Units.PIXELS)
+	@Range(min = 12)
+	default int swarmerFontSize()
+	{
+		return 12;
+	}
+
+	@ConfigItem(
+			name = "Font Color",
+			description = "Font color of swarm overlay.",
+			position = 4,
+			keyName = "swarmerFontColor",
+			section = SECTION_KEPHRI
+	)
+	default Color swarmerFontColor()
+	{
+		return Color.WHITE;
 	}
 
 	// Apmeken
