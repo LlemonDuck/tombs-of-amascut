@@ -94,14 +94,16 @@ public class Swarmer implements PluginLifecycleComponent
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged e)
 	{
-		if (e.getGameState() == GameState.LOGIN_SCREEN) {
+		if (e.getGameState() == GameState.LOGIN_SCREEN)
+		{
 			isKephriDowned = false;
 			WaveNumber = 1;
 			KephriDownCount = 0;
 			aliveSwarms.clear();
 			allSwarms.clear();
 			sidePanel.clearRecentRaids();
-		} else if (e.getGameState() == GameState.LOGGED_IN) {
+		} else if (e.getGameState() == GameState.LOGGED_IN)
+		{
 			sidePanel.updateRecentRaids();
 		}
 	}
@@ -113,15 +115,18 @@ public class Swarmer implements PluginLifecycleComponent
 		final int npcId = npc.getId();
 
 
-		if (isKephriDowned && npcId == SWARM_NPC_ID) {
+		if (isKephriDowned && npcId == SWARM_NPC_ID)
+		{
 			SwarmNpc swarm = new SwarmNpc(npc);
 			allSwarms.add(swarm);
-			if (aliveSwarms.stream().noneMatch(s -> s.getIndex() == swarm.getIndex())) {
+			if (aliveSwarms.stream().noneMatch(s -> s.getIndex() == swarm.getIndex()))
+			{
 				aliveSwarms.add(swarm);
 				getCardinalNpcs(npc).forEach(cardinalNpc ->
 				{
 					SwarmNpc cardinalSwarm = new SwarmNpc(cardinalNpc);
-					if (aliveSwarms.stream().noneMatch(s -> s.getIndex() == cardinalSwarm.getIndex())) {
+					if (aliveSwarms.stream().noneMatch(s -> s.getIndex() == cardinalSwarm.getIndex()))
+					{
 						aliveSwarms.add(cardinalSwarm);
 					}
 				});
@@ -133,13 +138,17 @@ public class Swarmer implements PluginLifecycleComponent
 	@Subscribe
 	public void onGameTick(GameTick ignoredEvent)
 	{
-		for (SwarmNpc swarm : allSwarms) {
-			if (swarm.isAlive()) {
-				if (swarm.getNpc().getAnimation() == SWARM_LEAK_ANIMATION_ID) {
+		for (SwarmNpc swarm : allSwarms)
+		{
+			if (swarm.isAlive())
+			{
+				if (swarm.getNpc().getAnimation() == SWARM_LEAK_ANIMATION_ID)
+				{
 					swarm.setLeaked(true);
 					swarm.setAlive(false);
 					aliveSwarms.removeIf(s -> s.getIndex() == swarm.getIndex());
-				} else if (npcUtil.isDying(swarm.getNpc()) || swarm.getNpc().getAnimation() == SWARM_DEATH_ANIMATION_ID) {
+				} else if (npcUtil.isDying(swarm.getNpc()) || swarm.getNpc().getAnimation() == SWARM_DEATH_ANIMATION_ID)
+				{
 					swarm.setAlive(false);
 					aliveSwarms.removeIf(s -> s.getIndex() == swarm.getIndex());
 				}
@@ -148,13 +157,16 @@ public class Swarmer implements PluginLifecycleComponent
 
 		IndexedObjectSet<? extends NPC> npcs = client.getTopLevelWorldView().npcs();
 
-		for (NPC npc : npcs) {
+		for (NPC npc : npcs)
+		{
 			final int npcId = npc.getId();
-			if (!isKephriDowned && npcId == KEPHRI_DOWNED_NPC_ID) {
+			if (!isKephriDowned && npcId == KEPHRI_DOWNED_NPC_ID)
+			{
 				isKephriDowned = true;
 				KephriDownCount++;
 				Swarmer.WaveNumber = 1;
-			} else if (isKephriDowned && Arrays.stream(KEPHRI_ALIVE_NPC_IDS).anyMatch(id -> id == npcId)) {
+			} else if (isKephriDowned && Arrays.stream(KEPHRI_ALIVE_NPC_IDS).anyMatch(id -> id == npcId))
+			{
 				isKephriDowned = false;
 			}
 		}
@@ -166,13 +178,16 @@ public class Swarmer implements PluginLifecycleComponent
 		if (
 				event.getType().equals(ChatMessageType.GAMEMESSAGE) &&
 						event.getMessage().startsWith(ROOM_ENDED_MESSAGE)
-		) {
+		)
+		{
 			Swarmer.KephriDownCount = 0;
 
 			ArrayList<KephriRoomData> swarmData = new ArrayList<>();
 
-			for (SwarmNpc swarm : allSwarms) {
-				if (swarm.isLeaked()) {
+			for (SwarmNpc swarm : allSwarms)
+			{
+				if (swarm.isLeaked())
+				{
 					swarmData.stream()
 							.filter(s -> s.getWave() == swarm.getWaveSpawned() && s.getDown() == swarm.getPhase())
 							.findFirst()
@@ -221,11 +236,13 @@ public class Swarmer implements PluginLifecycleComponent
 	{
 		IndexedObjectSet<? extends NPC> npcs = client.getTopLevelWorldView().npcs();
 
-		for (NPC npc : npcs) {
+		for (NPC npc : npcs)
+		{
 			if (
 					npc.getId() == SWARM_NPC_ID &&
 							npc.getWorldLocation().getX() == worldPoint.getX() && npc.getWorldLocation().getY() == worldPoint.getY()
-			) {
+			)
+			{
 				return npc;
 			}
 		}
@@ -234,10 +251,12 @@ public class Swarmer implements PluginLifecycleComponent
 
 	private void createSidePanel()
 	{
-		if (sidePanel == null) {
+		if (sidePanel == null)
+		{
 			sidePanel = new SwarmerPanel();
 		}
-		if (navButton == null) {
+		if (navButton == null)
+		{
 			navButton = NavigationButton.builder()
 					.tooltip("Swarmer")
 					.icon(PANEL_ICON)

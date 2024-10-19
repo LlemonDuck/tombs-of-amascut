@@ -67,18 +67,21 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 		this.renderedSwarms.clear();
 		List<SwarmNpc> aliveSwarms = this.swarmer.getAliveSwarms();
 
-		for (SwarmNpc swarm : aliveSwarms) {
+		for (SwarmNpc swarm : aliveSwarms)
+		{
 			WorldPoint worldPoint = swarm.getNpc().getWorldLocation();
 			this.renderedSwarms.put(worldPoint, swarm);
 		}
 
-		if (!this.renderedSwarms.isEmpty()) {
+		if (!this.renderedSwarms.isEmpty())
+		{
 			graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			this.renderedSwarms.asMap().forEach(
 					(worldPoint, npcs) ->
 					{
 						int offset = 0;
-						for (SwarmNpc swarm : npcs) {
+						for (SwarmNpc swarm : npcs)
+						{
 							this.draw(graphics, swarm, offset);
 							offset += graphics.getFontMetrics().getHeight();
 						}
@@ -92,7 +95,8 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 		String text = String.valueOf(swarmer.getWaveSpawned());
 
 		Point canvasTextLocation = swarmer.getNpc().getCanvasTextLocation(graphics, text, 0);
-		if (canvasTextLocation == null) {
+		if (canvasTextLocation == null)
+		{
 			return;
 		}
 		int x = canvasTextLocation.getX();
@@ -100,13 +104,15 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 
 		graphics.setFont(new Font(config.swarmerFontType().toString(), config.useBoldFont() ? Font.BOLD : Font.PLAIN, config.swarmerFontSize()));
 
-		if (config.swarmerOverlay()) {
+		if (config.swarmerOverlay())
+		{
 			graphics.setColor(Color.BLACK); // outline color
 			IntStream.range(-1, 2).forEachOrdered(ex ->
 			{
 				IntStream.range(-1, 2).forEachOrdered(ey ->
 				{
-					if (ex != 0 && ey != 0) {
+					if (ex != 0 && ey != 0)
+					{
 						graphics.drawString(text, x + ex, y + ey);
 					}
 				});

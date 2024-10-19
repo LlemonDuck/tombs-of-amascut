@@ -38,7 +38,8 @@ public class SwarmerPanel extends PluginPanel
 
 	private void renderSidePanel(String[] rList, DefaultTableModel leaksTableModel)
 	{
-		if (mainPanel != null) {
+		if (mainPanel != null)
+		{
 			remove(mainPanel);
 		}
 
@@ -68,7 +69,8 @@ public class SwarmerPanel extends PluginPanel
 
 		recentRaidsPanel.add(recentRaidsLabel);
 
-		if (rList == null) {
+		if (rList == null)
+		{
 			rList = new String[0];
 		}
 
@@ -80,9 +82,11 @@ public class SwarmerPanel extends PluginPanel
 		raidsList.setSelectionForeground(textColor);
 		raidsList.addListSelectionListener(e ->
 		{
-			if (!e.getValueIsAdjusting()) {
+			if (!e.getValueIsAdjusting())
+			{
 				String selectedRaid = raidsList.getSelectedValue();
-				if (selectedRaid != null) {
+				if (selectedRaid != null)
+				{
 					this.selectedRaid = selectedRaid;
 					loadRaidData(selectedRaid);
 				}
@@ -119,7 +123,8 @@ public class SwarmerPanel extends PluginPanel
 		leaksLabel.setPreferredSize(new Dimension(150, 20));
 		leaksPanel.add(leaksLabel);
 
-		if (leaksTableModel == null) {
+		if (leaksTableModel == null)
+		{
 			String[] columnNames = {"Down", "Wave", "Leaks"};
 			Object[][] data = new Object[0][3];
 			leaksTableModel = new DefaultTableModel(data, columnNames)
@@ -159,7 +164,8 @@ public class SwarmerPanel extends PluginPanel
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
 		// Apply the renderer to each column
-		for (int i = 0; i < leaksTable.getColumnCount(); i++) {
+		for (int i = 0; i < leaksTable.getColumnCount(); i++)
+		{
 			leaksTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 		}
 
@@ -177,7 +183,8 @@ public class SwarmerPanel extends PluginPanel
 
 	public void loadRaidData(String raid)
 	{
-		if (raid == null || raid.equals(loadedRaidData)) {
+		if (raid == null || raid.equals(loadedRaidData))
+		{
 			return;
 		}
 		List<KephriRoomData> raidDataList = KephriRoomData.getRaidData(raid);
@@ -194,7 +201,8 @@ public class SwarmerPanel extends PluginPanel
 		};
 
 		leaksTableModel.setRowCount(0); // Clear existing data
-		for (KephriRoomData raidData : raidDataList) {
+		for (KephriRoomData raidData : raidDataList)
+		{
 			leaksTableModel.addRow(new Object[]{raidData.getDown(), raidData.getWave(), raidData.getLeaks()});
 		}
 
