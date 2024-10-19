@@ -7,29 +7,29 @@ import net.runelite.api.NPC;
 @Getter
 public class SwarmNpc
 {
-    private final NPC npc;
+	private final NPC npc;
 
-    private final int id;
+	private final int id;
 
-    private final int index;
+	private final int index;
 
-    @Setter
-    private boolean isAlive;
+	@Setter
+	private boolean isAlive;
 
-    @Setter
-    private boolean isLeaked;
+	@Setter
+	private boolean isLeaked;
 
-    private final int waveSpawned;
-    private final int phase;
+	private final int waveSpawned;
+	private final int phase;
 
-    public SwarmNpc(NPC npc)
-    {
-        this.npc = npc;
-        this.id = npc.getId();
-        this.index = npc.getIndex();
-        this.isAlive = true;
-        this.isLeaked = false;
-        this.waveSpawned = Swarmer.WaveNumber;
-        this.phase = Swarmer.KephriDownCount;
-    }
+	public SwarmNpc(NPC npc)
+	{
+		this.npc = npc;
+		this.id = npc.getId();
+		this.index = npc.getIndex();
+		this.isAlive = true;
+		this.isLeaked = false;
+		this.waveSpawned = Swarmer.WaveNumber;
+		this.phase = Swarmer.KephriDownCount;
+	}
 }

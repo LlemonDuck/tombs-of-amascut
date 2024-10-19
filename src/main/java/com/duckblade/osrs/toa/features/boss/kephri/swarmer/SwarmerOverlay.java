@@ -20,107 +20,101 @@ import java.util.stream.IntStream;
 @Singleton
 public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 {
-    private final TombsOfAmascutConfig config;
-    private final OverlayManager overlayManager;
-    private final Swarmer swarmer;
+	private final TombsOfAmascutConfig config;
+	private final OverlayManager overlayManager;
+	private final Swarmer swarmer;
 
-    public ArrayListMultimap<WorldPoint, SwarmNpc> renderedSwarms;
+	public ArrayListMultimap<WorldPoint, SwarmNpc> renderedSwarms;
 
-    @Inject
-    protected SwarmerOverlay(
-            final TombsOfAmascutConfig config,
-            final OverlayManager overlayManager,
-            final Swarmer swarmer
-    )
-    {
-        this.config = config;
-        this.overlayManager = overlayManager;
-        this.swarmer = swarmer;
-        this.renderedSwarms = ArrayListMultimap.create();
+	@Inject
+	protected SwarmerOverlay(
+			final TombsOfAmascutConfig config,
+			final OverlayManager overlayManager,
+			final Swarmer swarmer
+	)
+	{
+		this.config = config;
+		this.overlayManager = overlayManager;
+		this.swarmer = swarmer;
+		this.renderedSwarms = ArrayListMultimap.create();
 
-        setPriority(Overlay.PRIORITY_HIGH);
-        setPosition(OverlayPosition.DYNAMIC);
-        setLayer(OverlayLayer.ABOVE_SCENE);
-    }
+		setPriority(Overlay.PRIORITY_HIGH);
+		setPosition(OverlayPosition.DYNAMIC);
+		setLayer(OverlayLayer.ABOVE_SCENE);
+	}
 
-    @Override
-    public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
-    {
-        return swarmer.isEnabled(config, raidState);
-    }
+	@Override
+	public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
+	{
+		return swarmer.isEnabled(config, raidState);
+	}
 
-    @Override
-    public void startUp()
-    {
-        overlayManager.add(this);
-    }
+	@Override
+	public void startUp()
+	{
+		overlayManager.add(this);
+	}
 
-    @Override
-    public void shutDown()
-    {
-        overlayManager.remove(this);
-    }
+	@Override
+	public void shutDown()
+	{
+		overlayManager.remove(this);
+	}
 
-    @Override
-    public Dimension render(Graphics2D graphics)
-    {
-        this.renderedSwarms.clear();
-        List<SwarmNpc> aliveSwarms = this.swarmer.getAliveSwarms();
+	@Override
+	public Dimension render(Graphics2D graphics)
+	{
+		this.renderedSwarms.clear();
+		List<SwarmNpc> aliveSwarms = this.swarmer.getAliveSwarms();
 
-        for (SwarmNpc swarm : aliveSwarms)
-        {
-            WorldPoint worldPoint = swarm.getNpc().getWorldLocation();
-            this.renderedSwarms.put(worldPoint, swarm);
-        }
+		for (SwarmNpc swarm : aliveSwarms) {
+			WorldPoint worldPoint = swarm.getNpc().getWorldLocation();
+			this.renderedSwarms.put(worldPoint, swarm);
+		}
 
-        if (!this.renderedSwarms.isEmpty())
-        {
-            graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-            this.renderedSwarms.asMap().forEach(
-                    (worldPoint, npcs) ->
-                    {
-                        int offset = 0;
-                        for (SwarmNpc swarm : npcs)
-                        {
-                            this.draw(graphics, swarm, offset);
-                            offset += graphics.getFontMetrics().getHeight();
-                        }
-                    });
-        }
-        return null;
-    }
+		if (!this.renderedSwarms.isEmpty()) {
+			graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			this.renderedSwarms.asMap().forEach(
+					(worldPoint, npcs) ->
+					{
+						int offset = 0;
+						for (SwarmNpc swarm : npcs) {
+							this.draw(graphics, swarm, offset);
+							offset += graphics.getFontMetrics().getHeight();
+						}
+					});
+		}
+		return null;
+	}
 
-    private void draw(Graphics2D graphics, SwarmNpc swarmer, int offset)
-    {
-        String text = String.valueOf(swarmer.getWaveSpawned());
+	private void draw(Graphics2D graphics, SwarmNpc swarmer, int offset)
+	{
+		String text = String.valueOf(swarmer.getWaveSpawned());
 
-        Point canvasTextLocation = swarmer.getNpc().getCanvasTextLocation(graphics, text, 0);
-        if (canvasTextLocation == null)
-        {
-            return;
-        }
-        int x = canvasTextLocation.getX();
-        int y = canvasTextLocation.getY() + offset;
+		Point canvasTextLocation = swarmer.getNpc().getCanvasTextLocation(graphics, text, 0);
+		if (canvasTextLocation == null) {
+			return;
+		}
+		int x = canvasTextLocation.getX();
+		int y = canvasTextLocation.getY() + offset;
 
-        graphics.setFont(new Font(config.swarmerFontType().toString(), config.useBoldFont() ? Font.BOLD : Font.PLAIN, config.swarmerFontSize()));
+		graphics.setFont(new Font(config.swarmerFontType().toString(), config.useBoldFont() ? Font.BOLD : Font.PLAIN, config.swarmerFontSize()));
 
-        if (config.swarmerOverlay())
-        {
-            graphics.setColor(Color.BLACK); // outline color
-            IntStream.range(-1, 2).forEachOrdered(ex ->
-            {
-                IntStream.range(-1, 2).forEachOrdered(ey ->
-                {
-                    if (ex != 0 && ey != 0)
-                    {
-                        graphics.drawString(text, x + ex, y + ey);
-                    }
-                });
-            });
-        }
+		if (config.swarmerOverlay()) {
+			graphics.setColor(Color.BLACK); // outline color
+			IntStream.range(-1, 2).forEachOrdered(ex ->
+			{
+				IntStream.range(-1, 2).forEachOrdered(ey ->
+				{
+					if (ex != 0 && ey != 0) {
+						graphics.drawString(text, x + ex, y + ey);
+					}
+				});
+			});
+		}
 
-        graphics.setColor(config.swarmerFontColor());
+		graphics.setColor(config.swarmerFontColor());
 
-        graphics.drawString(text, x, y);
-    }
+		graphics.drawString(text, x, y);
+	}
 }
