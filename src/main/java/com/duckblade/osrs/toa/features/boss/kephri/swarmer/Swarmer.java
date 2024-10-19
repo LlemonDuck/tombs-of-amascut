@@ -102,7 +102,8 @@ public class Swarmer implements PluginLifecycleComponent
 			aliveSwarms.clear();
 			allSwarms.clear();
 			sidePanel.clearRecentRaids();
-		} else if (e.getGameState() == GameState.LOGGED_IN)
+		}
+		else if (e.getGameState() == GameState.LOGGED_IN)
 		{
 			sidePanel.updateRecentRaids();
 		}
@@ -147,7 +148,8 @@ public class Swarmer implements PluginLifecycleComponent
 					swarm.setLeaked(true);
 					swarm.setAlive(false);
 					aliveSwarms.removeIf(s -> s.getIndex() == swarm.getIndex());
-				} else if (npcUtil.isDying(swarm.getNpc()) || swarm.getNpc().getAnimation() == SWARM_DEATH_ANIMATION_ID)
+				}
+				else if (npcUtil.isDying(swarm.getNpc()) || swarm.getNpc().getAnimation() == SWARM_DEATH_ANIMATION_ID)
 				{
 					swarm.setAlive(false);
 					aliveSwarms.removeIf(s -> s.getIndex() == swarm.getIndex());
@@ -165,7 +167,8 @@ public class Swarmer implements PluginLifecycleComponent
 				isKephriDowned = true;
 				KephriDownCount++;
 				Swarmer.WaveNumber = 1;
-			} else if (isKephriDowned && Arrays.stream(KEPHRI_ALIVE_NPC_IDS).anyMatch(id -> id == npcId))
+			}
+			else if (isKephriDowned && Arrays.stream(KEPHRI_ALIVE_NPC_IDS).anyMatch(id -> id == npcId))
 			{
 				isKephriDowned = false;
 			}

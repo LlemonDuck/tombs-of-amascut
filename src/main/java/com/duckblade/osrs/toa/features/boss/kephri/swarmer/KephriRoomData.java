@@ -47,7 +47,8 @@ public class KephriRoomData
 				Files.createDirectories(Path.of(PLUGIN_DIRECTORY));
 				return new ArrayList<>();
 			}
-		} catch (Exception ignored)
+		}
+		catch (Exception ignored)
 		{
 			return new ArrayList<>();
 		}
@@ -63,7 +64,8 @@ public class KephriRoomData
 					raids.add(raidName);
 				}
 			}
-		} catch (Exception ignored)
+		}
+		catch (Exception ignored)
 		{
 			return new ArrayList<>();
 		}
@@ -83,7 +85,8 @@ public class KephriRoomData
 				Files.createDirectories(Path.of(PLUGIN_DIRECTORY));
 				return new ArrayList<>();
 			}
-		} catch (Exception ignored)
+		}
+		catch (Exception ignored)
 		{
 			return new ArrayList<>();
 		}
@@ -98,7 +101,8 @@ public class KephriRoomData
 			{
 			}.getType();
 			return gson.fromJson(reader, listType);
-		} catch (Exception ignored)
+		}
+		catch (Exception ignored)
 		{
 		}
 		return new ArrayList<>();
@@ -119,7 +123,8 @@ public class KephriRoomData
 				Files.createFile(Path.of(PLUGIN_DIRECTORY, raidName + ".json"));
 			}
 			Files.writeString(Path.of(PLUGIN_DIRECTORY, raidName + ".json"), gson.toJson(raidDataList));
-		} catch (Exception ignored)
+		}
+		catch (Exception ignored)
 		{
 		}
 	}
