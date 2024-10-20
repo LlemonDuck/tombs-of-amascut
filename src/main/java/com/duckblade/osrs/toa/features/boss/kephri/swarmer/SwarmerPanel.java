@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -29,15 +30,19 @@ public class SwarmerPanel extends PluginPanel
 	private static final Color tableColor1 = new Color(0x1F1F1F);
 	private static final Color tableColor2 = new Color(0x2D2D2D);
 
+	private final SwarmerDataManager swarmerDataManager;
+
 	private final DefaultListModel<String> raidsListModel;
 	private final DefaultTableModel leaksTableModel;
 
 	private String loadedRaidData;
 	private String selectedRaid;
 
-	SwarmerPanel()
+	@Inject
+	SwarmerPanel(SwarmerDataManager swarmerDataManager)
 	{
 		super(false);
+		this.swarmerDataManager = swarmerDataManager;
 
 		Font tableTitleFont = new Font(SwarmerFonts.REGULAR.toString(), Font.PLAIN, 18);
 		Font tableFont = new Font(SwarmerFonts.VERDANA.toString(), Font.PLAIN, 12);
@@ -151,7 +156,7 @@ public class SwarmerPanel extends PluginPanel
 			return;
 		}
 
-		List<SwarmerRoomData> raidDataList = SwarmerDataManager.getRaidData(raid);
+		List<SwarmerRoomData> raidDataList = swarmerDataManager.getRaidData(raid);
 		Object[][] newData = new Object[raidDataList.size()][3];
 		for (int i = 0; i < raidDataList.size(); i++)
 		{
@@ -171,7 +176,7 @@ public class SwarmerPanel extends PluginPanel
 
 	private List<String> getRecentRaids()
 	{
-		List<String> raids = SwarmerDataManager.getRaidList();
+		List<String> raids = swarmerDataManager.getRaidList();
 		raids.replaceAll(s -> new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(Long.parseLong(s) * 1000)));
 		return raids;
 	}

@@ -51,6 +51,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	private final EventBus eventBus;
 	private final OverlayManager overlayManager;
 	private final TombsOfAmascutConfig config;
+	private final SwarmerDataManager swarmerDataManager;
 
 	private final Map<Integer, SwarmNpc> aliveSwarms = new HashMap<>();
 	private final ArrayList<SwarmNpc> allSwarms = new ArrayList<>();
@@ -62,12 +63,13 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	private int lastSpawnTick = -1;
 
 	@Inject
-	public SwarmerOverlay(Client client, EventBus eventBus, OverlayManager overlayManager, TombsOfAmascutConfig config)
+	public SwarmerOverlay(Client client, EventBus eventBus, OverlayManager overlayManager, TombsOfAmascutConfig config, SwarmerDataManager swarmerDataManager)
 	{
 		this.client = client;
 		this.eventBus = eventBus;
 		this.overlayManager = overlayManager;
 		this.config = config;
+		this.swarmerDataManager = swarmerDataManager;
 
 		setPriority(Overlay.PRIORITY_HIGH);
 		setPosition(OverlayPosition.DYNAMIC);
@@ -211,7 +213,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 				}
 			}
 
-			SwarmerDataManager.saveRaidData(swarmData);
+			swarmerDataManager.saveRaidData(swarmData);
 			allSwarms.clear();
 		}
 

@@ -27,7 +27,9 @@ public class SwarmerDataManager
 	private static final int MAX_RECENT_RAIDS = 10;
 	public static final Path SWARMS_DIRECTORY = new File(TombsOfAmascutPlugin.TOA_FOLDER, "kephri-swarms").toPath();
 
-	public static List<String> getRaidList()
+	private final Gson gson;
+
+	public List<String> getRaidList()
 	{
 		try
 		{
@@ -63,7 +65,7 @@ public class SwarmerDataManager
 		return raids.size() > MAX_RECENT_RAIDS ? raids.subList(raids.size() - MAX_RECENT_RAIDS, raids.size()) : raids;
 	}
 
-	public static List<SwarmerRoomData> getRaidData(String raid)
+	public List<SwarmerRoomData> getRaidData(String raid)
 	{
 		raid = String.valueOf(java.sql.Timestamp.valueOf(raid).getTime() / 1000);
 		try
@@ -82,7 +84,6 @@ public class SwarmerDataManager
 		{
 			return new ArrayList<>();
 		}
-		Gson gson = new Gson();
 		try (FileReader reader = new FileReader(SWARMS_DIRECTORY.resolve(raid + ".json").toFile()))
 		{
 			Type listType = new TypeToken<List<SwarmerRoomData>>()
@@ -96,10 +97,9 @@ public class SwarmerDataManager
 		return new ArrayList<>();
 	}
 
-	public static void saveRaidData(List<SwarmerRoomData> raidDataList)
+	public void saveRaidData(List<SwarmerRoomData> raidDataList)
 	{
 		String raidName = String.valueOf((int) (System.currentTimeMillis() / 1000));
-		Gson gson = new Gson();
 		try
 		{
 			if (!Files.exists(SWARMS_DIRECTORY))
