@@ -11,9 +11,7 @@ import com.duckblade.osrs.toa.features.timetracking.SplitsMode;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
 import com.duckblade.osrs.toa.util.FontStyle;
 import com.duckblade.osrs.toa.util.HighlightMode;
-
-import java.awt.*;
-
+import java.awt.Color;
 import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
