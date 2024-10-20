@@ -195,7 +195,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 		{
 			kephriDownCount = 0;
 
-			ArrayList<KephriRoomData> swarmData = new ArrayList<>();
+			ArrayList<SwarmerRoomData> swarmData = new ArrayList<>();
 
 			for (SwarmNpc swarm : allSwarms)
 			{
@@ -206,12 +206,12 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 						.findFirst()
 						.ifPresentOrElse(
 							raidData -> raidData.setLeaks(raidData.getLeaks() + 1),
-							() -> swarmData.add(new KephriRoomData(swarm.getPhase(), swarm.getWaveSpawned(), 1))
+							() -> swarmData.add(new SwarmerRoomData(swarm.getPhase(), swarm.getWaveSpawned(), 1))
 						);
 				}
 			}
 
-			KephriRoomData.saveRaidData(swarmData);
+			SwarmerDataManager.saveRaidData(swarmData);
 			allSwarms.clear();
 		}
 

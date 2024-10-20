@@ -151,11 +151,11 @@ public class SwarmerPanel extends PluginPanel
 			return;
 		}
 
-		List<KephriRoomData> raidDataList = KephriRoomData.getRaidData(raid);
+		List<SwarmerRoomData> raidDataList = SwarmerDataManager.getRaidData(raid);
 		Object[][] newData = new Object[raidDataList.size()][3];
 		for (int i = 0; i < raidDataList.size(); i++)
 		{
-			KephriRoomData raidData = raidDataList.get(i);
+			SwarmerRoomData raidData = raidDataList.get(i);
 			newData[i] = new Object[]{raidData.getDown(), raidData.getWave(), raidData.getLeaks()};
 		}
 		leaksTableModel.setDataVector(newData, LEAKS_COLUMN_NAMES);
@@ -171,7 +171,7 @@ public class SwarmerPanel extends PluginPanel
 
 	private List<String> getRecentRaids()
 	{
-		List<String> raids = KephriRoomData.getRaidList();
+		List<String> raids = SwarmerDataManager.getRaidList();
 		raids.replaceAll(s -> new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(Long.parseLong(s) * 1000)));
 		return raids;
 	}

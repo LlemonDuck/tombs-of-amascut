@@ -1,11 +1,9 @@
 package com.duckblade.osrs.toa.features.boss.kephri.swarmer;
 
+import com.duckblade.osrs.toa.TombsOfAmascutPlugin;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import lombok.Getter;
-import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.File;
 
 import java.io.FileReader;
 import java.lang.reflect.Type;
@@ -17,34 +15,25 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 
-@Getter
-@Setter
-public class KephriRoomData
+@Singleton
+@RequiredArgsConstructor(onConstructor_ = @Inject)
+public class SwarmerDataManager
 {
-	private static final Logger log = LoggerFactory.getLogger(KephriRoomData.class);
-	private int down;
-	private int wave;
-	private int leaks;
-
-	public KephriRoomData(int down, int wave, int leaks)
-	{
-		this.down = down;
-		this.wave = wave;
-		this.leaks = leaks;
-	}
 
 	private static final int MAX_RECENT_RAIDS = 10;
-
-	public static final String PLUGIN_DIRECTORY = System.getProperty("user.home").replace("\\", "/") + "/.runelite/tombs-of-amascut/swarmer";
+	public static final Path SWARMS_DIRECTORY = new File(TombsOfAmascutPlugin.TOA_FOLDER, "kephri-swarms").toPath();
 
 	public static List<String> getRaidList()
 	{
 		try
 		{
-			if (!Files.exists(Path.of(PLUGIN_DIRECTORY)))
+			if (!Files.exists(SWARMS_DIRECTORY))
 			{
-				Files.createDirectories(Path.of(PLUGIN_DIRECTORY));
+				Files.createDirectories(SWARMS_DIRECTORY);
 				return new ArrayList<>();
 			}
 		}
@@ -54,7 +43,7 @@ public class KephriRoomData
 		}
 
 		ArrayList<String> raids = new ArrayList<>();
-		try (Stream<Path> files = Files.list(Path.of(PLUGIN_DIRECTORY)))
+		try (Stream<Path> files = Files.list(SWARMS_DIRECTORY))
 		{
 			for (Path file : files.collect(toList()))
 			{
@@ -72,17 +61,16 @@ public class KephriRoomData
 
 		raids.sort(Comparator.comparingLong(Long::parseLong));
 		return raids.size() > MAX_RECENT_RAIDS ? raids.subList(raids.size() - MAX_RECENT_RAIDS, raids.size()) : raids;
-
 	}
 
-	public static List<KephriRoomData> getRaidData(String raid)
+	public static List<SwarmerRoomData> getRaidData(String raid)
 	{
 		raid = String.valueOf(java.sql.Timestamp.valueOf(raid).getTime() / 1000);
 		try
 		{
-			if (!Files.exists(Path.of(PLUGIN_DIRECTORY)))
+			if (!Files.exists(SWARMS_DIRECTORY))
 			{
-				Files.createDirectories(Path.of(PLUGIN_DIRECTORY));
+				Files.createDirectories(SWARMS_DIRECTORY);
 				return new ArrayList<>();
 			}
 		}
@@ -90,14 +78,14 @@ public class KephriRoomData
 		{
 			return new ArrayList<>();
 		}
-		if (!Files.exists(Path.of(PLUGIN_DIRECTORY, raid + ".json")))
+		if (!Files.exists(SWARMS_DIRECTORY.resolve(raid + ".json")))
 		{
 			return new ArrayList<>();
 		}
 		Gson gson = new Gson();
-		try (FileReader reader = new FileReader(Path.of(PLUGIN_DIRECTORY, raid + ".json").toFile()))
+		try (FileReader reader = new FileReader(SWARMS_DIRECTORY.resolve(raid + ".json").toFile()))
 		{
-			Type listType = new TypeToken<List<KephriRoomData>>()
+			Type listType = new TypeToken<List<SwarmerRoomData>>()
 			{
 			}.getType();
 			return gson.fromJson(reader, listType);
@@ -108,21 +96,21 @@ public class KephriRoomData
 		return new ArrayList<>();
 	}
 
-	public static void saveRaidData(List<KephriRoomData> raidDataList)
+	public static void saveRaidData(List<SwarmerRoomData> raidDataList)
 	{
 		String raidName = String.valueOf((int) (System.currentTimeMillis() / 1000));
 		Gson gson = new Gson();
 		try
 		{
-			if (!Files.exists(Path.of(PLUGIN_DIRECTORY)))
+			if (!Files.exists(SWARMS_DIRECTORY))
 			{
-				Files.createDirectories(Path.of(PLUGIN_DIRECTORY));
+				Files.createDirectories(SWARMS_DIRECTORY);
 			}
-			if (!Files.exists(Path.of(PLUGIN_DIRECTORY, raidName + ".json")))
+			if (!Files.exists(SWARMS_DIRECTORY.resolve(raidName + ".json")))
 			{
-				Files.createFile(Path.of(PLUGIN_DIRECTORY, raidName + ".json"));
+				Files.createFile(SWARMS_DIRECTORY.resolve(raidName + ".json"));
 			}
-			Files.writeString(Path.of(PLUGIN_DIRECTORY, raidName + ".json"), gson.toJson(raidDataList));
+			Files.writeString(SWARMS_DIRECTORY.resolve(raidName + ".json"), gson.toJson(raidDataList));
 		}
 		catch (Exception ignored)
 		{
