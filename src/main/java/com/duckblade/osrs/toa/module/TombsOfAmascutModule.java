@@ -10,7 +10,6 @@ import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealth;
 import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealthOverlay;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicator;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicatorOverlay;
-import com.duckblade.osrs.toa.features.boss.kephri.swarmer.Swarmer;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerOverlay;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerPanelManager;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeOverlay;

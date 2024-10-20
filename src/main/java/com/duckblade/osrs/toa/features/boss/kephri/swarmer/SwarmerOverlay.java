@@ -15,6 +15,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
@@ -54,7 +55,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	private final SwarmerDataManager swarmerDataManager;
 
 	private final Map<Integer, SwarmNpc> aliveSwarms = new HashMap<>();
-	private final ArrayList<SwarmNpc> allSwarms = new ArrayList<>();
+	private final Map<Integer, Map<Integer, Integer>> leaks = new HashMap<>();
 
 	private int waveNumber = 1;
 	private int kephriDownCount = 0;
@@ -101,7 +102,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 
 	private void reset()
 	{
-		allSwarms.clear();
+		leaks.clear();
 		aliveSwarms.clear();
 		isKephriDowned = false;
 		lastSpawnTick = -1;
@@ -118,7 +119,6 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 		if (isKephriDowned && npcId == NpcID.SCARAB_SWARM_11723)
 		{
 			SwarmNpc swarm = new SwarmNpc(npc, waveNumber, kephriDownCount);
-			allSwarms.add(swarm);
 			aliveSwarms.put(npc.getIndex(), swarm);
 
 			int thisTick = client.getTickCount();
@@ -159,14 +159,16 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 
 		if (npc.getAnimation() == ANIMATION_SWARM_LEAK)
 		{
-			swarm.setAlive(false);
-			swarm.setLeaked(true);
 			aliveSwarms.remove(npc.getIndex());
+			leaks.compute(kephriDownCount, (downs, waveMap) ->
+			{
+				Map<Integer, Integer> waveLeaks = waveMap != null ? waveMap : new HashMap<>();
+				waveLeaks.compute(swarm.getWaveSpawned(), (wave, count) -> count != null ? count + 1 : 1);
+				return waveLeaks;
+			});
 		}
 		else if (npc.getAnimation() == ANIMATION_SWARM_DEATH)
 		{
-			swarm.setAlive(false);
-			swarm.setLeaked(true);
 			aliveSwarms.remove(npc.getIndex());
 		}
 	}
@@ -178,6 +180,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 			isKephriDowned = true;
 			kephriDownCount++;
 			waveNumber = 1;
+			aliveSwarms.clear();
 		}
 		else if (isKephriDowned && npc.getAnimation() == ANIMATION_KEPHRI_UP)
 		{
@@ -195,26 +198,18 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 
 		if (event.getMessage().startsWith(ROOM_ENDED_MESSAGE))
 		{
-			kephriDownCount = 0;
-
-			ArrayList<SwarmerRoomData> swarmData = new ArrayList<>();
-
-			for (SwarmNpc swarm : allSwarms)
+			List<SwarmerRoomData> swarmData = new ArrayList<>();
+			for (Map.Entry<Integer, Map<Integer, Integer>> e : leaks.entrySet())
 			{
-				if (swarm.isLeaked())
+				int down = e.getKey();
+				for (Map.Entry<Integer, Integer> f : e.getValue().entrySet())
 				{
-					swarmData.stream()
-						.filter(s -> s.getWave() == swarm.getWaveSpawned() && s.getDown() == swarm.getPhase())
-						.findFirst()
-						.ifPresentOrElse(
-							raidData -> raidData.setLeaks(raidData.getLeaks() + 1),
-							() -> swarmData.add(new SwarmerRoomData(swarm.getPhase(), swarm.getWaveSpawned(), 1))
-						);
+					int wave = f.getKey();
+					int leaks = f.getValue();
+					swarmData.add(new SwarmerRoomData(down, wave, leaks));
 				}
 			}
-
 			swarmerDataManager.saveRaidData(swarmData);
-			allSwarms.clear();
 		}
 
 		if (event.getMessage().startsWith(ROOM_FAIL_MESSAGE))
