@@ -1,6 +1,5 @@
 package com.duckblade.osrs.toa.features.boss.kephri.swarmer;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -10,6 +9,7 @@ import javax.inject.Singleton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -19,21 +19,19 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import net.runelite.client.ui.PluginPanel;
-import net.runelite.client.util.SwingUtil;
 
 @Singleton
 public class SwarmerPanel extends PluginPanel
 {
+	private static final String[] LEAKS_COLUMN_NAMES = {"Down", "Wave", "Leaks"};
+
 	private static final Color textColor = Color.WHITE;
-	private static final Color sidePanelColor = new Color(0x282828);
-	private static final Color backgroundColor = new Color(0x161616);
 	private static final Color tableColor1 = new Color(0x1F1F1F);
 	private static final Color tableColor2 = new Color(0x2D2D2D);
 
-	Font tableTitleFont;
-	Font tableFont;
+	private final DefaultListModel<String> raidsListModel;
+	private final DefaultTableModel leaksTableModel;
 
-	private JPanel mainPanel;
 	private String loadedRaidData;
 	private String selectedRaid;
 
@@ -41,48 +39,25 @@ public class SwarmerPanel extends PluginPanel
 	{
 		super(false);
 
-		this.tableTitleFont = new Font(SwarmerFonts.REGULAR.toString(), Font.PLAIN, 18);
-		this.tableFont = new Font(SwarmerFonts.VERDANA.toString(), Font.PLAIN, 12);
+		Font tableTitleFont = new Font(SwarmerFonts.REGULAR.toString(), Font.PLAIN, 18);
+		Font tableFont = new Font(SwarmerFonts.VERDANA.toString(), Font.PLAIN, 12);
 
-		renderSidePanel(null, null);
-	}
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		add(Box.createVerticalStrut(20));
 
-	private void renderSidePanel(String[] rList, DefaultTableModel leaksTableModel)
-	{
-		if (mainPanel != null)
-		{
-			SwingUtil.fastRemoveAll(this);
-		}
-
-		setLayout(new BorderLayout());
-
-		// Create main panel
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));  // Vertical alignment
-		mainPanel.setBackground(sidePanelColor);
-		mainPanel.setForeground(textColor);
-
-		mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-
-		// Recent Raids Panel
 		JPanel recentRaidsPanel = new JPanel();
 		recentRaidsPanel.setLayout(new BoxLayout(recentRaidsPanel, BoxLayout.Y_AXIS));
-		recentRaidsPanel.setBackground(backgroundColor);
 
 		JLabel recentRaidsLabel = new JLabel("Recent Raids");
 		recentRaidsLabel.setForeground(textColor);
 		recentRaidsLabel.setFont(tableTitleFont);
-		recentRaidsLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		recentRaidsLabel.setPreferredSize(new Dimension(150, 20));
-
+		recentRaidsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		recentRaidsLabel.setAlignmentX(CENTER_ALIGNMENT);
 		recentRaidsPanel.add(recentRaidsLabel);
+		recentRaidsPanel.add(Box.createVerticalStrut(5));
 
-		if (rList == null)
-		{
-			rList = new String[0];
-		}
-
-		JList<String> raidsList = new JList<>(rList);
+		raidsListModel = new DefaultListModel<>();
+		JList<String> raidsList = new JList<>(raidsListModel);
 		raidsList.setBackground(tableColor1);
 		raidsList.setForeground(textColor);
 		raidsList.setFont(tableFont);
@@ -114,46 +89,37 @@ public class SwarmerPanel extends PluginPanel
 		});
 
 		recentRaidsPanel.add(new JScrollPane(raidsList));
-		mainPanel.add(recentRaidsPanel);
+		add(recentRaidsPanel);
+		add(Box.createVerticalStrut(20));
 
-		mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-
-		// Leaks Table Panel
 		JPanel leaksPanel = new JPanel();
 		leaksPanel.setLayout(new BoxLayout(leaksPanel, BoxLayout.Y_AXIS));
-		leaksPanel.setBackground(backgroundColor);
 
 		JLabel leaksLabel = new JLabel("Leaks");
 		leaksLabel.setForeground(textColor);
 		leaksLabel.setFont(tableTitleFont);
-		leaksLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		leaksLabel.setPreferredSize(new Dimension(150, 20));
+		leaksLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		leaksLabel.setAlignmentX(CENTER_ALIGNMENT);
 		leaksPanel.add(leaksLabel);
+		leaksPanel.add(Box.createVerticalStrut(5));
 
-		if (leaksTableModel == null)
+		leaksTableModel = new DefaultTableModel()
 		{
-			String[] columnNames = {"Down", "Wave", "Leaks"};
-			Object[][] data = new Object[0][3];
-			leaksTableModel = new DefaultTableModel(data, columnNames)
+			@Override
+			public boolean isCellEditable(int row, int column)
 			{
-				@Override
-				public boolean isCellEditable(int row, int column)
-				{
-					return false;
-				}
-			};
-		}
-
+				return false;
+			}
+		};
 		JTable leaksTable = new JTable(leaksTableModel);
 		leaksTable.setRowSelectionAllowed(false);
 		leaksTable.setColumnSelectionAllowed(false);
 		leaksTable.setCellSelectionEnabled(false);
-		leaksTable.setBackground(backgroundColor);
+		leaksTable.setBackground(tableColor1);
 		leaksTable.setForeground(textColor);
-		leaksTable.setGridColor(backgroundColor);
+		leaksTable.setGridColor(tableColor1);
 		leaksTable.setFont(tableFont);
 
-		// Alternate row colors
 		DefaultTableCellRenderer leaksCellRenderer = new DefaultTableCellRenderer()
 		{
 			@Override
@@ -172,12 +138,8 @@ public class SwarmerPanel extends PluginPanel
 		leaksScrollPane.setPreferredSize(new Dimension(100, 400));
 
 		leaksPanel.add(leaksScrollPane);
-		mainPanel.add(leaksPanel);
-
-		mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-
-		// Add main panel to frame
-		add(mainPanel, BorderLayout.CENTER);
+		add(leaksPanel);
+		add(Box.createVerticalStrut(20));
 	}
 
 	public void loadRaidData(String raid)
@@ -188,41 +150,28 @@ public class SwarmerPanel extends PluginPanel
 		}
 
 		List<KephriRoomData> raidDataList = KephriRoomData.getRaidData(raid);
-
-		String[] columnNames = {"Down", "Wave", "Leaks"};
-		Object[][] data = new Object[raidDataList.size()][3];
-		DefaultTableModel leaksTableModel = new DefaultTableModel(data, columnNames)
+		Object[][] newData = new Object[raidDataList.size()][3];
+		for (int i = 0; i < raidDataList.size(); i++)
 		{
-			@Override
-			public boolean isCellEditable(int row, int column)
-			{
-				return false;
-			}
-		};
-
-		leaksTableModel.setRowCount(0); // Clear existing data
-		for (KephriRoomData raidData : raidDataList)
-		{
-			leaksTableModel.addRow(new Object[]{raidData.getDown(), raidData.getWave(), raidData.getLeaks()});
+			KephriRoomData raidData = raidDataList.get(i);
+			newData[i] = new Object[]{raidData.getDown(), raidData.getWave(), raidData.getLeaks()};
 		}
+		leaksTableModel.setDataVector(newData, LEAKS_COLUMN_NAMES);
 
 		loadedRaidData = raid;
-
-		renderSidePanel(getRecentRaids(), leaksTableModel);
 	}
 
 	public void updateRecentRaids()
 	{
-		renderSidePanel(getRecentRaids(), null);
+		raidsListModel.clear();
+		raidsListModel.addAll(getRecentRaids());
 	}
 
-	private String[] getRecentRaids()
+	private List<String> getRecentRaids()
 	{
 		List<String> raids = KephriRoomData.getRaidList();
-
 		raids.replaceAll(s -> new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(Long.parseLong(s) * 1000)));
-
-		return raids.toArray(new String[0]);
+		return raids;
 	}
 
 }
