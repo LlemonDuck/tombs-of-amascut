@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 8;
+	public static final int TARGET_VERSION = 9;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -117,6 +117,10 @@ public class UpdateNotifier implements PluginLifecycleComponent
 				updates.add("<strong>(Path of Apmeken -> Volatile Baboon Tile)</strong> can draw a 3x3 box around volatile baboons.");
 				updates.add("The Path of Het solver will no longer continue to show the solution when the seal is weakened.");
 				updates.add("The points tracker has been updated to account for deaths more accurately. If you have Separate Room Points enabled, you will begin to see that room points are preserved after wipes, this is intentional and accounted for.");
+
+			case 8:
+				updates.add("<strong>(Kephri -> Swarmer Overlay)</strong>Spawn numbers can be added to the Kephri swarms. Thanks @FiveNine!");
+				updates.add("Fixed a bug that was causing the Salts Cooldown feature to erroneously prevent salting.");
 		}
 
 		return updates;
