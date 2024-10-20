@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.List;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import net.runelite.client.ui.PluginPanel;
@@ -37,6 +38,7 @@ public class SwarmerPanel extends PluginPanel
 	private String loadedRaidData;
 	private String selectedRaid;
 
+	@Inject
 	SwarmerPanel(SwarmerDataManager swarmerDataManager)
 	{
 		super(false);
@@ -143,8 +145,6 @@ public class SwarmerPanel extends PluginPanel
 		leaksPanel.add(leaksScrollPane);
 		add(leaksPanel);
 		add(Box.createVerticalStrut(20));
-
-		updateRecentRaids();
 	}
 
 	public void loadRaidData(String raid)
@@ -154,29 +154,29 @@ public class SwarmerPanel extends PluginPanel
 			return;
 		}
 
-		List<SwarmerRoomData> raidDataList = swarmerDataManager.getRaidData(raid);
-		Object[][] newData = new Object[raidDataList.size()][3];
-		for (int i = 0; i < raidDataList.size(); i++)
-		{
-			SwarmerRoomData raidData = raidDataList.get(i);
-			newData[i] = new Object[]{raidData.getDown(), raidData.getWave(), raidData.getLeaks()};
-		}
-		leaksTableModel.setDataVector(newData, LEAKS_COLUMN_NAMES);
-
+		// set this early to prevent multi-clicks from possibly beating out the execution of the read.
 		loadedRaidData = raid;
+		swarmerDataManager.getRaidData(raid)
+			.thenAccept(raidDataList -> SwingUtilities.invokeLater(() ->
+			{
+				Object[][] newData = new Object[raidDataList.size()][3];
+				for (int i = 0; i < raidDataList.size(); i++)
+				{
+					SwarmerRoomData raidData = raidDataList.get(i);
+					newData[i] = new Object[]{raidData.getDown(), raidData.getWave(), raidData.getLeaks()};
+				}
+				leaksTableModel.setDataVector(newData, LEAKS_COLUMN_NAMES);
+			}));
 	}
 
 	public void updateRecentRaids()
 	{
-		raidsListModel.clear();
-		raidsListModel.addAll(swarmerDataManager.getRaidList());
-	}
-
-	private List<String> getRecentRaids()
-	{
-		List<String> raids = swarmerDataManager.getRaidList();
-		raids.replaceAll(s -> new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(Long.parseLong(s) * 1000)));
-		return raids;
+		swarmerDataManager.getRaidList()
+			.thenAccept(raids -> SwingUtilities.invokeLater(() ->
+			{
+				raidsListModel.clear();
+				raidsListModel.addAll(raids);
+			}));
 	}
 
 }

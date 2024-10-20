@@ -28,7 +28,7 @@ public class SwarmerPanelManager implements PluginLifecycleComponent
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(SwarmerPanelManager.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
-	private final SwarmerDataManager dataManager;
+	private final SwarmerPanel swarmerPanel;
 
 	private NavigationButton navButton;
 
@@ -58,9 +58,10 @@ public class SwarmerPanelManager implements PluginLifecycleComponent
 				.tooltip("Swarmer")
 				.icon(PANEL_ICON)
 				.priority(999)
-				.panel(new SwarmerPanel(dataManager))
+				.panel(swarmerPanel)
 				.build();
 			clientToolbar.addNavigation(navButton);
+			swarmerPanel.updateRecentRaids();
 		});
 	}
 
