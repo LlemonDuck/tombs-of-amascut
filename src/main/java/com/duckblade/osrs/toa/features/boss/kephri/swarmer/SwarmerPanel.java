@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -170,7 +169,7 @@ public class SwarmerPanel extends PluginPanel
 	public void updateRecentRaids()
 	{
 		raidsListModel.clear();
-		raidsListModel.addAll(getRecentRaids());
+		raidsListModel.addAll(swarmerDataManager.getRaidList());
 	}
 
 	private List<String> getRecentRaids()
