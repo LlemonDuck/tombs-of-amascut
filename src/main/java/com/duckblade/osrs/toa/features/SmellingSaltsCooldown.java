@@ -55,11 +55,15 @@ public class SmellingSaltsCooldown implements PluginLifecycleComponent
 	@Subscribe
 	public void onVarbitChanged(VarbitChanged e)
 	{
-		if (e.getVarbitId() == Varbits.BUFF_STAT_BOOST && e.getValue() > lastSaltVarb)
+		if (e.getVarbitId() == Varbits.BUFF_STAT_BOOST)
 		{
-			log.debug("Detected salt consumption");
-			lastSalt = e.getValue();
-			lastSalt = System.currentTimeMillis();
+			if (e.getValue() > lastSaltVarb)
+			{
+				log.debug("Detected salt consumption");
+				lastSalt = e.getValue();
+				lastSalt = System.currentTimeMillis();
+			}
+			lastSaltVarb = e.getValue();
 		}
 	}
 
