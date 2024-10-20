@@ -6,6 +6,7 @@ import com.duckblade.osrs.toa.util.RaidState;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.swing.SwingUtilities;
 import lombok.RequiredArgsConstructor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
@@ -27,6 +28,7 @@ public class SwarmerPanelManager implements PluginLifecycleComponent
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(SwarmerPanelManager.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
+	private final SwarmerDataManager dataManager;
 
 	private NavigationButton navButton;
 
@@ -50,13 +52,16 @@ public class SwarmerPanelManager implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		navButton = NavigationButton.builder()
-			.tooltip("Swarmer")
-			.icon(PANEL_ICON)
-			.priority(999)
-			.panel(new SwarmerPanel())
-			.build();
-		clientToolbar.addNavigation(navButton);
+		SwingUtilities.invokeLater(() ->
+		{
+			navButton = NavigationButton.builder()
+				.tooltip("Swarmer")
+				.icon(PANEL_ICON)
+				.priority(999)
+				.panel(new SwarmerPanel(dataManager))
+				.build();
+			clientToolbar.addNavigation(navButton);
+		});
 	}
 
 	@Override

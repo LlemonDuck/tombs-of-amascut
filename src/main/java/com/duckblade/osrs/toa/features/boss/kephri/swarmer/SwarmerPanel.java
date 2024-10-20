@@ -38,7 +38,6 @@ public class SwarmerPanel extends PluginPanel
 	private String loadedRaidData;
 	private String selectedRaid;
 
-	@Inject
 	SwarmerPanel(SwarmerDataManager swarmerDataManager)
 	{
 		super(false);
