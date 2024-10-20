@@ -1,27 +1,37 @@
 package com.duckblade.osrs.toa.features.boss.kephri.swarmer;
 
-import net.runelite.client.ui.PluginPanel;
-
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.util.List;
 import javax.inject.Singleton;
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.util.List;
+import net.runelite.client.ui.PluginPanel;
+import net.runelite.client.util.SwingUtil;
 
 @Singleton
 public class SwarmerPanel extends PluginPanel
 {
-	private final Color textColor = Color.WHITE;
-	private final Color sidePanelColor = new Color(0x282828);
-	private final Color backgroundColor = new Color(0x161616);
-	private final Color tableColor1 = new Color(0x1F1F1F);
-	private final Color tableColor2 = new Color(0x2D2D2D);
+	private static final Color textColor = Color.WHITE;
+	private static final Color sidePanelColor = new Color(0x282828);
+	private static final Color backgroundColor = new Color(0x161616);
+	private static final Color tableColor1 = new Color(0x1F1F1F);
+	private static final Color tableColor2 = new Color(0x2D2D2D);
 
 	Font tableTitleFont;
 	Font tableFont;
-
-	JTable statsTable;
 
 	private JPanel mainPanel;
 	private String loadedRaidData;
@@ -29,22 +39,21 @@ public class SwarmerPanel extends PluginPanel
 
 	SwarmerPanel()
 	{
+		super(false);
+
 		this.tableTitleFont = new Font(SwarmerFonts.REGULAR.toString(), Font.PLAIN, 18);
 		this.tableFont = new Font(SwarmerFonts.VERDANA.toString(), Font.PLAIN, 12);
 
 		renderSidePanel(null, null);
-
 	}
 
 	private void renderSidePanel(String[] rList, DefaultTableModel leaksTableModel)
 	{
 		if (mainPanel != null)
 		{
-			remove(mainPanel);
+			SwingUtil.fastRemoveAll(this);
 		}
 
-		getParent().setLayout(new BorderLayout());
-		getParent().add(this, BorderLayout.CENTER);
 		setLayout(new BorderLayout());
 
 		// Create main panel
@@ -61,7 +70,6 @@ public class SwarmerPanel extends PluginPanel
 		recentRaidsPanel.setBackground(backgroundColor);
 
 		JLabel recentRaidsLabel = new JLabel("Recent Raids");
-		recentRaidsLabel.setBackground(backgroundColor);
 		recentRaidsLabel.setForeground(textColor);
 		recentRaidsLabel.setFont(tableTitleFont);
 		recentRaidsLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -116,7 +124,6 @@ public class SwarmerPanel extends PluginPanel
 		leaksPanel.setBackground(backgroundColor);
 
 		JLabel leaksLabel = new JLabel("Leaks");
-		leaksLabel.setBackground(backgroundColor);
 		leaksLabel.setForeground(textColor);
 		leaksLabel.setFont(tableTitleFont);
 		leaksLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -147,7 +154,7 @@ public class SwarmerPanel extends PluginPanel
 		leaksTable.setFont(tableFont);
 
 		// Alternate row colors
-		leaksTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
+		DefaultTableCellRenderer leaksCellRenderer = new DefaultTableCellRenderer()
 		{
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
@@ -157,17 +164,9 @@ public class SwarmerPanel extends PluginPanel
 				c.setForeground(textColor);
 				return c;
 			}
-		});
-
-		// Create a custom cell renderer to center the text
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-
-		// Apply the renderer to each column
-		for (int i = 0; i < leaksTable.getColumnCount(); i++)
-		{
-			leaksTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-		}
+		};
+		leaksCellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		leaksTable.setDefaultRenderer(Object.class, leaksCellRenderer);
 
 		JScrollPane leaksScrollPane = new JScrollPane(leaksTable);
 		leaksScrollPane.setPreferredSize(new Dimension(100, 400));
@@ -187,6 +186,7 @@ public class SwarmerPanel extends PluginPanel
 		{
 			return;
 		}
+
 		List<KephriRoomData> raidDataList = KephriRoomData.getRaidData(raid);
 
 		String[] columnNames = {"Down", "Wave", "Leaks"};
@@ -213,12 +213,7 @@ public class SwarmerPanel extends PluginPanel
 
 	public void updateRecentRaids()
 	{
-		renderSidePanel(getRecentRaids(), new DefaultTableModel());
-	}
-
-	public void clearRecentRaids()
-	{
-		renderSidePanel(new String[0], new DefaultTableModel());
+		renderSidePanel(getRecentRaids(), null);
 	}
 
 	private String[] getRecentRaids()
