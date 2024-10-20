@@ -64,7 +64,8 @@ public class Swarmer implements PluginLifecycleComponent
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
-		return config.swarmerOverlay();
+		return config.swarmerOverlay()
+			&& (raidState.isInLobby() || raidState.isInRaid());
 	}
 
 	@Override
