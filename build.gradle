@@ -47,6 +47,7 @@ sourceCompatibility = '1.8'
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+    options.release.set(11)
 }
 
 test {
