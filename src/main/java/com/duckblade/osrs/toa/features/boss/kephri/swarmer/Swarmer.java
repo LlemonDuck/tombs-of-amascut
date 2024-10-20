@@ -143,11 +143,13 @@ public class Swarmer implements PluginLifecycleComponent
 		{
 			swarm.setAlive(false);
 			swarm.setLeaked(true);
+			aliveSwarms.remove(npc.getIndex());
 		}
 		else if (npc.getAnimation() == ANIMATION_SWARM_DEATH)
 		{
 			swarm.setAlive(false);
 			swarm.setLeaked(true);
+			aliveSwarms.remove(npc.getIndex());
 		}
 	}
 
