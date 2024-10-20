@@ -12,6 +12,7 @@ import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicator;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicatorOverlay;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.Swarmer;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerOverlay;
+import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerPanelManager;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeOverlay;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxePreventEntry;
 import com.duckblade.osrs.toa.features.het.solver.HetSolver;
@@ -79,8 +80,6 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(HpOrbManager.class);
 		lifecycleComponents.addBinding().to(InvocationPresetsManager.class);
 		lifecycleComponents.addBinding().to(InvocationScreenshot.class);
-		lifecycleComponents.addBinding().to(Swarmer.class);
-		lifecycleComponents.addBinding().to(SwarmerOverlay.class);
 		lifecycleComponents.addBinding().to(LeftClickBankAll.class);
 		lifecycleComponents.addBinding().to(LightPuzzleSolver.class);
 		lifecycleComponents.addBinding().to(MatchingPuzzleSolver.class);
@@ -100,6 +99,8 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(SmellingSaltsCooldown.class);
 		lifecycleComponents.addBinding().to(SplitsOverlay.class);
 		lifecycleComponents.addBinding().to(SplitsTracker.class);
+		lifecycleComponents.addBinding().to(SwarmerOverlay.class);
+		lifecycleComponents.addBinding().to(SwarmerPanelManager.class);
 		lifecycleComponents.addBinding().to(TargetTimeManager.class);
 		lifecycleComponents.addBinding().to(UpdateNotifier.class);
 	}

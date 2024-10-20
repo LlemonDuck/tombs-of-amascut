@@ -2,6 +2,7 @@ package com.duckblade.osrs.toa;
 
 import com.duckblade.osrs.toa.features.QuickProceedSwaps.QuickProceedEnableMode;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerFonts;
+import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerPanelManager;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
@@ -207,6 +208,18 @@ public interface TombsOfAmascutConfig extends Config
 	default int swarmerFontSize()
 	{
 		return 12;
+	}
+
+	@ConfigItem(
+			name = "Side Panel",
+			description = "Show a side panel with summary data for previous raids.",
+			position = 4,
+			keyName = "swarmerSidePanel",
+			section = SECTION_KEPHRI
+	)
+	default SwarmerPanelManager.PanelMode swarmerSidePanel()
+	{
+		return SwarmerPanelManager.PanelMode.NEVER;
 	}
 
 	@ConfigItem(
