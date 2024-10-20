@@ -118,7 +118,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 
 		if (isKephriDowned && npcId == NpcID.SCARAB_SWARM_11723)
 		{
-			SwarmNpc swarm = new SwarmNpc(npc, waveNumber, kephriDownCount);
+			SwarmNpc swarm = new SwarmNpc(npc, waveNumber);
 			aliveSwarms.put(npc.getIndex(), swarm);
 
 			int thisTick = client.getTickCount();

@@ -7,12 +7,5 @@ import net.runelite.api.NPC;
 public class SwarmNpc
 {
 	private final NPC npc;
-
 	private final int waveSpawned;
-
-	private final int phase;
-
-	private boolean isAlive;
-
-	private boolean isLeaked;
 }
