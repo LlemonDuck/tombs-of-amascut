@@ -6,6 +6,7 @@ import com.duckblade.osrs.toa.util.RaidState;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import java.util.Collection;
 import net.runelite.api.Point;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.Overlay;
@@ -65,7 +66,8 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	public Dimension render(Graphics2D graphics)
 	{
 		this.renderedSwarms.clear();
-		List<SwarmNpc> aliveSwarms = this.swarmer.getAliveSwarms();
+		Collection<SwarmNpc> aliveSwarms = this.swarmer.getAliveSwarms()
+			.values();
 
 		for (SwarmNpc swarm : aliveSwarms)
 		{

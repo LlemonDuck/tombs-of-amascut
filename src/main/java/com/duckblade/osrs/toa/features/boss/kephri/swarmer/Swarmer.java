@@ -3,13 +3,14 @@ package com.duckblade.osrs.toa.features.boss.kephri.swarmer;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidState;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
-import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.eventbus.EventBus;
@@ -54,9 +55,10 @@ public class Swarmer implements PluginLifecycleComponent
 	private final String ROOM_ENDED_MESSAGE = "Challenge complete: Kephri.";
 
 	private boolean isKephriDowned = false;
+	private int lastSpawnTick = -1;
 
 	@Getter
-	private final ArrayList<SwarmNpc> aliveSwarms = new ArrayList<>();
+	private final Map<Integer, SwarmNpc> aliveSwarms = new HashMap<>();
 
 	private final ArrayList<SwarmNpc> allSwarms = new ArrayList<>();
 
@@ -73,11 +75,7 @@ public class Swarmer implements PluginLifecycleComponent
 	{
 		eventBus.register(this);
 		createSidePanel();
-		allSwarms.clear();
-		aliveSwarms.clear();
-		isKephriDowned = false;
-		WaveNumber = 1;
-		KephriDownCount = 0;
+		reset();
 	}
 
 	@Override
@@ -85,29 +83,17 @@ public class Swarmer implements PluginLifecycleComponent
 	{
 		eventBus.unregister(this);
 		removeSidePanel();
+		reset();
+	}
+
+	private void reset()
+	{
 		allSwarms.clear();
 		aliveSwarms.clear();
 		isKephriDowned = false;
+		lastSpawnTick = -1;
 		WaveNumber = 1;
 		KephriDownCount = 0;
-	}
-
-	@Subscribe
-	public void onGameStateChanged(GameStateChanged e)
-	{
-		if (e.getGameState() == GameState.LOGIN_SCREEN)
-		{
-			isKephriDowned = false;
-			WaveNumber = 1;
-			KephriDownCount = 0;
-			aliveSwarms.clear();
-			allSwarms.clear();
-			sidePanel.clearRecentRaids();
-		}
-		else if (e.getGameState() == GameState.LOGGED_IN)
-		{
-			sidePanel.updateRecentRaids();
-		}
 	}
 
 	@Subscribe
@@ -119,20 +105,15 @@ public class Swarmer implements PluginLifecycleComponent
 
 		if (isKephriDowned && npcId == SWARM_NPC_ID)
 		{
-			SwarmNpc swarm = new SwarmNpc(npc);
+			SwarmNpc swarm = new SwarmNpc(npc, WaveNumber, KephriDownCount);
 			allSwarms.add(swarm);
-			if (aliveSwarms.stream().noneMatch(s -> s.getIndex() == swarm.getIndex()))
+			aliveSwarms.put(npc.getIndex(), swarm);
+
+			int thisTick = client.getTickCount();
+			if (lastSpawnTick != thisTick)
 			{
-				aliveSwarms.add(swarm);
-				getCardinalNpcs(npc).forEach(cardinalNpc ->
-				{
-					SwarmNpc cardinalSwarm = new SwarmNpc(cardinalNpc);
-					if (aliveSwarms.stream().noneMatch(s -> s.getIndex() == cardinalSwarm.getIndex()))
-					{
-						aliveSwarms.add(cardinalSwarm);
-					}
-				});
-				Swarmer.WaveNumber++;
+				WaveNumber++;
+				lastSpawnTick = thisTick;
 			}
 		}
 	}
@@ -148,12 +129,12 @@ public class Swarmer implements PluginLifecycleComponent
 				{
 					swarm.setLeaked(true);
 					swarm.setAlive(false);
-					aliveSwarms.removeIf(s -> s.getIndex() == swarm.getIndex());
+					aliveSwarms.remove(swarm.getNpc().getIndex());
 				}
 				else if (npcUtil.isDying(swarm.getNpc()) || swarm.getNpc().getAnimation() == SWARM_DEATH_ANIMATION_ID)
 				{
 					swarm.setAlive(false);
-					aliveSwarms.removeIf(s -> s.getIndex() == swarm.getIndex());
+					aliveSwarms.remove(swarm.getNpc().getIndex());
 				}
 			}
 		}
