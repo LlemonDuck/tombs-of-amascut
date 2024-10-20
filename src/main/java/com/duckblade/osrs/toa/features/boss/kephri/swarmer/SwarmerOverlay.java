@@ -58,11 +58,11 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	private final Map<Integer, SwarmNpc> aliveSwarms = new HashMap<>();
 	private final Map<Integer, Map<Integer, Integer>> leaks = new HashMap<>();
 
-	private int waveNumber = 1;
-	private int kephriDownCount = 0;
+	private int waveNumber;
+	private int kephriDownCount;
 
-	private boolean isKephriDowned = false;
-	private int lastSpawnTick = -1;
+	private boolean isKephriDowned;
+	private int lastSpawnTick;
 
 	@Inject
 	public SwarmerOverlay(Client client, EventBus eventBus, OverlayManager overlayManager, TombsOfAmascutConfig config, SwarmerDataManager swarmerDataManager, SwarmerPanel swarmerPanel)
@@ -108,7 +108,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 		aliveSwarms.clear();
 		isKephriDowned = false;
 		lastSpawnTick = -1;
-		waveNumber = 1;
+		waveNumber = 0;
 		kephriDownCount = 0;
 	}
 
@@ -120,15 +120,15 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 
 		if (isKephriDowned && npcId == NpcID.SCARAB_SWARM_11723)
 		{
-			SwarmNpc swarm = new SwarmNpc(npc, waveNumber);
-			aliveSwarms.put(npc.getIndex(), swarm);
-
 			int thisTick = client.getTickCount();
 			if (lastSpawnTick != thisTick)
 			{
 				waveNumber++;
 				lastSpawnTick = thisTick;
 			}
+
+			SwarmNpc swarm = new SwarmNpc(npc, waveNumber);
+			aliveSwarms.put(npc.getIndex(), swarm);
 		}
 	}
 
@@ -181,7 +181,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 		{
 			isKephriDowned = true;
 			kephriDownCount++;
-			waveNumber = 1;
+			waveNumber = 0;
 			aliveSwarms.clear();
 		}
 		else if (isKephriDowned && npc.getAnimation() == ANIMATION_KEPHRI_UP)
