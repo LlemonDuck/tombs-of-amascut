@@ -37,6 +37,7 @@ public class Swarmer implements PluginLifecycleComponent
 	private static final int ANIMATION_SWARM_DEATH = 9608;
 
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(Swarmer.class, "icon.png");
+	private static final String ROOM_ENDED_MESSAGE = "Challenge complete: Kephri.";
 
 	private final Client client;
 	private final ClientToolbar clientToolbar;
@@ -47,8 +48,6 @@ public class Swarmer implements PluginLifecycleComponent
 
 	private int waveNumber = 1;
 	private int kephriDownCount = 0;
-
-	private final String ROOM_ENDED_MESSAGE = "Challenge complete: Kephri.";
 
 	private boolean isKephriDowned = false;
 	private int lastSpawnTick = -1;
