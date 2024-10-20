@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.Comparator;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.Box;
@@ -159,12 +160,11 @@ public class SwarmerPanel extends PluginPanel
 		swarmerDataManager.getRaidData(raid)
 			.thenAccept(raidDataList -> SwingUtilities.invokeLater(() ->
 			{
-				Object[][] newData = new Object[raidDataList.size()][3];
-				for (int i = 0; i < raidDataList.size(); i++)
-				{
-					SwarmerRoomData raidData = raidDataList.get(i);
-					newData[i] = new Object[]{raidData.getDown(), raidData.getWave(), raidData.getLeaks()};
-				}
+				Object[][] newData = raidDataList.stream()
+					.sorted(Comparator.comparing(SwarmerRoomData::getDown)
+						.thenComparing(SwarmerRoomData::getWave))
+					.map(row -> new Object[]{row.getDown(), row.getWave(), row.getLeaks()})
+					.toArray(Object[][]::new);
 				leaksTableModel.setDataVector(newData, LEAKS_COLUMN_NAMES);
 			}));
 	}
