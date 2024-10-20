@@ -107,9 +107,9 @@ public class SwarmerDataManager implements PluginLifecycleComponent
 		}, executor);
 	}
 
-	public void saveRaidData(List<SwarmerRoomData> raidDataList)
+	public CompletableFuture<Void> saveRaidData(List<SwarmerRoomData> raidDataList)
 	{
-		CompletableFuture.runAsync(() ->
+		return CompletableFuture.runAsync(() ->
 		{
 			String raidName = new SimpleDateFormat("yyyy-MM-dd HH_mm_ss").format(new Date());
 			try

@@ -53,6 +53,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	private final OverlayManager overlayManager;
 	private final TombsOfAmascutConfig config;
 	private final SwarmerDataManager swarmerDataManager;
+	private final SwarmerPanel swarmerPanel;
 
 	private final Map<Integer, SwarmNpc> aliveSwarms = new HashMap<>();
 	private final Map<Integer, Map<Integer, Integer>> leaks = new HashMap<>();
@@ -64,13 +65,14 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	private int lastSpawnTick = -1;
 
 	@Inject
-	public SwarmerOverlay(Client client, EventBus eventBus, OverlayManager overlayManager, TombsOfAmascutConfig config, SwarmerDataManager swarmerDataManager)
+	public SwarmerOverlay(Client client, EventBus eventBus, OverlayManager overlayManager, TombsOfAmascutConfig config, SwarmerDataManager swarmerDataManager, SwarmerPanel swarmerPanel)
 	{
 		this.client = client;
 		this.eventBus = eventBus;
 		this.overlayManager = overlayManager;
 		this.config = config;
 		this.swarmerDataManager = swarmerDataManager;
+		this.swarmerPanel = swarmerPanel;
 
 		setPriority(Overlay.PRIORITY_HIGH);
 		setPosition(OverlayPosition.DYNAMIC);
@@ -209,7 +211,14 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 					swarmData.add(new SwarmerRoomData(down, wave, leaks));
 				}
 			}
-			swarmerDataManager.saveRaidData(swarmData);
+			swarmerDataManager.saveRaidData(swarmData)
+				.thenRun(() ->
+				{
+					if (config.swarmerSidePanel() != SwarmerPanelManager.PanelMode.NEVER)
+					{
+						swarmerPanel.updateRecentRaids();
+					}
+				});
 		}
 
 		if (event.getMessage().startsWith(ROOM_FAIL_MESSAGE))
