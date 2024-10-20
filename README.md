@@ -57,7 +57,8 @@ Font style and size can be controlled by the matching options.
 Displays wave numbers on scarab swarms in the kephri room as they spawn.
 The side panel will show logs of previous raid's leaked swarms.
 Font color, style and size can be controlled by the matching options.
-![Swarmer Example](https://imgur.com/msneEOQ.png "Swarmer Example")
+
+![Swarmer Example](docs/kephri/swarms.png "Swarmer Example")
 
 </details>
 
