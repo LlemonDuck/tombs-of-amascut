@@ -140,6 +140,8 @@ public class SwarmerPanel extends PluginPanel
 		leaksPanel.add(leaksScrollPane);
 		add(leaksPanel);
 		add(Box.createVerticalStrut(20));
+
+		updateRecentRaids();
 	}
 
 	public void loadRaidData(String raid)

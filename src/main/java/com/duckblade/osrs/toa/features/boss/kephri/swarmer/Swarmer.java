@@ -170,10 +170,8 @@ public class Swarmer implements PluginLifecycleComponent
 	@Subscribe
 	public void onChatMessage(ChatMessage event)
 	{
-		if (
-				event.getType().equals(ChatMessageType.GAMEMESSAGE) &&
-						event.getMessage().startsWith(ROOM_ENDED_MESSAGE)
-		)
+		if (event.getType().equals(ChatMessageType.GAMEMESSAGE) &&
+						event.getMessage().startsWith(ROOM_ENDED_MESSAGE))
 		{
 			kephriDownCount = 0;
 
@@ -201,19 +199,12 @@ public class Swarmer implements PluginLifecycleComponent
 
 	private void createSidePanel()
 	{
-		if (sidePanel == null)
-		{
-			sidePanel = new SwarmerPanel();
-		}
-		if (navButton == null)
-		{
-			navButton = NavigationButton.builder()
-					.tooltip("Swarmer")
-					.icon(PANEL_ICON)
-					.priority(999)
-					.panel(sidePanel)
-					.build();
-		}
+		navButton = NavigationButton.builder()
+				.tooltip("Swarmer")
+				.icon(PANEL_ICON)
+				.priority(999)
+				.panel(new SwarmerPanel())
+				.build();
 		clientToolbar.addNavigation(navButton);
 	}
 
