@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
-import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.NpcSpawned;
@@ -23,7 +22,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Singleton
@@ -195,51 +193,6 @@ public class Swarmer implements PluginLifecycleComponent
 			allSwarms.clear();
 			sidePanel.updateRecentRaids();
 		}
-	}
-
-	private List<NPC> getCardinalNpcs(NPC npc)
-	{
-		WorldPoint npcLocation = npc.getWorldLocation();
-		int npcX = npcLocation.getX();
-		int npcY = npcLocation.getY();
-		WorldPoint north = new WorldPoint(npcX, npcY - 1, client.getTopLevelWorldView().getPlane());
-		WorldPoint south = new WorldPoint(npcX, npcY + 1, client.getTopLevelWorldView().getPlane());
-		WorldPoint east = new WorldPoint(npcX + 1, npcY, client.getTopLevelWorldView().getPlane());
-		WorldPoint west = new WorldPoint(npcX - 1, npcY, client.getTopLevelWorldView().getPlane());
-
-		NPC northNpc = getNpcOnTile(north);
-		NPC southNpc = getNpcOnTile(south);
-		NPC eastNpc = getNpcOnTile(east);
-		NPC westNpc = getNpcOnTile(west);
-
-		List<NPC> cardinalNpcs = new ArrayList<>();
-		if (northNpc != null)
-			cardinalNpcs.add(northNpc);
-		if (southNpc != null)
-			cardinalNpcs.add(southNpc);
-		if (eastNpc != null)
-			cardinalNpcs.add(eastNpc);
-		if (westNpc != null)
-			cardinalNpcs.add(westNpc);
-
-		return cardinalNpcs;
-	}
-
-	private NPC getNpcOnTile(WorldPoint worldPoint)
-	{
-		IndexedObjectSet<? extends NPC> npcs = client.getTopLevelWorldView().npcs();
-
-		for (NPC npc : npcs)
-		{
-			if (
-					npc.getId() == NpcID.SCARAB_SWARM_11723 &&
-							npc.getWorldLocation().getX() == worldPoint.getX() && npc.getWorldLocation().getY() == worldPoint.getY()
-			)
-			{
-				return npc;
-			}
-		}
-		return null;
 	}
 
 	private void createSidePanel()
