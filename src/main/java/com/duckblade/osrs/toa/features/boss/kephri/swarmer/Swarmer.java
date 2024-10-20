@@ -44,8 +44,8 @@ public class Swarmer implements PluginLifecycleComponent
 	private SwarmerPanel sidePanel;
 	private NavigationButton navButton;
 
-	public static int WaveNumber = 1;
-	public static int KephriDownCount = 0;
+	private int waveNumber = 1;
+	private int kephriDownCount = 0;
 
 	private final String ROOM_ENDED_MESSAGE = "Challenge complete: Kephri.";
 
@@ -87,8 +87,8 @@ public class Swarmer implements PluginLifecycleComponent
 		aliveSwarms.clear();
 		isKephriDowned = false;
 		lastSpawnTick = -1;
-		WaveNumber = 1;
-		KephriDownCount = 0;
+		waveNumber = 1;
+		kephriDownCount = 0;
 	}
 
 	@Subscribe
@@ -99,14 +99,14 @@ public class Swarmer implements PluginLifecycleComponent
 
 		if (isKephriDowned && npcId == NpcID.SCARAB_SWARM_11723)
 		{
-			SwarmNpc swarm = new SwarmNpc(npc, WaveNumber, KephriDownCount);
+			SwarmNpc swarm = new SwarmNpc(npc, waveNumber, kephriDownCount);
 			allSwarms.add(swarm);
 			aliveSwarms.put(npc.getIndex(), swarm);
 
 			int thisTick = client.getTickCount();
 			if (lastSpawnTick != thisTick)
 			{
-				WaveNumber++;
+				waveNumber++;
 				lastSpawnTick = thisTick;
 			}
 		}
@@ -156,8 +156,8 @@ public class Swarmer implements PluginLifecycleComponent
 		if (!isKephriDowned && npc.getAnimation() == ANIMATION_KEPHRI_DOWN)
 		{
 			isKephriDowned = true;
-			KephriDownCount++;
-			WaveNumber = 1;
+			kephriDownCount++;
+			waveNumber = 1;
 		}
 		else if (isKephriDowned && npc.getAnimation() == ANIMATION_KEPHRI_UP)
 		{
@@ -173,7 +173,7 @@ public class Swarmer implements PluginLifecycleComponent
 						event.getMessage().startsWith(ROOM_ENDED_MESSAGE)
 		)
 		{
-			Swarmer.KephriDownCount = 0;
+			kephriDownCount = 0;
 
 			ArrayList<KephriRoomData> swarmData = new ArrayList<>();
 
