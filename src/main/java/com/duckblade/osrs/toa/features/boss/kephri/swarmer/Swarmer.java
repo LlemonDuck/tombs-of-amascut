@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.ChatMessage;
-import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -24,7 +24,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -32,6 +31,11 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class Swarmer implements PluginLifecycleComponent
 {
+	private static final int ANIMATION_KEPHRI_DOWN = 9579;
+	private static final int ANIMATION_KEPHRI_UP = 9581;
+	private static final int ANIMATION_SWARM_LEAK = 9607;
+	private static final int ANIMATION_SWARM_DEATH = 9608;
+
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(Swarmer.class, "icon.png");
 
 	private final Client client;
@@ -43,14 +47,8 @@ public class Swarmer implements PluginLifecycleComponent
 	private SwarmerPanel sidePanel;
 	private NavigationButton navButton;
 
-	public static final int SWARM_NPC_ID = 11723;
-	public static final int SWARM_LEAK_ANIMATION_ID = 9607;
-	public static final int SWARM_DEATH_ANIMATION_ID = 9608;
 	public static int WaveNumber = 1;
 	public static int KephriDownCount = 0;
-
-	private final int KEPHRI_DOWNED_NPC_ID = 11720;
-	private final int[] KEPHRI_ALIVE_NPC_IDS = {11721, 11719};
 
 	private final String ROOM_ENDED_MESSAGE = "Challenge complete: Kephri.";
 
@@ -102,8 +100,7 @@ public class Swarmer implements PluginLifecycleComponent
 		final NPC npc = event.getNpc();
 		final int npcId = npc.getId();
 
-
-		if (isKephriDowned && npcId == SWARM_NPC_ID)
+		if (isKephriDowned && npcId == NpcID.SCARAB_SWARM_11723)
 		{
 			SwarmNpc swarm = new SwarmNpc(npc, WaveNumber, KephriDownCount);
 			allSwarms.add(swarm);
@@ -119,41 +116,55 @@ public class Swarmer implements PluginLifecycleComponent
 	}
 
 	@Subscribe
-	public void onGameTick(GameTick ignoredEvent)
+	public void onAnimationChanged(AnimationChanged e)
 	{
-		for (SwarmNpc swarm : allSwarms)
+		if (!(e.getActor() instanceof NPC))
 		{
-			if (swarm.isAlive())
-			{
-				if (swarm.getNpc().getAnimation() == SWARM_LEAK_ANIMATION_ID)
-				{
-					swarm.setLeaked(true);
-					swarm.setAlive(false);
-					aliveSwarms.remove(swarm.getNpc().getIndex());
-				}
-				else if (npcUtil.isDying(swarm.getNpc()) || swarm.getNpc().getAnimation() == SWARM_DEATH_ANIMATION_ID)
-				{
-					swarm.setAlive(false);
-					aliveSwarms.remove(swarm.getNpc().getIndex());
-				}
-			}
+			return;
 		}
 
-		IndexedObjectSet<? extends NPC> npcs = client.getTopLevelWorldView().npcs();
-
-		for (NPC npc : npcs)
+		NPC npc = ((NPC) e.getActor());
+		if (npc.getId() == NpcID.SCARAB_SWARM_11723)
 		{
-			final int npcId = npc.getId();
-			if (!isKephriDowned && npcId == KEPHRI_DOWNED_NPC_ID)
-			{
-				isKephriDowned = true;
-				KephriDownCount++;
-				Swarmer.WaveNumber = 1;
-			}
-			else if (isKephriDowned && Arrays.stream(KEPHRI_ALIVE_NPC_IDS).anyMatch(id -> id == npcId))
-			{
-				isKephriDowned = false;
-			}
+			handleSwarmAnimationChanged(npc);
+		}
+		else if (npc.getId() == NpcID.KEPHRI || npc.getId() == NpcID.KEPHRI_11720)
+		{
+			handleKephriAnimationChanged(npc);
+		}
+	}
+
+	private void handleSwarmAnimationChanged(NPC npc)
+	{
+		SwarmNpc swarm = aliveSwarms.get(npc.getIndex());
+		if (swarm == null)
+		{
+			return;
+		}
+
+		if (npc.getAnimation() == ANIMATION_SWARM_LEAK)
+		{
+			swarm.setAlive(false);
+			swarm.setLeaked(true);
+		}
+		else if (npc.getAnimation() == ANIMATION_SWARM_DEATH)
+		{
+			swarm.setAlive(false);
+			swarm.setLeaked(true);
+		}
+	}
+
+	private void handleKephriAnimationChanged(NPC npc)
+	{
+		if (!isKephriDowned && npc.getAnimation() == ANIMATION_KEPHRI_DOWN)
+		{
+			isKephriDowned = true;
+			KephriDownCount++;
+			WaveNumber = 1;
+		}
+		else if (isKephriDowned && npc.getAnimation() == ANIMATION_KEPHRI_UP)
+		{
+			isKephriDowned = false;
 		}
 	}
 
@@ -224,7 +235,7 @@ public class Swarmer implements PluginLifecycleComponent
 		for (NPC npc : npcs)
 		{
 			if (
-					npc.getId() == SWARM_NPC_ID &&
+					npc.getId() == NpcID.SCARAB_SWARM_11723 &&
 							npc.getWorldLocation().getX() == worldPoint.getX() && npc.getWorldLocation().getY() == worldPoint.getY()
 			)
 			{
