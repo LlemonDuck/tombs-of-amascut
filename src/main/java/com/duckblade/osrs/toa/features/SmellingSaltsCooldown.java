@@ -9,8 +9,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
+import net.runelite.api.Varbits;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.events.VarbitChanged;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -25,20 +27,23 @@ public class SmellingSaltsCooldown implements PluginLifecycleComponent
 	private final TombsOfAmascutConfig config;
 
 	private long lastSalt;
-	private boolean clickQueued;
+	private int lastSaltVarb;
+	private boolean clickConsumeQueued;
 
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
-		return config.smellingSaltsCooldown() > 0;
+		return raidState.isInRaid()
+			&& config.smellingSaltsCooldown() > 0;
 	}
 
 	@Override
 	public void startUp()
 	{
-		clickQueued = false;
+		clickConsumeQueued = false;
 		lastSalt = 0;
 		eventBus.register(this);
+		lastSaltVarb = client.getVarbitValue(Varbits.BUFF_STAT_BOOST);
 	}
 
 	@Override
@@ -48,9 +53,20 @@ public class SmellingSaltsCooldown implements PluginLifecycleComponent
 	}
 
 	@Subscribe
+	public void onVarbitChanged(VarbitChanged e)
+	{
+		if (e.getVarbitId() == Varbits.BUFF_STAT_BOOST && e.getValue() > lastSaltVarb)
+		{
+			log.debug("Detected salt consumption");
+			lastSalt = e.getValue();
+			lastSalt = System.currentTimeMillis();
+		}
+	}
+
+	@Subscribe
 	public void onGameTick(GameTick e)
 	{
-		if (clickQueued)
+		if (clickConsumeQueued)
 		{
 			client.addChatMessage(
 				ChatMessageType.GAMEMESSAGE,
@@ -58,7 +74,7 @@ public class SmellingSaltsCooldown implements PluginLifecycleComponent
 				"You are already boosted by smelling salts!",
 				null
 			);
-			clickQueued = false;
+			clickConsumeQueued = false;
 		}
 	}
 
@@ -69,15 +85,12 @@ public class SmellingSaltsCooldown implements PluginLifecycleComponent
 			&& e.getMenuOption().equals("Crush"))
 		{
 			long now = System.currentTimeMillis();
-			if (now - lastSalt > (config.smellingSaltsCooldown() * 1000L))
+			if (now - lastSalt < (config.smellingSaltsCooldown() * 1000L))
 			{
-				lastSalt = now;
-				return;
+				// delay the blocking chat message until the next game tick to feel a bit more authentic (and less spammy)
+				clickConsumeQueued = true;
+				e.consume();
 			}
-
-			// delay the blocking chat message until the next game tick to feel a bit more authentic (and less spammy)
-			clickQueued = true;
-			e.consume();
 		}
 	}
 }
