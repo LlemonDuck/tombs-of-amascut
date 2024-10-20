@@ -15,7 +15,6 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.game.NpcUtil;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.util.ImageUtil;
@@ -39,10 +38,8 @@ public class Swarmer implements PluginLifecycleComponent
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(Swarmer.class, "icon.png");
 
 	private final Client client;
-	public final TombsOfAmascutConfig config;
 	private final ClientToolbar clientToolbar;
 	private final EventBus eventBus;
-	private final NpcUtil npcUtil;
 
 	private SwarmerPanel sidePanel;
 	private NavigationButton navButton;
