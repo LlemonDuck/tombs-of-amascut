@@ -45,6 +45,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	private static final int ANIMATION_SWARM_DEATH = 9608;
 
 	private static final String ROOM_ENDED_MESSAGE = "Challenge complete: Kephri.";
+	private static final String ROOM_FAIL_MESSAGE = "Your party failed to complete";
 
 	private final Client client;
 	private final EventBus eventBus;
@@ -185,8 +186,12 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	@Subscribe
 	public void onChatMessage(ChatMessage event)
 	{
-		if (event.getType().equals(ChatMessageType.GAMEMESSAGE) &&
-			event.getMessage().startsWith(ROOM_ENDED_MESSAGE))
+		if (!event.getType().equals(ChatMessageType.GAMEMESSAGE))
+		{
+			return;
+		}
+
+		if (event.getMessage().startsWith(ROOM_ENDED_MESSAGE))
 		{
 			kephriDownCount = 0;
 
@@ -208,6 +213,11 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 
 			KephriRoomData.saveRaidData(swarmData);
 			allSwarms.clear();
+		}
+
+		if (event.getMessage().startsWith(ROOM_FAIL_MESSAGE))
+		{
+			reset();
 		}
 	}
 
