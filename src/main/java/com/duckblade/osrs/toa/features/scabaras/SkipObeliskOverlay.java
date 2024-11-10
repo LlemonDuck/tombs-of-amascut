@@ -17,6 +17,7 @@ import net.runelite.api.GameObject;
 import net.runelite.api.ObjectID;
 import net.runelite.api.Point;
 import net.runelite.api.events.ChatMessage;
+import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -132,6 +133,19 @@ public class SkipObeliskOverlay extends Overlay implements PluginLifecycleCompon
 	{
 		checkForFlame(e.getGameObject());
 		checkForObelisk(e.getGameObject());
+	}
+
+	@Subscribe
+	public void onGameObjectDespawned(GameObjectDespawned e)
+	{
+		// in some unknown case, maybe unlocked fps only,
+		// it's possible to get a render tick before the shutDown clears the references
+		// so we should invalidate them early regardless if needed
+		if (e.getGameObject().getId() == FLAME_ID
+			|| e.getGameObject().getId() == OBELISK_ID)
+		{
+			reset();
+		}
 	}
 
 	@Subscribe
