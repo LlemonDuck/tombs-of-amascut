@@ -34,7 +34,7 @@ public class PickaxeUtil
 		ItemID.CRYSTAL_PICKAXE_INACTIVE,
 		ItemID._3RD_AGE_PICKAXE,
 		ItemID.GILDED_PICKAXE,
-		ItemID.TRAILBLAZER_PICKAXE
+		ItemID.ECHO_PICKAXE
 	);
 
 	private static final int VARBIT_PICKAXE_STORAGE = 14440;
