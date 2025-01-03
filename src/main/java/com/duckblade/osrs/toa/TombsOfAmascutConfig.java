@@ -1009,10 +1009,27 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "adrenalineCooldown",
+		name = "Adrenaline Cooldown",
+		description = "After using Liquid adrenaline, prevents re-using them for this long.",
+		position = 6,
+		section = SECTION_MISCELLANEOUS
+	)
+	@Units(Units.SECONDS)
+	@Range(
+		min = 0,
+		max = 150
+	)
+	default int adrenalineCooldown()
+	{
+		return 15;
+	}
+
+	@ConfigItem(
 		keyName = "disableCameraShake",
 		name = "Disable Camera Shake",
 		description = "Disables camera shake effects at P4 Wardens.",
-		position = 6,
+		position = 7,
 		section = SECTION_MISCELLANEOUS
 	)
 	default boolean disableCameraShake()
