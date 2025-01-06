@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 9;
+	public static final int TARGET_VERSION = 10;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -121,6 +121,9 @@ public class UpdateNotifier implements PluginLifecycleComponent
 			case 8:
 				updates.add("<strong>(Kephri -> Swarmer Overlay)</strong>Spawn numbers can be added to the Kephri swarms. Thanks @FiveNine!");
 				updates.add("Fixed a bug that was causing the Salts Cooldown feature to erroneously prevent salting.");
+
+			case 9:
+				updates.add("<strong>(Miscellaneous -> Adrenaline Cooldown) An adrenaline cooldown has been added to prevent double-consuming adrenaline.");
 		}
 
 		return updates;
