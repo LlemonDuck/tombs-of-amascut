@@ -198,7 +198,11 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 			return;
 		}
 
-		if (event.getMessage().startsWith(ROOM_ENDED_MESSAGE))
+		String message = event.getMessage();
+		
+		boolean saveData = message.startsWith(ROOM_ENDED_MESSAGE) || message.startsWith(ROOM_FAIL_MESSAGE);
+		
+		if (saveData)
 		{
 			List<SwarmerRoomData> swarmData = new ArrayList<>();
 			for (Map.Entry<Integer, Map<Integer, Integer>> e : leaks.entrySet())
@@ -221,7 +225,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 				});
 		}
 
-		if (event.getMessage().startsWith(ROOM_FAIL_MESSAGE))
+		if (message.startsWith(ROOM_FAIL_MESSAGE))
 		{
 			reset();
 		}
