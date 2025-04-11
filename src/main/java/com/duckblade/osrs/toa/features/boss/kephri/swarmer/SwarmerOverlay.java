@@ -199,9 +199,9 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 		}
 
 		String message = event.getMessage();
-		
+
 		boolean saveData = message.startsWith(ROOM_ENDED_MESSAGE) || message.startsWith(ROOM_FAIL_MESSAGE);
-		
+
 		if (saveData)
 		{
 			List<SwarmerRoomData> swarmData = new ArrayList<>();
