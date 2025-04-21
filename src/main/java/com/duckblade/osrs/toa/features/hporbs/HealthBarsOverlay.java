@@ -34,7 +34,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import javax.inject.Inject;
 import net.runelite.api.Client;
-import net.runelite.api.Varbits;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.ProgressBarComponent;
@@ -73,7 +73,7 @@ public class HealthBarsOverlay extends OverlayPanel
 		if (Strings.isNullOrEmpty(client.getVarcStrValue(1100)))
 		{
 			String playerName = client.getVarcStrValue(1099);
-			double hpFactor = hpFactor(client.getVarbitValue(Varbits.TOA_MEMBER_0_HEALTH) - 1);
+			double hpFactor = hpFactor(client.getVarbitValue(VarbitID.TOA_CLIENT_P0) - 1);
 			panelComponent.getChildren().add(buildHpBar(playerName, hpFactor));
 
 			return super.render(graphics);
@@ -83,7 +83,14 @@ public class HealthBarsOverlay extends OverlayPanel
 		for (int i = 0; i < 8; i++)
 		{
 			String playerName = client.getVarcStrValue(1099 + i);
-			double hpFactor = hpFactor(client.getVarbitValue(Varbits.TOA_MEMBER_0_HEALTH + i) - 1);
+			double hpFactor = hpFactor(client.getVarbitValue(VarbitID.TOA_CLIENT_P0 + i) - 1);
+			if (hpFactor > 1.0)
+			{
+				// reports over 100% for death for some reason
+				// we can use it to colour gray for death
+				hpFactor = -1.0;
+			}
+
 			if (Strings.isNullOrEmpty(playerName))
 			{
 				continue;

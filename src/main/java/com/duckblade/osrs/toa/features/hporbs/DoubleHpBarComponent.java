@@ -41,13 +41,15 @@ import net.runelite.client.ui.overlay.components.TextComponent;
 public class DoubleHpBarComponent implements LayoutableRenderableEntity
 {
 
+	private static final Color COLOUR_HEALTH = new Color(0, 146, 54, 230);
+	private static final Color COLOUR_HURT = new Color(102, 15, 16, 230);
+	private static final Color COLOUR_DEAD = Color.DARK_GRAY;
+	private static final Color COLOUR_NAME = Color.WHITE;
+
 	private double value1;
 	private String centerLabel1;
 	private double value2;
 	private String centerLabel2;
-	private Color foregroundColor = new Color(0, 146, 54, 230);
-	private Color backgroundColor = new Color(102, 15, 16, 230);
-	private Color fontColor = Color.WHITE;
 	private Point preferredLocation = new Point();
 	private Dimension preferredSize = new Dimension(ComponentConstants.STANDARD_WIDTH, 16);
 	private int gap = 3;
@@ -107,14 +109,22 @@ public class DoubleHpBarComponent implements LayoutableRenderableEntity
 		final int progressTextX = baseX + (width - metrics.stringWidth(name)) / 2;
 		final int progressTextY = baseY + ((height - metrics.getHeight()) / 2) + metrics.getHeight();
 
-		graphics.setColor(backgroundColor);
-		graphics.fillRect(baseX, baseY, width, height);
-		graphics.setColor(foregroundColor);
-		graphics.fillRect(baseX, baseY, progressFill, height);
+		if (value < 0)
+		{
+			graphics.setColor(COLOUR_DEAD);
+			graphics.fillRect(baseX, baseY, width, height);
+		}
+		else
+		{
+			graphics.setColor(COLOUR_HURT);
+			graphics.fillRect(baseX, baseY, width, height);
+			graphics.setColor(COLOUR_HEALTH);
+			graphics.fillRect(baseX, baseY, progressFill, height);
+		}
 
 		final TextComponent textComponent1 = new TextComponent();
 		textComponent1.setPosition(new Point(progressTextX, progressTextY));
-		textComponent1.setColor(fontColor);
+		textComponent1.setColor(COLOUR_NAME);
 		textComponent1.setText(name);
 		textComponent1.render(graphics);
 	}
