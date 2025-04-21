@@ -182,7 +182,7 @@ public class SkipObeliskOverlay extends Overlay implements PluginLifecycleCompon
 		}
 
 		log.debug("Found obelisk ({}) spawn at {}", obj.getId(), obj.getSceneMinLocation());
-		State derivedState = QUADRANT_STATES.get(obj.getSceneMinLocation());
+		State derivedState = QUADRANT_STATES.getOrDefault(obj.getSceneMinLocation(), State.UNKNOWN);
 		if (derivedState != null)
 		{
 			log.debug("Determined that obelisk puzzle is avoided by {}", state);

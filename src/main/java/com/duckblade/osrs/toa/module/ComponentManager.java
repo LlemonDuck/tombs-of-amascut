@@ -109,7 +109,7 @@ public class ComponentManager
 			gameEventManager.simulateGameEvents(component);
 			states.put(component, true);
 		}
-		catch (Exception e)
+		catch (Throwable e)
 		{
 			log.error("Failed to start ToA plugin component [{}]", component.getClass().getName(), e);
 		}
@@ -131,7 +131,7 @@ public class ComponentManager
 		{
 			component.shutDown();
 		}
-		catch (Exception e)
+		catch (Throwable e)
 		{
 			log.error("Failed to cleanly shut down ToA plugin component [{}]", component.getClass().getName());
 		}
