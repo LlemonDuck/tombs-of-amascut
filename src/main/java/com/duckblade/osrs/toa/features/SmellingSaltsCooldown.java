@@ -9,10 +9,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
-import net.runelite.api.Varbits;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.VarbitChanged;
+import net.runelite.api.gameval.VarbitID;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -24,6 +25,7 @@ public class SmellingSaltsCooldown implements PluginLifecycleComponent
 
 	private final EventBus eventBus;
 	private final Client client;
+	private final ClientThread clientThread;
 	private final TombsOfAmascutConfig config;
 
 	private long lastSalt;
@@ -43,7 +45,7 @@ public class SmellingSaltsCooldown implements PluginLifecycleComponent
 		clickConsumeQueued = false;
 		lastSalt = 0;
 		eventBus.register(this);
-		lastSaltVarb = client.getVarbitValue(Varbits.BUFF_STAT_BOOST);
+		clientThread.invoke(() -> lastSaltVarb = client.getVarbitValue(VarbitID.TOA_MIDRAIDLOOT_STATS_TIMER));
 	}
 
 	@Override
@@ -55,7 +57,7 @@ public class SmellingSaltsCooldown implements PluginLifecycleComponent
 	@Subscribe
 	public void onVarbitChanged(VarbitChanged e)
 	{
-		if (e.getVarbitId() == Varbits.BUFF_STAT_BOOST)
+		if (e.getVarbitId() == VarbitID.TOA_MIDRAIDLOOT_STATS_TIMER)
 		{
 			if (e.getValue() > lastSaltVarb)
 			{
