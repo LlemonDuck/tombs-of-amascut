@@ -5,20 +5,25 @@ import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.Map;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.GameObject;
-import net.runelite.api.ObjectID;
+import net.runelite.api.NPC;
 import net.runelite.api.Point;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
+import net.runelite.api.events.NpcSpawned;
+import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.Overlay;
@@ -47,7 +52,7 @@ public class SkipObeliskOverlay extends Overlay implements PluginLifecycleCompon
 		;
 	}
 
-	private static final int OBELISK_ID = 43876; // imposter as 11698 (inactive), 11699 (active)
+	private static final Set<Integer> OBELISK_IDS = ImmutableSet.of(NpcID.TOA_SCABARAS_GUESSER_OBELISK, NpcID.TOA_SCABARAS_GUESSER_OBELISK_HIT);
 	private static final Map<Point, State> QUADRANT_STATES = ImmutableMap.of(
 		new Point(36, 57), State.HIGHLIGHT_LOWER, // top left
 		new Point(53, 57), State.HIGHLIGHT_UPPER, // top right
@@ -55,7 +60,7 @@ public class SkipObeliskOverlay extends Overlay implements PluginLifecycleCompon
 		new Point(53, 45), State.HIGHLIGHT_LOWER  // bottom right
 	);
 
-	private static final int FLAME_ID = ObjectID.BARRIER_45135;
+	private static final int FLAME_ID = ObjectID.TOA_PATH_BARRIER;
 	private static final Point FLAME_UPPER_HALF_LOC = new Point(28, 54);
 	private static final Point FLAME_LOWER_HALF_LOC = new Point(28, 42);
 
@@ -97,6 +102,7 @@ public class SkipObeliskOverlay extends Overlay implements PluginLifecycleCompon
 	@Override
 	public void shutDown()
 	{
+		reset();
 		eventBus.unregister(this);
 		overlayManager.remove(this);
 	}
@@ -132,7 +138,6 @@ public class SkipObeliskOverlay extends Overlay implements PluginLifecycleCompon
 	public void onGameObjectSpawned(GameObjectSpawned e)
 	{
 		checkForFlame(e.getGameObject());
-		checkForObelisk(e.getGameObject());
 	}
 
 	@Subscribe
@@ -141,11 +146,17 @@ public class SkipObeliskOverlay extends Overlay implements PluginLifecycleCompon
 		// in some unknown case, maybe unlocked fps only,
 		// it's possible to get a render tick before the shutDown clears the references
 		// so we should invalidate them early regardless if needed
-		if (e.getGameObject().getId() == FLAME_ID
-			|| e.getGameObject().getId() == OBELISK_ID)
+		if (e.getGameObject().getId() == FLAME_ID)
 		{
-			reset();
+			flameLower = null;
+			flameUpper = null;
 		}
+	}
+
+	@Subscribe
+	public void onNpcSpawned(NpcSpawned e)
+	{
+		checkForObelisk(e.getNpc());
 	}
 
 	@Subscribe
@@ -153,7 +164,8 @@ public class SkipObeliskOverlay extends Overlay implements PluginLifecycleCompon
 	{
 		if (e.getMessage().startsWith("Your party failed to complete the challenge"))
 		{
-			reset();
+			log.debug("Party failed to complete challenge, resetting state");
+			state = State.UNKNOWN;
 		}
 	}
 
@@ -174,19 +186,20 @@ public class SkipObeliskOverlay extends Overlay implements PluginLifecycleCompon
 		}
 	}
 
-	private void checkForObelisk(GameObject obj)
+	private void checkForObelisk(NPC npc)
 	{
-		if (state != State.UNKNOWN || obj.getId() != OBELISK_ID)
+		if (state != State.UNKNOWN || !OBELISK_IDS.contains(npc.getId()))
 		{
 			return;
 		}
 
-		log.debug("Found obelisk ({}) spawn at {}", obj.getId(), obj.getSceneMinLocation());
-		State derivedState = QUADRANT_STATES.getOrDefault(obj.getSceneMinLocation(), State.UNKNOWN);
-		if (derivedState != null)
+		Point p = new Point(npc.getLocalLocation().getSceneX(), npc.getLocalLocation().getSceneY());
+		log.debug("Found obelisk ({}) spawn at {}", npc.getId(), p);
+		State derivedState = QUADRANT_STATES.getOrDefault(p, State.UNKNOWN);
+		if (derivedState != State.UNKNOWN)
 		{
-			log.debug("Determined that obelisk puzzle is avoided by {}", state);
 			state = derivedState;
+			log.debug("Determined that obelisk puzzle is avoided by {}", state);
 		}
 	}
 }
