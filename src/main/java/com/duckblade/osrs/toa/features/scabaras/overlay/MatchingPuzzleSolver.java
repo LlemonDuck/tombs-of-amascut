@@ -49,6 +49,17 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 		.put(45373, Color.green) // boot
 		.build();
 
+	private static final Map<Integer, Integer> TILE_NUMBER = ImmutableMap.<Integer, Integer>builder().put(45365, 1) // line
+		.put(45366, 2) // knives
+		.put(45367, 3) // crook
+		.put(45368, 4) // diamond
+		.put(45369, 5) // hand
+		.put(45370, 6) // star
+		.put(45371, 7) // bird
+		.put(45372, 8) // wiggle
+		.put(45373, 9) // boot
+		.build();
+
 	private static final Map<Integer, Integer> MATCHED_OBJECT_IDS = ImmutableMap.<Integer, Integer>builder().put(45388, 45365) // line
 		.put(45389, 45366) // knives
 		.put(45386, 45367) // crook
@@ -91,7 +102,7 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 		if (TILE_COLORS.containsKey(id))
 		{
 			LocalPoint lp = e.getGroundObject().getLocalLocation();
-			discoveredTiles.put(lp, new MatchingTile(lp, TILE_NAMES.getOrDefault(id, "Unknown"), TILE_COLORS.getOrDefault(id, Color.black)));
+			discoveredTiles.put(lp, new MatchingTile(lp, TILE_NAMES.getOrDefault(id, "Unknown"), TILE_COLORS.getOrDefault(id, Color.black), TILE_NUMBER.getOrDefault(id, 0)));
 		}
 	}
 

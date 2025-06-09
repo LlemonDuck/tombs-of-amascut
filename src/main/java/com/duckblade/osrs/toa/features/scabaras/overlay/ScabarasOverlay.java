@@ -120,8 +120,9 @@ public class ScabarasOverlay extends Overlay
 		}
 
 		int matchedOpacity = config.scabarasMatchingCompletedOpacity();
-		boolean tile = mode == MatchingTileDisplayMode.TILE || mode == MatchingTileDisplayMode.BOTH;
-		boolean name = mode == MatchingTileDisplayMode.NAME || mode == MatchingTileDisplayMode.BOTH;
+		boolean tile = mode == MatchingTileDisplayMode.TILE || mode == MatchingTileDisplayMode.TILE_AND_NAME || mode == MatchingTileDisplayMode.TILE_AND_NUMBER;
+		boolean name = mode == MatchingTileDisplayMode.NAME || mode == MatchingTileDisplayMode.TILE_AND_NAME;
+		boolean number = mode == MatchingTileDisplayMode.NUMBER || mode == MatchingTileDisplayMode.TILE_AND_NUMBER;
 		matchingTiles.values().forEach(mt ->
 		{
 			Polygon canvasTilePoly = Perspective.getCanvasTilePoly(client, mt.getLocalPoint());
@@ -140,11 +141,15 @@ public class ScabarasOverlay extends Overlay
 			{
 				OverlayUtil.renderPolygon(graphics, canvasTilePoly, color, new Color(0, 0, 0, Math.min(color.getAlpha(), 50)), new BasicStroke(2));
 			}
+
+			Rectangle tileB = canvasTilePoly.getBounds();
+			Rectangle txtB = graphics.getFontMetrics().getStringBounds(mt.getName(), graphics).getBounds();
+			Point p = new Point(tileB.x + tileB.width / 2 - txtB.width / 2, tileB.y + tileB.height / 2 + txtB.height / 2);
+			if (number) {
+				renderTextLocationAlpha(graphics, p, String.valueOf(mt.getNumber()), color);
+			}
 			if (name)
 			{
-				Rectangle tileB = canvasTilePoly.getBounds();
-				Rectangle txtB = graphics.getFontMetrics().getStringBounds(mt.getName(), graphics).getBounds();
-				Point p = new Point(tileB.x + tileB.width / 2 - txtB.width / 2, tileB.y + tileB.height / 2 + txtB.height / 2);
 				renderTextLocationAlpha(graphics, p, mt.getName(), color);
 			}
 		});

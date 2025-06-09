@@ -6,7 +6,9 @@ public enum MatchingTileDisplayMode
 	DISABLED,
 	TILE,
 	NAME,
-	BOTH,
+	NUMBER,
+	TILE_AND_NAME,
+	TILE_AND_NUMBER,
 	;
 
 }

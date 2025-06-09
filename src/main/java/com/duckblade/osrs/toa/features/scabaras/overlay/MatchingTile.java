@@ -11,6 +11,7 @@ public class MatchingTile
 	private final LocalPoint localPoint;
 	private final String name;
 	private final Color color;
+	private final Integer number;
 	private boolean matched;
 
 }
