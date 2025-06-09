@@ -565,13 +565,13 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		keyName = "scabarasMatchingDisplayMode",
 		name = "Matching Display",
-		description = "Whether to show highlight tiles, show names of tiles, or both for the matching puzzle.",
+		description = "Whether to show highlight tiles, show names of tiles, show numbering of tiles, or a mix of these in the matching puzzle.",
 		position = 7,
 		section = SECTION_SCABARAS
 	)
 	default MatchingTileDisplayMode scabarasMatchingDisplayMode()
 	{
-		return MatchingTileDisplayMode.BOTH;
+		return MatchingTileDisplayMode.TILE_AND_NAME;
 	}
 
 	@ConfigItem(
