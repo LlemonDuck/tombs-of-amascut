@@ -45,9 +45,17 @@ public interface TombsOfAmascutConfig extends Config
 	String SECTION_AKKHA = "sectionAkkha";
 
 	@ConfigSection(
+		name = "Ba-ba",
+		description = "Configuration for Ba-ba boss room.",
+		position = 2,
+		closedByDefault = true
+	)
+	String SECTION_BABA = "sectionBaba";
+
+	@ConfigSection(
 		name = "Kephri",
 		description = "Configuration for the Kephri room.",
-		position = 2,
+		position = 3,
 		closedByDefault = true
 	)
 	String SECTION_KEPHRI = "sectionKephri";
@@ -55,7 +63,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Apmeken",
 		description = "Options for the Path of Apmeken.",
-		position = 3,
+		position = 4,
 		closedByDefault = true
 	)
 	String SECTION_APMEKEN = "sectionApmeken";
@@ -63,7 +71,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Het",
 		description = "Helpers for the Path of Het.",
-		position = 4,
+		position = 5,
 		closedByDefault = true
 	)
 	String SECTION_HET = "sectionHet";
@@ -71,7 +79,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Scabaras",
 		description = "Options for the puzzles in the Path of Scabaras.",
-		position = 5,
+		position = 6,
 		closedByDefault = true
 	)
 	String SECTION_SCABARAS = "sectionScabaras";
@@ -79,7 +87,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Burial Tomb",
 		description = "Configuration for the burial tomb.",
-		position = 6,
+		position = 7,
 		closedByDefault = true
 	)
 	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
@@ -88,7 +96,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Points Tracker",
 		description = "<html>Tracks points for the raid, used in calculating drop chance." +
 			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
-		position = 7,
+		position = 8,
 		closedByDefault = true
 	)
 	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
@@ -96,7 +104,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
-		position = 8,
+		position = 9,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
@@ -104,7 +112,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Screenshot",
 		description = "All config options related to the Invocation Screenshot functionality",
-		position = 9,
+		position = 10,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
@@ -112,7 +120,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Time Tracking",
 		description = "Time tracking and splits.",
-		position = 10,
+		position = 11,
 		closedByDefault = true
 	)
 	String SECTION_TIME_TRACKING = "sectionTimeTracking";
@@ -155,6 +163,47 @@ public interface TombsOfAmascutConfig extends Config
 	default int akkhaFontSize()
 	{
 		return 12;
+	}
+
+	// Ba-ba
+	@ConfigItem(
+		name = "Highlight Sarcophagi",
+		description = "Whether to highlight sarcophagi based on their health.<br>Sarcophagi can take two boulder hits before breaking.",
+		position = 1,
+		keyName = "babaSarcophagusHighlights",
+		section = SECTION_BABA
+	)
+	default boolean babaSarcophagusHighlights()
+	{
+		return true;
+	}
+
+	// Ba-ba
+	@ConfigItem(
+		name = "Healthy Sarcophagus Highlight",
+		description = "Highlights full-health sarcophagi with this colour.",
+		position = 2,
+		keyName = "babaSarcophagusHealthyColour",
+		section = SECTION_BABA
+	)
+	@Alpha
+	default Color babaSarcophagusHealthyColour()
+	{
+		return new Color(0x4EA254);
+	}
+
+	// Ba-ba
+	@ConfigItem(
+		name = "Low Sarcophagus Highlight",
+		description = "Highlights full-health sarcophagi with this colour.",
+		position = 3,
+		keyName = "babaSarcophagusLowColour",
+		section = SECTION_BABA
+	)
+	@Alpha
+	default Color babaSarcophagusLowColour()
+	{
+		return new Color(0x943A3A);
 	}
 
 	// Kephri
