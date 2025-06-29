@@ -32,15 +32,12 @@ import java.io.File;
 import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.events.GameObjectSpawned;
+import net.runelite.client.audio.AudioPlayer;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -55,7 +52,7 @@ public class SarcophagusOpeningSoundPlayer implements PluginLifecycleComponent
 	private final EventBus eventBus;
 	private final TombsOfAmascutConfig config;
 
-	private Clip clip = null;
+	private final AudioPlayer audioPlayer;
 
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
@@ -66,7 +63,6 @@ public class SarcophagusOpeningSoundPlayer implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		clip = null;
 		eventBus.register(this);
 	}
 
@@ -74,12 +70,6 @@ public class SarcophagusOpeningSoundPlayer implements PluginLifecycleComponent
 	public void shutDown()
 	{
 		eventBus.unregister(this);
-
-		if (clip != null)
-		{
-			clip.close();
-		}
-		clip = null;
 	}
 
 	@Subscribe
@@ -109,56 +99,21 @@ public class SarcophagusOpeningSoundPlayer implements PluginLifecycleComponent
 		playClip();
 	}
 
-	private boolean loadClip()
+	public void playClip()
 	{
 		final File f = new File(TombsOfAmascutPlugin.TOA_FOLDER, "toa-chest.wav");
 		if (!f.exists())
 		{
-			log.warn("ToA chest opening sound file does not exist, expected " + f.getAbsolutePath());
-			return false;
+			log.warn("ToA chest opening sound file does not exist, expected {}", f.getAbsolutePath());
 		}
 
-		try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(f))
+		try
 		{
-			clip = AudioSystem.getClip();
-			clip.open(audioInputStream);
-			return true;
+			audioPlayer.play(f, config.chestAudioVolume());
 		}
 		catch (UnsupportedAudioFileException | IOException | LineUnavailableException e)
 		{
-			if (clip.isOpen())
-			{
-				clip.close();
-			}
-			clip = null;
-			log.warn("Failed to load toa chest audio");
+			log.warn("Failed to play toa chest audio");
 		}
-		return false;
-	}
-
-	public void playClip()
-	{
-		if (clip == null || !clip.isOpen())
-		{
-			if (!loadClip())
-			{
-				log.warn("Unable to play audio clip");
-				return;
-			}
-		}
-
-		FloatControl volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		float gain = 20f * (float) Math.log10(config.chestAudioVolume() / 100f);
-
-		// Ensure the value we pass is between the clips maximum and minimum value to prevent an IllegalArgumentException
-		gain = Math.max(Math.min(gain, volume.getMaximum()), volume.getMinimum());
-		volume.setValue(gain);
-
-		// Reset audio to starting frame in case its been played or is currently being played
-		clip.setFramePosition(0);
-
-		// From RuneLite base client Notifier class:
-		// Using loop prevents the clip from not being played sometimes, presumably from a race condition in the underlying line driver
-		clip.loop(0);
 	}
 }
