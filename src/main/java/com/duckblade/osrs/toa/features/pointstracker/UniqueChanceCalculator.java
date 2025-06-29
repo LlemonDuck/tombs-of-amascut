@@ -12,11 +12,13 @@ public class UniqueChanceCalculator
 	private static final int BASE_RATE_PET = 350_000;
 	private static final int MODIFIER_RAID_LEVEL_PET = 700;
 
-	private static final int RAID_LEVEL_REDUCE_FLOOR = 400;
-	private static final double RAID_LEVEL_REDUCE_FACTOR = 1.0 / 3.0;
+	private static final int DIMINISH_POINT_1 = 310;
+	private static final int DIMINISH_FACTOR_1 = 3;
+	private static final int DIMINISH_POINT_2 = 430;
+	private static final int DIMINISH_FACTOR_2 = 2;
 	private static final int RAID_LEVEL_MAX = 550;
 
-	private static final double MAX_RATE_UNIQUE = 55;
+	private static final double MAX_RATE_UNIQUE = 55.0;
 
 	public static double getUniqueChance(int raidLevel, int points)
 	{
@@ -30,13 +32,17 @@ public class UniqueChanceCalculator
 
 	private static double getChance(int raidLevel, int points, int baseRate, int modifier)
 	{
-		int raidLevelModifier = modifier * Math.min(raidLevel, RAID_LEVEL_REDUCE_FLOOR);
-		if (raidLevel > RAID_LEVEL_REDUCE_FLOOR)
+		raidLevel = Math.min(RAID_LEVEL_MAX, raidLevel);
+		if (raidLevel > DIMINISH_POINT_1)
 		{
-			raidLevelModifier += (Math.min(raidLevel, RAID_LEVEL_MAX) - RAID_LEVEL_REDUCE_FLOOR) * modifier * RAID_LEVEL_REDUCE_FACTOR;
+			if (raidLevel > DIMINISH_POINT_2)
+			{
+				raidLevel = DIMINISH_POINT_2 + ((raidLevel - DIMINISH_POINT_2) / DIMINISH_FACTOR_2);
+			}
+			raidLevel = DIMINISH_POINT_1 + ((raidLevel - DIMINISH_POINT_1) / DIMINISH_FACTOR_1);
 		}
 
-		double denominator = baseRate - raidLevelModifier;
+		double denominator = baseRate - (modifier * raidLevel);
 		return Math.max(0, Math.min(MAX_RATE_UNIQUE, points / denominator));
 	}
 }
