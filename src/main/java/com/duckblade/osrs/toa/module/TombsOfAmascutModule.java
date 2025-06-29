@@ -11,6 +11,7 @@ import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealth;
 import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealthOverlay;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicator;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicatorOverlay;
+import com.duckblade.osrs.toa.features.boss.baba.BabaSarcophagusWarning;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerDataManager;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerOverlay;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerPanelManager;
@@ -68,6 +69,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(ApmekenBaboonIndicator.class);
 		lifecycleComponents.addBinding().to(ApmekenBaboonIndicatorOverlay.class);
 		lifecycleComponents.addBinding().to(ApmekenWaveInstaller.class);
+		lifecycleComponents.addBinding().to(BabaSarcophagusWarning.class);
 		lifecycleComponents.addBinding().to(BeamTimerOverlay.class);
 		lifecycleComponents.addBinding().to(BeamTimerTracker.class);
 		lifecycleComponents.addBinding().to(CameraShakeDisabler.class);
