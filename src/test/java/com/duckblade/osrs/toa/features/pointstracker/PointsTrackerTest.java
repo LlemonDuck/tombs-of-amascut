@@ -8,10 +8,10 @@ import com.duckblade.osrs.toa.util.RaidStateChanged;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
 import lombok.Getter;
 import net.runelite.api.Client;
-import net.runelite.api.ItemID;
 import net.runelite.api.Tile;
 import net.runelite.api.TileItem;
 import net.runelite.api.events.ItemSpawned;
+import net.runelite.api.gameval.ItemID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.PluginMessage;
@@ -86,7 +86,7 @@ public class PointsTrackerTest
 		pointsTracker.onRaidStateChanged(raidStartEvent);
 
 		TileItem bigBanana = mock(TileItem.class);
-		when(bigBanana.getId()).thenReturn(ItemID.BIG_BANANA);
+		when(bigBanana.getId()).thenReturn(ItemID.TOA_BABA_BANANA);
 		ItemSpawned earnPointsEvent = new ItemSpawned(mock(Tile.class), bigBanana);
 		pointsTracker.onItemSpawned(earnPointsEvent);
 
