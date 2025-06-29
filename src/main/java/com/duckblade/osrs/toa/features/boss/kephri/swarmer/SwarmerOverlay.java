@@ -200,7 +200,11 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 
 		String message = event.getMessage();
 
-		boolean saveData = message.startsWith(ROOM_ENDED_MESSAGE) || message.startsWith(ROOM_FAIL_MESSAGE);
+		boolean saveData = message.startsWith(ROOM_ENDED_MESSAGE);
+		if (config.swarmerSaveOnFail())
+		{
+			saveData = saveData || message.startsWith(ROOM_FAIL_MESSAGE);
+		}
 
 		if (saveData)
 		{

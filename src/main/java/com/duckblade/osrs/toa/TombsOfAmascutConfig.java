@@ -281,6 +281,18 @@ public interface TombsOfAmascutConfig extends Config
 		return Color.WHITE;
 	}
 
+	@ConfigItem(
+			name = "Save on Fail",
+			description = "Save swarmer data on room fail.",
+			position = 5,
+			keyName = "swarmerSaveOnFail",
+			section = SECTION_KEPHRI
+	)
+	default boolean swarmerSaveOnFail()
+	{
+		return false;
+	}
+
 	// Apmeken
 
 	@ConfigItem(
