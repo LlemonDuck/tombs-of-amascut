@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 10;
+	public static final int TARGET_VERSION = 11;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -123,7 +123,11 @@ public class UpdateNotifier implements PluginLifecycleComponent
 				updates.add("Fixed a bug that was causing the Salts Cooldown feature to erroneously prevent salting.");
 
 			case 9:
-				updates.add("<strong>(Miscellaneous -> Adrenaline Cooldown) An adrenaline cooldown has been added to prevent double-consuming adrenaline.");
+				updates.add("<strong>(Miscellaneous -> Adrenaline Cooldown)</strong> An adrenaline cooldown has been added to prevent double-consuming adrenaline.");
+
+			case 10:
+				updates.add("<strong>(Ba-ba -> Highlight Sarcophagi)</strong> A new option to show which sarcophagi are safe to split a boulder with at Ba-ba.");
+				updates.add("The points tracker has been updated to account for the new summer sweep-up loot chance changes.");
 		}
 
 		return updates;
