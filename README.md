@@ -37,6 +37,12 @@ after major plugin updates.
 
 Prevents wasting smelling salts by adding a cooldown to the Crush option.
 
+### 🚀 Deposit Pot Filter
+
+Prevents accidental item deposits by restricting depositable items to a configurable filter list.
+
+![Deposit Pot Filter Preview](docs/deposit-pot-filter.png)
+
 </details>
 
 <details>

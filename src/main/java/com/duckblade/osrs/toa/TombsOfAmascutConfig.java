@@ -125,6 +125,14 @@ public interface TombsOfAmascutConfig extends Config
 	)
 	String SECTION_TIME_TRACKING = "sectionTimeTracking";
 
+	@ConfigSection(
+		name = "Deposit Box",
+		description = "Prevents accidentally depositing the wrong items at the deposit box.",
+		position = 12,
+		closedByDefault = true
+	)
+	String SECTION_DEPOSIT_BOX = "sectionDepositBox";
+
 	// Akkha
 
 	@ConfigItem(
@@ -195,7 +203,7 @@ public interface TombsOfAmascutConfig extends Config
 	// Ba-ba
 	@ConfigItem(
 		name = "Low Sarcophagus Highlight",
-		description = "Highlights full-health sarcophagi with this colour.",
+		description = "Highlights low-health sarcophagi with this colour.",
 		position = 3,
 		keyName = "babaSarcophagusLowColour",
 		section = SECTION_BABA
@@ -996,6 +1004,57 @@ public interface TombsOfAmascutConfig extends Config
 	default SplitsMode splitsOverlay()
 	{
 		return SplitsMode.OFF;
+	}
+
+	// Deposit box
+
+	String KEY_DEPOSIT_BOX_FILTER_STRING = "depositBoxFilterString";
+	@ConfigItem(
+		keyName = KEY_DEPOSIT_BOX_FILTER_STRING,
+		name = "Allowed Items",
+		description = "Comma-separated item names which should be allowed for depositing. Does not support wildcards.",
+		position = 1,
+		section = SECTION_DEPOSIT_BOX
+	)
+	default String depositBoxFilterString()
+	{
+		return "Divine super combat potion(4),Divine super combat potion(3),Divine super combat potion(2),Divine super combat potion(1)";
+	}
+
+	@ConfigItem(
+		keyName = "depositBoxPreventUse",
+		name = "Prevent Deposit on Use",
+		description = "Restricts depositing items by using them on the deposit box to those specified in 'Allowed Items'.",
+		position = 2,
+		section = SECTION_DEPOSIT_BOX
+	)
+	default boolean depositBoxPreventUse()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "depositBoxPreventInterface",
+		name = "Prevent Deposit in Interface",
+		description = "Restricts depositing items from within the deposit box UI to those specified in 'Allowed Items'.<br>This can be overridden using right-click.",
+		position = 3,
+		section = SECTION_DEPOSIT_BOX
+	)
+	default boolean depositBoxPreventInterface()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "depositBoxInterfaceOverlay",
+		name = "Highlight Items in Interface",
+		description = "Adds an overlay showing the allowed/disallowed items in the deposit box UI.",
+		position = 4,
+		section = SECTION_DEPOSIT_BOX
+	)
+	default boolean depositBoxInterfaceOverlay()
+	{
+		return false;
 	}
 
 	// Miscellaneous
