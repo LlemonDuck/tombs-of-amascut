@@ -3,6 +3,8 @@ package com.duckblade.osrs.toa.module;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.features.AdrenalineCooldown;
 import com.duckblade.osrs.toa.features.CameraShakeDisabler;
+import com.duckblade.osrs.toa.features.DepositBoxFilter;
+import com.duckblade.osrs.toa.features.DepositBoxFilterOverlay;
 import com.duckblade.osrs.toa.features.FadeDisabler;
 import com.duckblade.osrs.toa.features.InvocationScreenshot;
 import com.duckblade.osrs.toa.features.LeftClickBankAll;
@@ -76,6 +78,8 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(BeamTimerTracker.class);
 		lifecycleComponents.addBinding().to(CameraShakeDisabler.class);
 		lifecycleComponents.addBinding().to(CursedPhalanxDetector.class);
+		lifecycleComponents.addBinding().to(DepositBoxFilter.class);
+		lifecycleComponents.addBinding().to(DepositBoxFilterOverlay.class);
 		lifecycleComponents.addBinding().to(DepositPickaxeOverlay.class);
 		lifecycleComponents.addBinding().to(DepositPickaxePreventEntry.class);
 		lifecycleComponents.addBinding().to(DepositPickaxeSwap.class);
