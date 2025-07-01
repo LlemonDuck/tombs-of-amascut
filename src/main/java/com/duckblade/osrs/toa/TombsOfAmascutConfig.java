@@ -6,7 +6,6 @@ import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerPanelManager;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
-import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import com.duckblade.osrs.toa.features.timetracking.SplitsMode;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
 import com.duckblade.osrs.toa.util.FontStyle;
@@ -171,11 +170,11 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-			name = "Font Type",
-			description = "Type of font",
-			position = 1,
-			keyName = "fontType",
-			section = SECTION_KEPHRI
+		name = "Font Type",
+		description = "Type of font",
+		position = 1,
+		keyName = "fontType",
+		section = SECTION_KEPHRI
 	)
 	default SwarmerFonts swarmerFontType()
 	{
@@ -183,11 +182,11 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-			name = "Use Bold Font",
-			description = "Font style of swarm overlay.",
-			position = 2,
-			keyName = "useBoldFont",
-			section = SECTION_KEPHRI
+		name = "Use Bold Font",
+		description = "Font style of swarm overlay.",
+		position = 2,
+		keyName = "useBoldFont",
+		section = SECTION_KEPHRI
 	)
 	default boolean useBoldFont()
 	{
@@ -195,11 +194,11 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-			name = "Font Size",
-			description = "Font size of swarm overlay.",
-			position = 3,
-			keyName = "swarmerFontSize",
-			section = SECTION_KEPHRI
+		name = "Font Size",
+		description = "Font size of swarm overlay.",
+		position = 3,
+		keyName = "swarmerFontSize",
+		section = SECTION_KEPHRI
 	)
 	@Units(Units.PIXELS)
 	@Range(min = 12)
@@ -209,11 +208,11 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-			name = "Side Panel",
-			description = "Show a side panel with summary data for previous raids.",
-			position = 4,
-			keyName = "swarmerSidePanel",
-			section = SECTION_KEPHRI
+		name = "Side Panel",
+		description = "Show a side panel with summary data for previous raids.",
+		position = 4,
+		keyName = "swarmerSidePanel",
+		section = SECTION_KEPHRI
 	)
 	default SwarmerPanelManager.PanelMode swarmerSidePanel()
 	{
@@ -221,11 +220,11 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-			name = "Font Color",
-			description = "Font color of swarm overlay.",
-			position = 4,
-			keyName = "swarmerFontColor",
-			section = SECTION_KEPHRI
+		name = "Font Color",
+		description = "Font color of swarm overlay.",
+		position = 4,
+		keyName = "swarmerFontColor",
+		section = SECTION_KEPHRI
 	)
 	default Color swarmerFontColor()
 	{
@@ -562,16 +561,44 @@ public interface TombsOfAmascutConfig extends Config
 		return Color.blue;
 	}
 
+	String KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE = "scabarasMatchingDisplayModeTile";
+
 	@ConfigItem(
-		keyName = "scabarasMatchingDisplayMode",
-		name = "Matching Display",
-		description = "Whether to show highlight tiles, show names of tiles, show numbering of tiles, or a mix of these in the matching puzzle.",
+		keyName = KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE,
+		name = "Matching Display - Tile",
+		description = "Whether to highlight tiles in the matching puzzle.",
 		position = 7,
 		section = SECTION_SCABARAS
 	)
-	default MatchingTileDisplayMode scabarasMatchingDisplayMode()
+	default boolean scabarasMatchingDisplayModeTile()
 	{
-		return MatchingTileDisplayMode.TILE_AND_NAME;
+		return true;
+	}
+
+	String KEY_SCABARAS_MATCHING_DISPLAY_MODE_NAME = "scabarasMatchingDisplayModeName";
+
+	@ConfigItem(
+		keyName = KEY_SCABARAS_MATCHING_DISPLAY_MODE_NAME,
+		name = "Matching Display - Name",
+		description = "Whether to show the tile name in the matching puzzle.",
+		position = 8,
+		section = SECTION_SCABARAS
+	)
+	default boolean scabarasMatchingDisplayModeName()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "scabarasMatchingDisplayModeNumber",
+		name = "Matching Display - Number",
+		description = "Whether to show the tile number in the matching puzzle.",
+		position = 9,
+		section = SECTION_SCABARAS
+	)
+	default boolean scabarasMatchingDisplayModeNumber()
+	{
+		return false;
 	}
 
 	@ConfigItem(
