@@ -4,6 +4,7 @@ import com.duckblade.osrs.toa.features.QuickProceedSwaps.QuickProceedEnableMode;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerFonts;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerPanelManager;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
+import com.duckblade.osrs.toa.features.pointstracker.OverlayPurpleWeightDisplayMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
@@ -93,10 +94,18 @@ public interface TombsOfAmascutConfig extends Config
 	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
 
 	@ConfigSection(
+		name = "Purple Weights",
+		description = "Configuration for displaying the likelihood of certain purples over others based on raid level.",
+		position = 8,
+		closedByDefault = true
+	)
+	String SECTION_PURPLE_WEIGHTS = "sectionPurpleWeights";
+
+	@ConfigSection(
 		name = "Points Tracker",
 		description = "<html>Tracks points for the raid, used in calculating drop chance." +
 			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
-		position = 8,
+		position = 9,
 		closedByDefault = true
 	)
 	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
@@ -104,7 +113,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
-		position = 9,
+		position = 10,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
@@ -112,7 +121,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Screenshot",
 		description = "All config options related to the Invocation Screenshot functionality",
-		position = 10,
+		position = 11,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
@@ -120,7 +129,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Time Tracking",
 		description = "Time tracking and splits.",
-		position = 11,
+		position = 12,
 		closedByDefault = true
 	)
 	String SECTION_TIME_TRACKING = "sectionTimeTracking";
@@ -220,11 +229,11 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-			name = "Font Type",
-			description = "Type of font",
-			position = 1,
-			keyName = "fontType",
-			section = SECTION_KEPHRI
+		name = "Font Type",
+		description = "Type of font",
+		position = 1,
+		keyName = "fontType",
+		section = SECTION_KEPHRI
 	)
 	default SwarmerFonts swarmerFontType()
 	{
@@ -232,11 +241,11 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-			name = "Use Bold Font",
-			description = "Font style of swarm overlay.",
-			position = 2,
-			keyName = "useBoldFont",
-			section = SECTION_KEPHRI
+		name = "Use Bold Font",
+		description = "Font style of swarm overlay.",
+		position = 2,
+		keyName = "useBoldFont",
+		section = SECTION_KEPHRI
 	)
 	default boolean useBoldFont()
 	{
@@ -244,11 +253,11 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-			name = "Font Size",
-			description = "Font size of swarm overlay.",
-			position = 3,
-			keyName = "swarmerFontSize",
-			section = SECTION_KEPHRI
+		name = "Font Size",
+		description = "Font size of swarm overlay.",
+		position = 3,
+		keyName = "swarmerFontSize",
+		section = SECTION_KEPHRI
 	)
 	@Units(Units.PIXELS)
 	@Range(min = 12)
@@ -258,11 +267,11 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-			name = "Side Panel",
-			description = "Show a side panel with summary data for previous raids.",
-			position = 4,
-			keyName = "swarmerSidePanel",
-			section = SECTION_KEPHRI
+		name = "Side Panel",
+		description = "Show a side panel with summary data for previous raids.",
+		position = 4,
+		keyName = "swarmerSidePanel",
+		section = SECTION_KEPHRI
 	)
 	default SwarmerPanelManager.PanelMode swarmerSidePanel()
 	{
@@ -270,11 +279,11 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-			name = "Font Color",
-			description = "Font color of swarm overlay.",
-			position = 4,
-			keyName = "swarmerFontColor",
-			section = SECTION_KEPHRI
+		name = "Font Color",
+		description = "Font color of swarm overlay.",
+		position = 4,
+		keyName = "swarmerFontColor",
+		section = SECTION_KEPHRI
 	)
 	default Color swarmerFontColor()
 	{
@@ -282,11 +291,11 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
-			name = "Save on Fail",
-			description = "Save swarmer data on room fail.",
-			position = 5,
-			keyName = "swarmerSaveOnFail",
-			section = SECTION_KEPHRI
+		name = "Save on Fail",
+		description = "Save swarmer data on room fail.",
+		position = 5,
+		keyName = "swarmerSaveOnFail",
+		section = SECTION_KEPHRI
 	)
 	default boolean swarmerSaveOnFail()
 	{
@@ -819,6 +828,30 @@ public interface TombsOfAmascutConfig extends Config
 	default boolean trackPurpleDryCount()
 	{
 		return false;
+	}
+
+	@ConfigItem(
+		name = "On Party Board",
+		description = "Enables the display on the party board's rewards section.",
+		position = 1,
+		keyName = "purpleWeightingDisplayOnPartyBoard",
+		section = SECTION_PURPLE_WEIGHTS
+	)
+	default boolean purpleWeightingDisplayOnPartyBoard()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		name = "On Points Panel",
+		description = "Adds purple weighting info to the points tracker overlay panel.",
+		position = 2,
+		keyName = "purpleWeightingDisplayOverlay",
+		section = SECTION_PURPLE_WEIGHTS
+	)
+	default OverlayPurpleWeightDisplayMode purpleWeightingOnPointsOverlay()
+	{
+		return OverlayPurpleWeightDisplayMode.OFF;
 	}
 
 	// Invocation Presets

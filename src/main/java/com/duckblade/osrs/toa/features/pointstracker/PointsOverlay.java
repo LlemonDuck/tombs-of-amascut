@@ -20,15 +20,24 @@ public class PointsOverlay extends OverlayPanel implements PluginLifecycleCompon
 	private final OverlayManager overlayManager;
 	private final PointsTracker pointsTracker;
 	private final PartyPointsTracker partyPointsTracker;
+	private final PurpleWeightingManager weightingManager;
 	private final TombsOfAmascutConfig config;
 
 	@Inject
-	public PointsOverlay(OverlayManager overlayManager, TombsOfAmascutConfig config, PointsTracker pointsTracker, PartyPointsTracker partyPointsTracker)
+	public PointsOverlay(
+		OverlayManager overlayManager,
+		PointsTracker pointsTracker,
+		PartyPointsTracker partyPointsTracker,
+		PurpleWeightingManager weightingManager,
+		TombsOfAmascutConfig config
+	)
 	{
 		this.overlayManager = overlayManager;
-		this.config = config;
 		this.pointsTracker = pointsTracker;
 		this.partyPointsTracker = partyPointsTracker;
+		this.weightingManager = weightingManager;
+		this.config = config;
+
 		setPosition(OverlayPosition.ABOVE_CHATBOX_RIGHT);
 	}
 
@@ -81,6 +90,17 @@ public class PointsOverlay extends OverlayPanel implements PluginLifecycleCompon
 			addChanceLine("Pet:", pointsTracker.getPetChance());
 		}
 
+		OverlayPurpleWeightDisplayMode purpleWeightDisplayMode = config.purpleWeightingOnPointsOverlay();
+		if (purpleWeightDisplayMode != OverlayPurpleWeightDisplayMode.OFF)
+		{
+			addLine("", "");
+
+			for (Purple purple : Purple.values())
+			{
+				addPurpleWeightLine(purple, purpleWeightDisplayMode);
+			}
+		}
+
 		return super.render(graphics);
 	}
 
@@ -101,6 +121,32 @@ public class PointsOverlay extends OverlayPanel implements PluginLifecycleCompon
 
 	private void addChanceLine(String title, double value)
 	{
-		addLine(title, PointsTracker.PERCENT_FORMAT.format(value / 100));
+		addLine(title, PointsTracker.PERCENT_FORMAT.format(value));
+	}
+
+	private void addPurpleWeightLine(Purple purple, OverlayPurpleWeightDisplayMode mode)
+	{
+		PurpleWeightingManager.PurpleWeighting weighting = weightingManager.getWeighting(purple);
+		String formatted;
+		switch (mode)
+		{
+			case BOTH:
+				formatted = String.format("%.3f%% (%.1f%%)", weighting.getPointsAdjustedPercent() * 100, weighting.getPurplePercent() * 100);
+				break;
+
+			case PER_PURPLE:
+				formatted = String.format("%.1f%%", weighting.getPurplePercent() * 100);
+				break;
+
+			case POINTS_ADJUSTED:
+				formatted = String.format("%.3f%%", weighting.getPointsAdjustedPercent() * 100);
+				break;
+
+			case OFF:
+			default:
+				return;
+		}
+
+		addLine(purple.getShortName(), formatted);
 	}
 }
