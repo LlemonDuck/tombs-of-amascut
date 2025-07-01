@@ -5,9 +5,12 @@ import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_MENU_S
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_PREVENT_EXIT;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HP_ORB_MODE;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_QUICK_PROCEED_ENABLE_MODE;
+import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_SCABARAS_MATCHING_DISPLAY_MODE_NAME;
+import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
+import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import net.runelite.client.config.ConfigManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -120,7 +123,11 @@ class ConfigMigrationServiceTest
 	@Test
 	void pickaxeReminderPreventExit()
 	{
-		when(configManager.getConfiguration(CONFIG_GROUP, "depositPickaxeMode", DepositPickaxeMode.class)).thenReturn(DepositPickaxeMode.PREVENT_EXIT);
+		when(configManager.getConfiguration(
+			CONFIG_GROUP,
+			"depositPickaxeMode",
+			DepositPickaxeMode.class
+		)).thenReturn(DepositPickaxeMode.PREVENT_EXIT);
 		configMigrationService.migratePickaxeReminder();
 
 		verify(configManager).unsetConfiguration(CONFIG_GROUP, "depositPickaxeMode");
@@ -148,6 +155,73 @@ class ConfigMigrationServiceTest
 	{
 		when(configManager.getConfiguration(CONFIG_GROUP, "depositPickaxeMode", DepositPickaxeMode.class)).thenReturn(null);
 		configMigrationService.migratePickaxeReminder();
+
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	void scabarasMatchingDisplayModeDisabled()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "scabarasMatchingDisplayMode", MatchingTileDisplayMode.class))
+			.thenReturn(MatchingTileDisplayMode.DISABLED);
+		configMigrationService.migrateScabarasMatchingDisplayMode();
+
+		verify(configManager).unsetConfiguration(CONFIG_GROUP, "scabarasMatchingDisplayMode");
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE, false);
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_SCABARAS_MATCHING_DISPLAY_MODE_NAME, false);
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	void scabarasMatchingDisplayModeTile()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "scabarasMatchingDisplayMode", MatchingTileDisplayMode.class))
+			.thenReturn(MatchingTileDisplayMode.TILE);
+		configMigrationService.migrateScabarasMatchingDisplayMode();
+
+		verify(configManager).unsetConfiguration(CONFIG_GROUP, "scabarasMatchingDisplayMode");
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE, true);
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_SCABARAS_MATCHING_DISPLAY_MODE_NAME, false);
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	void scabarasMatchingDisplayModeName()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "scabarasMatchingDisplayMode", MatchingTileDisplayMode.class))
+			.thenReturn(MatchingTileDisplayMode.NAME);
+		configMigrationService.migrateScabarasMatchingDisplayMode();
+
+		verify(configManager).unsetConfiguration(CONFIG_GROUP, "scabarasMatchingDisplayMode");
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE, false);
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_SCABARAS_MATCHING_DISPLAY_MODE_NAME, true);
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	void scabarasMatchingDisplayModeBoth()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "scabarasMatchingDisplayMode", MatchingTileDisplayMode.class))
+			.thenReturn(MatchingTileDisplayMode.BOTH);
+		configMigrationService.migrateScabarasMatchingDisplayMode();
+
+		verify(configManager).unsetConfiguration(CONFIG_GROUP, "scabarasMatchingDisplayMode");
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE, true);
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_SCABARAS_MATCHING_DISPLAY_MODE_NAME, true);
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	void scabarasMatchingDisplayModeNull()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "scabarasMatchingDisplayMode", MatchingTileDisplayMode.class))
+			.thenReturn(null);
+		configMigrationService.migrateScabarasMatchingDisplayMode();
 
 		verifyNoMoreInteractions(configManager);
 	}

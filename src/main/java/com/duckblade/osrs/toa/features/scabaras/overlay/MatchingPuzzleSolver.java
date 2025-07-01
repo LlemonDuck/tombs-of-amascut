@@ -27,7 +27,8 @@ import net.runelite.client.eventbus.Subscribe;
 public class MatchingPuzzleSolver implements PluginLifecycleComponent
 {
 
-	private static final Map<Integer, String> TILE_NAMES = ImmutableMap.<Integer, String>builder().put(45365, "Line") // line
+	private static final Map<Integer, String> TILE_NAMES = ImmutableMap.<Integer, String>builder()
+		.put(45365, "Line") // line
 		.put(45366, "Knives") // knives
 		.put(45367, "Crook") // crook
 		.put(45368, "Diamond") // diamond
@@ -38,7 +39,8 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 		.put(45373, "Boot") // boot
 		.build();
 
-	private static final Map<Integer, Color> TILE_COLORS = ImmutableMap.<Integer, Color>builder().put(45365, Color.black) // line
+	private static final Map<Integer, Color> TILE_COLORS = ImmutableMap.<Integer, Color>builder()
+		.put(45365, Color.black) // line
 		.put(45366, Color.red) // knives
 		.put(45367, Color.magenta) // crook
 		.put(45368, Color.blue) // diamond
@@ -47,6 +49,19 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 		.put(45371, Color.pink) // bird
 		.put(45372, Color.yellow) // wiggle
 		.put(45373, Color.green) // boot
+		.build();
+
+	private static final Map<Integer, Integer> TILE_NUMBER = ImmutableMap.<Integer, Integer>builder()
+		// these are intentionally out of id order since line, crook, hand, bird are always auto-completed in solos
+		.put(45365, 1) // line
+		.put(45367, 2) // crook
+		.put(45369, 3) // hand
+		.put(45371, 4) // bird
+		.put(45366, 5) // knives
+		.put(45368, 6) // diamond
+		.put(45370, 7) // star
+		.put(45372, 8) // wiggle
+		.put(45373, 9) // boot
 		.build();
 
 	private static final Map<Integer, Integer> MATCHED_OBJECT_IDS = ImmutableMap.<Integer, Integer>builder().put(45388, 45365) // line
@@ -91,7 +106,7 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 		if (TILE_COLORS.containsKey(id))
 		{
 			LocalPoint lp = e.getGroundObject().getLocalLocation();
-			discoveredTiles.put(lp, new MatchingTile(lp, TILE_NAMES.getOrDefault(id, "Unknown"), TILE_COLORS.getOrDefault(id, Color.black)));
+			discoveredTiles.put(lp, new MatchingTile(lp, TILE_NAMES.getOrDefault(id, "Unknown"), TILE_COLORS.getOrDefault(id, Color.black), TILE_NUMBER.getOrDefault(id, 0)));
 		}
 	}
 
