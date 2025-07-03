@@ -28,6 +28,8 @@ import net.runelite.client.util.Text;
 public class DepositBoxFilter implements PluginLifecycleComponent
 {
 
+	// todo maybe add a separate config for first vs second spirit encounter?
+
 	private static final int SOUND_EFFECT_DENIED = 2277;
 	private static final String ACTION_NO_DEPOSIT = "ToA Plugin Info";
 
