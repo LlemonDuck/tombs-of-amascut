@@ -34,9 +34,6 @@ public class CameraShakeDisabler implements PluginLifecycleComponent
 	@Override
 	public void shutDown()
 	{
-		if (wasDisabled)
-		{
-			client.setCameraShakeDisabled(false);
-		}
+		client.setCameraShakeDisabled(wasDisabled);
 	}
 }
