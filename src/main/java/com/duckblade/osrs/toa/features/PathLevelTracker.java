@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;
 import net.runelite.api.events.WidgetLoaded;
-import net.runelite.api.widgets.InterfaceID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -20,11 +20,6 @@ import net.runelite.client.eventbus.Subscribe;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class PathLevelTracker implements PluginLifecycleComponent
 {
-	private static final int CHILD_ID_DEFAULT = 45;
-	private static final int CHILD_ID_KEPHRI = 49;
-	private static final int CHILD_ID_AKKHA = 51;
-	private static final int CHILD_ID_BABA = 53;
-	private static final int CHILD_ID_ZEBAK = 55;
 
 	private final EventBus eventBus;
 	private final Client client;
@@ -63,7 +58,7 @@ public class PathLevelTracker implements PluginLifecycleComponent
 	{
 		final int groupId = event.getGroupId();
 
-		if (groupId == InterfaceID.TOA_RAID)
+		if (groupId == InterfaceID.TOA_HUD)
 		{
 			readPathLevels();
 		}
@@ -77,29 +72,29 @@ public class PathLevelTracker implements PluginLifecycleComponent
 
 		if (raidRoom == RaidRoom.NEXUS)
 		{
-			if ((widget = client.getWidget(InterfaceID.TOA_RAID, CHILD_ID_KEPHRI)) != null)
+			if ((widget = client.getWidget(InterfaceID.ToaHud.NEXUS_SCABARAS_LEVEL)) != null)
 			{
 				kephriPathLevel = Integer.parseInt(widget.getText());
 			}
 
-			if ((widget = client.getWidget(InterfaceID.TOA_RAID, CHILD_ID_AKKHA)) != null)
+			if ((widget = client.getWidget(InterfaceID.ToaHud.NEXUS_AKKHA_LEVEL)) != null)
 			{
 				akkhaPathLevel = Integer.parseInt(widget.getText());
 			}
 
-			if ((widget = client.getWidget(InterfaceID.TOA_RAID, CHILD_ID_BABA)) != null)
+			if ((widget = client.getWidget(InterfaceID.ToaHud.NEXUS_APMEKAN_LEVEL)) != null)
 			{
 				babaPathLevel = Integer.parseInt(widget.getText());
 			}
 
-			if ((widget = client.getWidget(InterfaceID.TOA_RAID, CHILD_ID_ZEBAK)) != null)
+			if ((widget = client.getWidget(InterfaceID.ToaHud.NEXUS_CRONDIS_LEVEL)) != null)
 			{
 				zebakPathLevel = Integer.parseInt(widget.getText());
 			}
 		}
 		else
 		{
-			if ((widget = client.getWidget(InterfaceID.TOA_RAID, CHILD_ID_DEFAULT)) == null)
+			if ((widget = client.getWidget(InterfaceID.ToaHud.PATHS_LEVEL)) == null)
 			{
 				return;
 			}
