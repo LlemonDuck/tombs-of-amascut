@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 11;
+	public static final int TARGET_VERSION = 12;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -128,6 +128,10 @@ public class UpdateNotifier implements PluginLifecycleComponent
 			case 10:
 				updates.add("<strong>(Ba-ba -> Highlight Sarcophagi)</strong> A new option to show which sarcophagi are safe to split a boulder with at Ba-ba.");
 				updates.add("The points tracker has been updated to account for the new summer sweep-up loot chance changes.");
+
+			case 11:
+				updates.add("<strong>Purple Weighting</strong>The weights of specific purples depending on raid level can now be shown on the party board or points panel.");
+				updates.add("<strong>Deposit Box</strong>A new deposit box filtering option can help prevent depositing the wrong items.");
 		}
 
 		return updates;
