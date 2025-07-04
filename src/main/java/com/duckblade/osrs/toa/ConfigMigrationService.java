@@ -1,6 +1,8 @@
 package com.duckblade.osrs.toa;
 
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.CONFIG_GROUP;
+import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_DEPOSIT_BOX_FILTER_STRING_FIRST;
+import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_DEPOSIT_BOX_FILTER_STRING_SECOND;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_MENU_SWAP;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_PREVENT_EXIT;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HP_ORB_MODE;
@@ -81,6 +83,19 @@ public class ConfigMigrationService
 			mode -> ImmutableMap.of(
 				KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE, mode == MatchingTileDisplayMode.TILE || mode == MatchingTileDisplayMode.BOTH,
 				KEY_SCABARAS_MATCHING_DISPLAY_MODE_NAME, mode == MatchingTileDisplayMode.NAME || mode == MatchingTileDisplayMode.BOTH
+			)
+		);
+	}
+
+	@VisibleForTesting
+	void migrateDepositBoxFilterString()
+	{
+		migrateMany(
+			"depositBoxFilterString",
+			String.class,
+			content -> ImmutableMap.of(
+				KEY_DEPOSIT_BOX_FILTER_STRING_FIRST, content,
+				KEY_DEPOSIT_BOX_FILTER_STRING_SECOND, content
 			)
 		);
 	}

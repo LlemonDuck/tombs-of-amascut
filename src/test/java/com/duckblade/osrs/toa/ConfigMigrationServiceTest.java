@@ -1,6 +1,8 @@
 package com.duckblade.osrs.toa;
 
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.CONFIG_GROUP;
+import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_DEPOSIT_BOX_FILTER_STRING_FIRST;
+import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_DEPOSIT_BOX_FILTER_STRING_SECOND;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_MENU_SWAP;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_PREVENT_EXIT;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HP_ORB_MODE;
@@ -223,6 +225,30 @@ class ConfigMigrationServiceTest
 			.thenReturn(null);
 		configMigrationService.migrateScabarasMatchingDisplayMode();
 
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@Test
+	void migrateDepositBoxFilterStringDefined()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "depositBoxFilterString", String.class))
+			.thenReturn("abc123");
+		configMigrationService.migrateDepositBoxFilterString();
+
+		verify(configManager).unsetConfiguration(CONFIG_GROUP, "depositBoxFilterString");
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_DEPOSIT_BOX_FILTER_STRING_FIRST, (Object) "abc123");
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_DEPOSIT_BOX_FILTER_STRING_SECOND, (Object) "abc123");
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@Test
+	void migrateDepositBoxFilterStringNull()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "depositBoxFilterString", String.class))
+			.thenReturn(null);
+		configMigrationService.migrateDepositBoxFilterString();
+
+		verify(configManager).getConfiguration(CONFIG_GROUP, "depositBoxFilterString", String.class);
 		verifyNoMoreInteractions(configManager);
 	}
 
