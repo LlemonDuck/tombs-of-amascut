@@ -130,8 +130,8 @@ public class UpdateNotifier implements PluginLifecycleComponent
 				updates.add("The points tracker has been updated to account for the new summer sweep-up loot chance changes.");
 
 			case 11:
-				updates.add("<strong>Purple Weighting</strong>The weights of specific purples depending on raid level can now be shown on the party board or points panel.");
-				updates.add("<strong>Deposit Box</strong>A new deposit box filtering option can help prevent depositing the wrong items.");
+				updates.add("<strong>Purple Weighting</strong> The weights of specific purples depending on raid level can now be shown on the party board or points panel.");
+				updates.add("<strong>Deposit Box</strong> A new deposit box filtering option can help prevent depositing the wrong items.");
 		}
 
 		return updates;
