@@ -1,7 +1,6 @@
 package com.duckblade.osrs.toa.util;
 
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
-import com.google.common.collect.ImmutableSet;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
