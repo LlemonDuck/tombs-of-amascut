@@ -92,6 +92,7 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 	{
 		interceptDepositAction(e);
 		interceptUseOnDepositBox(e);
+		interceptDepositAlls(e);
 	}
 
 	boolean isDepositAllowed(String itemName)
@@ -120,24 +121,7 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 			return;
 		}
 
-		// add a feedback action so users aren't confused why they can't deposit
-		client.getMenu()
-			.createMenuEntry(-1)
-			.setType(MenuAction.RUNELITE_WIDGET)
-			.setOption(ACTION_NO_DEPOSIT)
-			.setTarget(e.getTarget())
-			.onClick(_clicked ->
-			{
-				client.playSoundEffect(SOUND_EFFECT_DENIED);
-				client.addChatMessage(
-					ChatMessageType.GAMEMESSAGE,
-					"",
-					"Deposit action prevented due to item filters. " +
-						"To deposit this item, reconfigure options in Tombs of Amascut -> Deposit Box -> Allowed Items, " +
-						"or use the right-click menu.",
-					"RL/Tombs of Amascut"
-				);
-			});
+		addFeedbackEntry(e.getMenuEntry());
 	}
 
 	private void interceptUseOnDepositBox(MenuEntryAdded e)
@@ -164,6 +148,42 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 			.removeMenuEntry(e.getMenuEntry());
 	}
 
+	private void interceptDepositAlls(MenuEntryAdded e)
+	{
+		if (!preventInterfaceDeposit ||
+			!isDepositAllAction(e.getMenuEntry()))
+		{
+			return;
+		}
+
+		e.getMenuEntry()
+			.setDeprioritized(true);
+
+		addFeedbackEntry(e.getMenuEntry());
+	}
+
+	private void addFeedbackEntry(MenuEntry sourceEntry)
+	{
+		// add a feedback action so users aren't confused why they can't deposit
+		client.getMenu()
+			.createMenuEntry(-1)
+			.setType(MenuAction.RUNELITE_WIDGET)
+			.setOption(ACTION_NO_DEPOSIT)
+			.setTarget(sourceEntry.getTarget())
+			.onClick(_clicked ->
+			{
+				client.playSoundEffect(SOUND_EFFECT_DENIED);
+				client.addChatMessage(
+					ChatMessageType.GAMEMESSAGE,
+					"",
+					"Deposit action prevented due to item filters. " +
+						"To deposit this item, reconfigure options in Tombs of Amascut -> Deposit Box -> Allowed Items, " +
+						"or use the right-click menu.",
+					"RL/Tombs of Amascut"
+				);
+			});
+	}
+
 	private boolean isUseAction(MenuEntry e)
 	{
 		return e.getType() == MenuAction.WIDGET_TARGET_ON_GAME_OBJECT &&
@@ -175,6 +195,12 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 		return e.getType() == MenuAction.CC_OP &&
 			(e.getOption().equals("Bank") || e.getOption().startsWith("Deposit-")) &&
 			DEPOSIT_BOX_SLOT_IDS.contains(e.getParam1());
+	}
+
+	private boolean isDepositAllAction(MenuEntry e)
+	{
+		return e.getType() == MenuAction.CC_OP &&
+			(e.getParam1() == InterfaceID.BankDepositbox.DEPOSIT_WORN || e.getParam1() == InterfaceID.BankDepositbox.DEPOSIT_INV);
 	}
 
 }
