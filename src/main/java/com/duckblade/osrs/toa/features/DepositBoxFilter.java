@@ -6,8 +6,8 @@ import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -61,9 +61,12 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState currentState)
 	{
-		if (currentState.getCurrentRoom() == RaidRoom.NEXUS) // todo
+		if (currentState.getCurrentRoom() == RaidRoom.NEXUS)
 		{
-			this.allowedItemNames = new HashSet<>(Text.fromCSV(config.depositBoxFilterString()));
+			this.allowedItemNames = Text.fromCSV(config.depositBoxFilterString())
+				.stream()
+				.map(String::toLowerCase)
+				.collect(Collectors.toSet());
 			this.preventInterfaceDeposit = config.depositBoxPreventInterface();
 			this.preventUseDeposit = config.depositBoxPreventUse();
 			return true;
@@ -93,7 +96,7 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 
 	boolean isDepositAllowed(String itemName)
 	{
-		return allowedItemNames.contains(Text.removeTags(itemName));
+		return allowedItemNames.contains(Text.removeTags(itemName).toLowerCase());
 	}
 
 	private void interceptDepositAction(MenuEntryAdded e)
