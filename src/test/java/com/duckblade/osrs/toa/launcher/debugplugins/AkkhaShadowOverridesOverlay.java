@@ -1,4 +1,4 @@
-package launcher.debugplugins;
+package com.duckblade.osrs.toa.launcher.debugplugins;
 
 import com.duckblade.osrs.toa.util.FontStyle;
 import com.duckblade.osrs.toa.util.OverlayUtil;
@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.Model;
 import net.runelite.api.NPC;
@@ -26,10 +27,17 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 public class AkkhaShadowOverridesOverlay extends Overlay
 {
 
+	private final ToaDebugConfig config;
+
 	private final Set<NPC> shadows = new TreeSet<>(Comparator.comparing(NPC::getIndex));
 
-	public AkkhaShadowOverridesOverlay()
+	@Inject
+	public AkkhaShadowOverridesOverlay(
+		ToaDebugConfig config
+	)
 	{
+		this.config = config;
+
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 	}
@@ -55,6 +63,11 @@ public class AkkhaShadowOverridesOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
+		if (!config.akkhaShadowHsl())
+		{
+			return null;
+		}
+
 		shadows.forEach((npc) ->
 		{
 			{
