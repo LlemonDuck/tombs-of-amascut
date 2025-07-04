@@ -50,6 +50,7 @@ import com.duckblade.osrs.toa.features.tomb.DryStreakTracker;
 import com.duckblade.osrs.toa.features.tomb.SarcophagusOpeningSoundPlayer;
 import com.duckblade.osrs.toa.features.tomb.SarcophagusRecolorer;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
+import com.duckblade.osrs.toa.util.RaidCompletionTracker;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -101,6 +102,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		lifecycleComponents.addBinding().to(PurpleWeightingManager.class);
 		lifecycleComponents.addBinding().to(PurpleWeightingPartyBoardManager.class);
 		lifecycleComponents.addBinding().to(QuickProceedSwaps.class);
+		lifecycleComponents.addBinding().to(RaidCompletionTracker.class);
 		lifecycleComponents.addBinding().to(RaidStateTracker.class);
 		lifecycleComponents.addBinding().to(SarcophagusOpeningSoundPlayer.class);
 		lifecycleComponents.addBinding().to(SarcophagusRecolorer.class);

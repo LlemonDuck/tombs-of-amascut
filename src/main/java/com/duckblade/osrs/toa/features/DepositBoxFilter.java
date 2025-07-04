@@ -2,6 +2,7 @@ package com.duckblade.osrs.toa.features;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.RaidCompletionTracker;
 import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.google.common.collect.ImmutableSet;
@@ -52,9 +53,10 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 	private final EventBus eventBus;
 
 	private final Client client;
-	private final TombsOfAmascutConfig config;
+	private final RaidCompletionTracker raidCompletionTracker;
 
-	private Set<String> allowedItemNames;
+	private Set<String> allowedItemNamesFirstPass;
+	private Set<String> allowedItemNamesSecondPass;
 	private boolean preventInterfaceDeposit;
 	private boolean preventUseDeposit;
 
@@ -63,7 +65,11 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 	{
 		if (currentState.getCurrentRoom() == RaidRoom.NEXUS)
 		{
-			this.allowedItemNames = Text.fromCSV(config.depositBoxFilterString())
+			this.allowedItemNamesFirstPass = Text.fromCSV(config.depositBoxFilterStringFirstPass())
+				.stream()
+				.map(String::toLowerCase)
+				.collect(Collectors.toSet());
+			this.allowedItemNamesSecondPass = Text.fromCSV(config.depositBoxFilterStringSecondPass())
 				.stream()
 				.map(String::toLowerCase)
 				.collect(Collectors.toSet());
@@ -97,7 +103,9 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 
 	boolean isDepositAllowed(String itemName)
 	{
-		return allowedItemNames.contains(Text.removeTags(itemName).toLowerCase());
+		boolean isFirstPass = raidCompletionTracker.getCompletedBosses().size() <= 4; // 2 paths + 2 bosses
+		return (isFirstPass ?  allowedItemNamesFirstPass : allowedItemNamesSecondPass)
+			.contains(Text.removeTags(itemName).strip().toLowerCase());
 	}
 
 	private void interceptDepositAction(MenuEntryAdded e)
@@ -138,8 +146,7 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 			return;
 		}
 
-		String itemName = Text.removeTags(targetParts[0]).strip();
-		if (isDepositAllowed(itemName))
+		if (isDepositAllowed(targetParts[0]))
 		{
 			return;
 		}
