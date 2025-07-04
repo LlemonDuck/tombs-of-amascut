@@ -20,7 +20,7 @@ public class UniqueChanceCalculator
 	private static final int PET_DIMINISH_FACTOR_1 = 3;
 	private static final int RAID_LEVEL_MAX = 550;
 
-	private static final double MAX_RATE_UNIQUE = 0.55;
+	private static final double MAX_RATE_UNIQUE = 55.0;
 
 	public static double getUniqueChance(int raidLevel, int points)
 	{
