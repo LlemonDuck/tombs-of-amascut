@@ -4,7 +4,6 @@ import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.Invocation;
 import com.duckblade.osrs.toa.util.RaidState;
-import com.duckblade.osrs.toa.util.RaidStateTracker;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.Runnables;
 import java.awt.Color;
@@ -59,7 +58,6 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	private final TombsOfAmascutConfig config;
 	private final ClientThread clientThread;
 	private final ChatboxPanelManager chatboxPanelManager;
-	private final RaidStateTracker raidStateTracker;
 
 	@Getter
 	private Set<Invocation> activeInvocations = EnumSet.noneOf(Invocation.class);
@@ -114,7 +112,8 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		presets.values().forEach(preset ->
 			{
 				Consumer<MenuEntry> onClick = deleteMode ? ignored -> confirmDeletePreset(preset) : ignored -> setCurrentPreset(preset);
-				client.createMenuEntry(-1)
+				client.getMenu()
+					.createMenuEntry(-1)
 					.setType(MenuAction.RUNELITE)
 					.setOption(deleteMode ? "<col=ff0000>Delete" : "Load")
 					.setTarget(preset.toStringDecorated())
@@ -124,26 +123,30 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 
 		if (currentPreset != null)
 		{
-			client.createMenuEntry(-1)
+			client.getMenu()
+				.createMenuEntry(-1)
 				.setType(MenuAction.RUNELITE)
 				.setOption("Export")
 				.setTarget(currentPreset.toStringDecorated())
 				.onClick(ignored -> exportCurrentPreset());
 		}
 
-		client.createMenuEntry(-1)
+		client.getMenu()
+			.createMenuEntry(-1)
 			.setType(MenuAction.RUNELITE)
 			.setOption("Import")
 			.setTarget("Preset")
 			.onClick(ignored -> importPreset());
 
-		client.createMenuEntry(-1)
+		client.getMenu()
+			.createMenuEntry(-1)
 			.setType(MenuAction.RUNELITE)
 			.setOption("Save")
 			.setTarget("New Preset")
 			.onClick(ignored -> savePreset());
 
-		client.createMenuEntry(-1)
+		client.getMenu()
+			.createMenuEntry(-1)
 			.setType(MenuAction.RUNELITE)
 			.setOption("Close")
 			.setTarget("Presets")
@@ -378,10 +381,9 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 		Widget parent = client.getWidget(WIDGET_ID_INVOCATIONS_PARENT, WIDGET_ID_INVOCATIONS_CHILD);
 		if (parent != null && !parent.isHidden() && parent.getChildren() != null)
 		{
-			for (int i = 0; i < parent.getChildren().length; i += 3)
+			for (Widget child : parent.getChildren())
 			{
-				parent.getChild(i)
-					.setOpacity(255)
+				child.setOpacity(255)
 					.setTextColor(Color.WHITE.getRGB())
 					.revalidate();
 			}

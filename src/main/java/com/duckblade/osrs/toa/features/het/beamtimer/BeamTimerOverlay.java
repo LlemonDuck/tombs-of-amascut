@@ -63,7 +63,7 @@ public class BeamTimerOverlay extends Overlay implements PluginLifecycleComponen
 			return null;
 		}
 
-		Point canvasPoint = Perspective.localToCanvas(client, casterStatue.getLocalLocation(), client.getPlane());
+		Point canvasPoint = Perspective.localToCanvas(client, casterStatue.getLocalLocation(), client.getLocalPlayer().getWorldView().getPlane());
 		if (canvasPoint == null)
 		{
 			return null;

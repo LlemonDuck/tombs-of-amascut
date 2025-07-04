@@ -13,10 +13,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Actor;
 import net.runelite.api.NPC;
-import net.runelite.api.NpcID;
 import net.runelite.api.events.ActorDeath;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -61,17 +61,17 @@ public class ApmekenBaboonIndicator implements PluginLifecycleComponent
 
 		switch (id)
 		{
-			case NpcID.VOLATILE_BABOON:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_ZOMBIE:
 				volatileBaboons.add(npc);
-			case NpcID.BABOON_BRAWLER:
-			case NpcID.BABOON_BRAWLER_11712:
-			case NpcID.BABOON_MAGE:
-			case NpcID.BABOON_MAGE_11714:
-			case NpcID.BABOON_THROWER:
-			case NpcID.BABOON_THROWER_11713:
-			case NpcID.BABOON_SHAMAN:
-			case NpcID.CURSED_BABOON:
-			case NpcID.BABOON_THRALL:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_MELEE_1:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_MELEE_2:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_MAGIC_1:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_MAGIC_2:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_RANGED_1:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_RANGED_2:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_SHAMAN:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_CURSED:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_THRALL:
 				baboons.add(npc);
 				break;
 			default:
@@ -104,17 +104,17 @@ public class ApmekenBaboonIndicator implements PluginLifecycleComponent
 
 		switch (id)
 		{
-			case NpcID.VOLATILE_BABOON:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_ZOMBIE:
 				volatileBaboons.remove(npc);
-			case NpcID.BABOON_BRAWLER:
-			case NpcID.BABOON_BRAWLER_11712:
-			case NpcID.BABOON_MAGE:
-			case NpcID.BABOON_MAGE_11714:
-			case NpcID.BABOON_THROWER:
-			case NpcID.BABOON_THROWER_11713:
-			case NpcID.BABOON_SHAMAN:
-			case NpcID.CURSED_BABOON:
-			case NpcID.BABOON_THRALL:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_MELEE_1:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_MELEE_2:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_MAGIC_1:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_MAGIC_2:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_RANGED_1:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_RANGED_2:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_SHAMAN:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_CURSED:
+			case NpcID.TOA_PATH_APMEKEN_BABOON_THRALL:
 				baboons.remove(npc);
 				break;
 			default:

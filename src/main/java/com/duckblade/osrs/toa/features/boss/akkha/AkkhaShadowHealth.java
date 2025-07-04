@@ -16,11 +16,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
-import net.runelite.api.NpcID;
-import net.runelite.api.Varbits;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
+import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -93,7 +93,7 @@ public class AkkhaShadowHealth implements PluginLifecycleComponent
 	{
 		final NPC npc = event.getNpc();
 
-		if (npc.getId() == NpcID.AKKHAS_SHADOW)
+		if (npc.getId() == NpcID.AKKHA_SHADOW)
 		{
 			akkhasShadows.put(npc, akkhasShadowMaxHp);
 		}
@@ -103,11 +103,7 @@ public class AkkhaShadowHealth implements PluginLifecycleComponent
 	private void onNpcDespawned(final NpcDespawned event)
 	{
 		final NPC npc = event.getNpc();
-
-		if (npc.getId() == NpcID.AKKHAS_SHADOW)
-		{
-			akkhasShadows.remove(npc);
-		}
+		akkhasShadows.remove(npc);
 	}
 
 	private void updateAkkhasShadowMaxHp()
@@ -115,7 +111,7 @@ public class AkkhaShadowHealth implements PluginLifecycleComponent
 		// Calculate max hp manually as NPCManager does not have this information
 		int hp = BASE_HP_AKKHAS_SHADOW;
 
-		final int raidLevelFactor = 4 * client.getVarbitValue(Varbits.TOA_RAID_LEVEL) / 10;
+		final int raidLevelFactor = 4 * client.getVarbitValue(VarbitID.TOA_CLIENT_RAID_LEVEL) / 10;
 		hp += hp * raidLevelFactor / 100;
 
 		final int pathLevel = pathLevelTracker.getAkkhaPathLevel();

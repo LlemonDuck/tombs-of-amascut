@@ -13,9 +13,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
-import net.runelite.api.NpcID;
 import net.runelite.api.Perspective;
 import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -97,28 +97,28 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 
 			switch (npc.getId())
 			{
-				case NpcID.BABOON_BRAWLER:
-				case NpcID.BABOON_BRAWLER_11712:
+				case NpcID.TOA_PATH_APMEKEN_BABOON_MELEE_1:
+				case NpcID.TOA_PATH_APMEKEN_BABOON_MELEE_2:
 					color = config.apmekenBaboonColorMelee();
 					break;
-				case NpcID.BABOON_MAGE:
-				case NpcID.BABOON_MAGE_11714:
+				case NpcID.TOA_PATH_APMEKEN_BABOON_MAGIC_1:
+				case NpcID.TOA_PATH_APMEKEN_BABOON_MAGIC_2:
 					color = config.apmekenBaboonColorMage();
 					break;
-				case NpcID.BABOON_THROWER:
-				case NpcID.BABOON_THROWER_11713:
+				case NpcID.TOA_PATH_APMEKEN_BABOON_RANGED_1:
+				case NpcID.TOA_PATH_APMEKEN_BABOON_RANGED_2:
 					color = config.apmekenBaboonColorRange();
 					break;
-				case NpcID.BABOON_SHAMAN:
+				case NpcID.TOA_PATH_APMEKEN_BABOON_SHAMAN:
 					color = config.apmekenBaboonColorShaman();
 					break;
-				case NpcID.CURSED_BABOON:
+				case NpcID.TOA_PATH_APMEKEN_BABOON_CURSED:
 					color = config.apmekenBaboonColorCursed();
 					break;
-				case NpcID.BABOON_THRALL:
+				case NpcID.TOA_PATH_APMEKEN_BABOON_THRALL:
 					color = config.apmekenBaboonColorThrall();
 					break;
-				case NpcID.VOLATILE_BABOON:
+				case NpcID.TOA_PATH_APMEKEN_BABOON_ZOMBIE:
 				default:
 					continue;
 			}

@@ -191,7 +191,10 @@ public class AdditionPuzzleSolver implements PluginLifecycleComponent
 			return;
 		}
 
-		Tile[][] sceneTiles = client.getScene().getTiles()[client.getPlane()];
+		Tile[][] sceneTiles = client.getLocalPlayer()
+			.getWorldView()
+			.getScene()
+			.getTiles()[client.getLocalPlayer().getWorldView().getPlane()];
 		Point tl = findStartTile(sceneTiles);
 		if (tl == null)
 		{

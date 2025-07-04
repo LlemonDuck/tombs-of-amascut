@@ -12,9 +12,9 @@ import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.MenuEntry;
-import net.runelite.api.NpcID;
-import net.runelite.api.ObjectID;
 import net.runelite.api.events.MenuEntryAdded;
+import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -33,26 +33,26 @@ public class QuickProceedSwaps implements PluginLifecycleComponent
 	}
 
 	private static final Set<Integer> NPC_IDS = ImmutableSet.of(
-		NpcID.OSMUMTEN, // post-demi-boss
-		NpcID.OSMUMTEN_11690, // pre-warden
-		NpcID.OSMUMTEN_11693 // loot room
+		NpcID.TOA_OSMUMTEN_VIS, // post-demi-boss
+		NpcID.TOA_OSMUMTEN_WARDENS_VIS, // pre-warden
+		NpcID.TOA_OSMUMTEN_VAULT_VIS_2 // loot room
 	);
 
 	private static final Set<Integer> OBJECT_IDS = ImmutableSet.of(
-		ObjectID.PATH_OF_CRONDIS,
-		ObjectID.PATH_OF_SCABARAS,
-		ObjectID.PATH_OF_HET,
-		ObjectID.PATH_OF_APMEKEN,
-		ObjectID.BARRIER_45135,
-		ObjectID.TELEPORT_CRYSTAL_45505, // kephri
-		ObjectID.TELEPORT_CRYSTAL_45506, // zebak
-		ObjectID.TELEPORT_CRYSTAL_45866, // akkha
-		ObjectID.TELEPORT_CRYSTAL_45754, // ba-ba // Quick-Use
-		ObjectID.ENTRY_45131, // het
-		ObjectID.ENTRY_45337, // scabaras
-		ObjectID.ENTRY_45397, // crondis
-		ObjectID.ENTRY_45500, // apmeken
-		ObjectID.ENTRY_46168 // wardens
+		ObjectID.TOA_NEXUS_CRONDIS_DOOR,
+		ObjectID.TOA_NEXUS_SCABARAS_DOOR,
+		ObjectID.TOA_NEXUS_HET_DOOR,
+		ObjectID.TOA_NEXUS_APMEKEN_DOOR,
+		ObjectID.TOA_PATH_BARRIER,
+		ObjectID.KEPHRI_TELEPORT, // kephri
+		ObjectID.ZEBAK_TELEPORT, // zebak
+		ObjectID.AKKHA_TELEPORT, // akkha
+		ObjectID.BABA_TELEPORT, // ba-ba // Quick-Use
+		ObjectID.TOA_DOOR_CONTINUE, // het
+		ObjectID.TOA_SCABARAS_CONTINUE, // scabaras
+		ObjectID.TOA_PATH_CRONDIS_CONTINUE, // crondis
+		ObjectID.TOA_PATH_APMEKEN_CONTINUE, // apmeken
+		ObjectID.TOA_NEXUS_WARDENS_DOOR_OPEN // wardens
 	);
 
 	private final EventBus eventBus;
@@ -101,7 +101,7 @@ public class QuickProceedSwaps implements PluginLifecycleComponent
 				final int id = me.getIdentifier();
 				final String option = me.getOption();
 
-				if (id == ObjectID.BARRIER_45135 &&
+				if (id == ObjectID.TOA_PATH_BARRIER &&
 					raidStateTracker.getCurrentState().getCurrentRoom() == RaidRoom.CRONDIS &&
 					option.equals("Pass"))
 				{

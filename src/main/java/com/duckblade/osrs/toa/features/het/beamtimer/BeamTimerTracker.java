@@ -13,12 +13,12 @@ import lombok.RequiredArgsConstructor;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
-import net.runelite.api.NpcID;
-import net.runelite.api.ObjectID;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GraphicsObjectCreated;
 import net.runelite.api.events.NpcChanged;
+import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -88,7 +88,7 @@ public class BeamTimerTracker implements PluginLifecycleComponent
 	@Subscribe
 	public void onGameObjectSpawned(GameObjectSpawned e)
 	{
-		if (e.getGameObject().getId() == ObjectID.CASTER_STATUE)
+		if (e.getGameObject().getId() == ObjectID.TOA_HET_SOURCE)
 		{
 			casterStatue = e.getGameObject();
 		}
@@ -106,11 +106,11 @@ public class BeamTimerTracker implements PluginLifecycleComponent
 	@Subscribe
 	public void onNpcChanged(NpcChanged e)
 	{
-		if (e.getOld().getId() == NpcID.HETS_SEAL_WEAKENED && e.getNpc().getId() == NpcID.HETS_SEAL_PROTECTED)
+		if (e.getOld().getId() == NpcID.TOA_HET_GOAL_VULNERABLE && e.getNpc().getId() == NpcID.TOA_HET_GOAL)
 		{
 			this.nextFireTick = client.getTickCount() + BEAM_FIRE_RATE_TICKS + 1;
 		}
-		else if (e.getOld().getId() == NpcID.HETS_SEAL_PROTECTED && e.getNpc().getId() == NpcID.HETS_SEAL_WEAKENED)
+		else if (e.getOld().getId() == NpcID.TOA_HET_GOAL && e.getNpc().getId() == NpcID.TOA_HET_GOAL_VULNERABLE)
 		{
 			this.nextFireTick = -1;
 		}

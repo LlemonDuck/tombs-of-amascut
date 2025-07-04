@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.events.WidgetLoaded;
-import net.runelite.api.widgets.InterfaceID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
@@ -73,7 +73,7 @@ public class DryStreakTracker implements PluginLifecycleComponent
 			return;
 		}
 
-		if (widgetLoaded.getGroupId() == InterfaceID.TOA_REWARD)
+		if (widgetLoaded.getGroupId() == InterfaceID.TOA_CHESTS)
 		{
 			chestOpened = true;
 

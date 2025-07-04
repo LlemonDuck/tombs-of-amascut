@@ -13,12 +13,12 @@ import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
-import net.runelite.api.InventoryID;
-import net.runelite.api.ItemID;
 import net.runelite.api.MenuEntry;
-import net.runelite.api.Varbits;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.gameval.InventoryID;
+import net.runelite.api.gameval.ItemID;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -27,8 +27,8 @@ import net.runelite.client.eventbus.Subscribe;
 public class CursedPhalanxDetector implements PluginLifecycleComponent
 {
 	private static final Set<Integer> CURSED_PHALANX_ITEM_IDS = ImmutableSet.of(
-		ItemID.CURSED_PHALANX,
-		ItemID.OSMUMTENS_FANG_OR
+		ItemID.OSMUMTENS_FANG_ORNAMENT_KIT,
+		ItemID.OSMUMTENS_FANG_ORNAMENT
 	);
 
 	private boolean isEligibleForKit = true;
@@ -76,7 +76,7 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 	{
 		if (!isEligibleForKit ||
 			raidStateTracker.getCurrentState().getCurrentRoom() != RaidRoom.TOMB ||
-			client.getVarbitValue(Varbits.TOA_RAID_LEVEL) < 500)
+			client.getVarbitValue(VarbitID.TOA_CLIENT_RAID_LEVEL) < 500)
 		{
 			return;
 		}
@@ -87,8 +87,8 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 			return;
 		}
 
-		boolean wearingPhalanx = InventoryUtil.containsAny(client.getItemContainer(InventoryID.EQUIPMENT), CURSED_PHALANX_ITEM_IDS);
-		boolean carryingPhalanx = InventoryUtil.containsAny(client.getItemContainer(InventoryID.INVENTORY), CURSED_PHALANX_ITEM_IDS);
+		boolean wearingPhalanx = InventoryUtil.containsAny(client.getItemContainer(InventoryID.WORN), CURSED_PHALANX_ITEM_IDS);
+		boolean carryingPhalanx = InventoryUtil.containsAny(client.getItemContainer(InventoryID.INV), CURSED_PHALANX_ITEM_IDS);
 
 		if (wearingPhalanx || carryingPhalanx)
 		{
