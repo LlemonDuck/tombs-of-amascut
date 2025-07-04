@@ -1,6 +1,8 @@
 package com.duckblade.osrs.toa.launcher.debugplugins;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
+import java.util.Collections;
+import java.util.Set;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -37,6 +39,16 @@ public interface ToaDebugConfig extends Config
 	default boolean menuEntryDumper()
 	{
 		return false;
+	}
+
+	@ConfigItem(
+		keyName = "stateOverlay",
+		description = "",
+		name = "State Overlay"
+	)
+	default Set<StateOverlay.StateDisplays> stateOverlay()
+	{
+		return Collections.emptySet();
 	}
 
 }

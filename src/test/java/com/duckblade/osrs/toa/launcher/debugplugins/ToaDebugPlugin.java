@@ -32,6 +32,9 @@ public class ToaDebugPlugin extends Plugin
 	private MenuEntryDumper menuEntryDumper;
 
 	@Inject
+	private StateOverlay stateOverlay;
+
+	@Inject
 	private EventBus eventBus;
 
 	@Override
@@ -43,6 +46,7 @@ public class ToaDebugPlugin extends Plugin
 
 		overlayManager.add(hetSolverDebugOverlay);
 		overlayManager.add(shadowOverridesOverlay);
+		overlayManager.add(stateOverlay);
 		eventBus.register(shadowOverridesOverlay);
 		eventBus.register(menuEntryDumper);
 	}
@@ -53,6 +57,7 @@ public class ToaDebugPlugin extends Plugin
 		((Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(Level.DEBUG);
 		overlayManager.remove(hetSolverDebugOverlay);
 		overlayManager.remove(shadowOverridesOverlay);
+		overlayManager.remove(stateOverlay);
 		eventBus.unregister(shadowOverridesOverlay);
 		eventBus.unregister(menuEntryDumper);
 	}
