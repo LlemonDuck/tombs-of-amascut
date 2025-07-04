@@ -1068,15 +1068,28 @@ public interface TombsOfAmascutConfig extends Config
 
 	// Deposit box
 
-	String KEY_DEPOSIT_BOX_FILTER_STRING = "depositBoxFilterString";
+	String KEY_DEPOSIT_BOX_FILTER_STRING_FIRST = "depositBoxFilterStringFirstPass";
 	@ConfigItem(
-		keyName = KEY_DEPOSIT_BOX_FILTER_STRING,
-		name = "Allowed Items",
-		description = "Comma-separated item names which should be allowed for depositing. Does not support wildcards.",
+		keyName = KEY_DEPOSIT_BOX_FILTER_STRING_FIRST,
+		name = "Allowed Items - First Deposit",
+		description = "Comma-separated item names which should be allowed for depositing after defeating 2 path bosses (first set of supplies). Does not support wildcards.",
 		position = 1,
 		section = SECTION_DEPOSIT_BOX
 	)
-	default String depositBoxFilterString()
+	default String depositBoxFilterStringFirstPass()
+	{
+		return "Divine super combat potion(4),Divine super combat potion(3),Divine super combat potion(2),Divine super combat potion(1)";
+	}
+
+	String KEY_DEPOSIT_BOX_FILTER_STRING_SECOND = "depositBoxFilterStringSecondPass";
+	@ConfigItem(
+		keyName = KEY_DEPOSIT_BOX_FILTER_STRING_SECOND,
+		name = "Allowed Items - Second Deposit",
+		description = "Comma-separated item names which should be allowed for depositing after defeating all 4 path bosses (second set of supplies). Does not support wildcards.",
+		position = 2,
+		section = SECTION_DEPOSIT_BOX
+	)
+	default String depositBoxFilterStringSecondPass()
 	{
 		return "Divine super combat potion(4),Divine super combat potion(3),Divine super combat potion(2),Divine super combat potion(1)";
 	}
@@ -1085,7 +1098,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "depositBoxPreventUse",
 		name = "Prevent Deposit on Use",
 		description = "Restricts depositing items by using them on the deposit box to those specified in 'Allowed Items'.",
-		position = 2,
+		position = 3,
 		section = SECTION_DEPOSIT_BOX
 	)
 	default boolean depositBoxPreventUse()
@@ -1097,7 +1110,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "depositBoxPreventInterface",
 		name = "Prevent Deposit in Interface",
 		description = "Restricts depositing items from within the deposit box UI to those specified in 'Allowed Items'.<br>This can be overridden using right-click.",
-		position = 3,
+		position = 4,
 		section = SECTION_DEPOSIT_BOX
 	)
 	default boolean depositBoxPreventInterface()
@@ -1109,7 +1122,7 @@ public interface TombsOfAmascutConfig extends Config
 		keyName = "depositBoxInterfaceOverlay",
 		name = "Highlight Items in Interface",
 		description = "Adds an overlay showing the allowed/disallowed items in the deposit box UI.",
-		position = 4,
+		position = 5,
 		section = SECTION_DEPOSIT_BOX
 	)
 	default boolean depositBoxInterfaceOverlay()

@@ -1,4 +1,4 @@
-package launcher.debugplugins;
+package com.duckblade.osrs.toa.launcher.debugplugins;
 
 import com.duckblade.osrs.toa.features.het.solver.HetSolution;
 import com.duckblade.osrs.toa.features.het.solver.HetSolver;
@@ -8,24 +8,29 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 import net.runelite.api.Point;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
 
 @Singleton
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class HetSolverDebugOverlay extends OverlayPanel
 {
 
-	@Inject
-	private HetSolver hetSolver;
-
-	@Inject
-	private RaidStateTracker raidStateTracker;
+	private final HetSolver hetSolver;
+	private final RaidStateTracker raidStateTracker;
+	private final ToaDebugConfig config;
 
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
+		if (!config.hetSolveDebug())
+		{
+			return null;
+		}
+
 		if (raidStateTracker.getCurrentState().getCurrentRoom() != RaidRoom.HET)
 		{
 			return null;

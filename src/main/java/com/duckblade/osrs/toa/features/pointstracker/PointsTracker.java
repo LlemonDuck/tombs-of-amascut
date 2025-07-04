@@ -321,7 +321,11 @@ public class PointsTracker implements PluginLifecycleComponent
 
 	public int getPersonalTotalPoints()
 	{
-		return this.personalTotalPoints - BASE_POINTS;
+		if (!partyPointsTracker.isInParty())
+		{
+			return this.personalTotalPoints - BASE_POINTS + nonPartyPoints;
+		}
+		return this.personalTotalPoints;
 	}
 
 	public double getPersonalPercent()
@@ -340,7 +344,7 @@ public class PointsTracker implements PluginLifecycleComponent
 		{
 			return partyPointsTracker.getTotalPartyPoints();
 		}
-		return getPersonalTotalPoints() + nonPartyPoints;
+		return getPersonalTotalPoints();
 	}
 
 	public double getUniqueChance()

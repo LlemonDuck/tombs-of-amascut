@@ -2,12 +2,13 @@ package com.duckblade.osrs.toa.features;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.RaidCompletionTracker;
 import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.google.common.collect.ImmutableSet;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -52,18 +53,26 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 	private final EventBus eventBus;
 
 	private final Client client;
-	private final TombsOfAmascutConfig config;
+	private final RaidCompletionTracker raidCompletionTracker;
 
-	private Set<String> allowedItemNames;
+	private Set<String> allowedItemNamesFirstPass;
+	private Set<String> allowedItemNamesSecondPass;
 	private boolean preventInterfaceDeposit;
 	private boolean preventUseDeposit;
 
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState currentState)
 	{
-		if (currentState.getCurrentRoom() == RaidRoom.NEXUS) // todo
+		if (currentState.getCurrentRoom() == RaidRoom.NEXUS)
 		{
-			this.allowedItemNames = new HashSet<>(Text.fromCSV(config.depositBoxFilterString()));
+			this.allowedItemNamesFirstPass = Text.fromCSV(config.depositBoxFilterStringFirstPass())
+				.stream()
+				.map(String::toLowerCase)
+				.collect(Collectors.toSet());
+			this.allowedItemNamesSecondPass = Text.fromCSV(config.depositBoxFilterStringSecondPass())
+				.stream()
+				.map(String::toLowerCase)
+				.collect(Collectors.toSet());
 			this.preventInterfaceDeposit = config.depositBoxPreventInterface();
 			this.preventUseDeposit = config.depositBoxPreventUse();
 			return true;
@@ -89,11 +98,14 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 	{
 		interceptDepositAction(e);
 		interceptUseOnDepositBox(e);
+		interceptDepositAlls(e);
 	}
 
 	boolean isDepositAllowed(String itemName)
 	{
-		return allowedItemNames.contains(Text.removeTags(itemName));
+		boolean isFirstPass = raidCompletionTracker.getCompletedBosses().size() <= 4; // 2 paths + 2 bosses
+		return (isFirstPass ?  allowedItemNamesFirstPass : allowedItemNamesSecondPass)
+			.contains(Text.removeTags(itemName).strip().toLowerCase());
 	}
 
 	private void interceptDepositAction(MenuEntryAdded e)
@@ -117,24 +129,7 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 			return;
 		}
 
-		// add a feedback action so users aren't confused why they can't deposit
-		client.getMenu()
-			.createMenuEntry(-1)
-			.setType(MenuAction.RUNELITE_WIDGET)
-			.setOption(ACTION_NO_DEPOSIT)
-			.setTarget(e.getTarget())
-			.onClick(_clicked ->
-			{
-				client.playSoundEffect(SOUND_EFFECT_DENIED);
-				client.addChatMessage(
-					ChatMessageType.GAMEMESSAGE,
-					"",
-					"Deposit action prevented due to item filters. " +
-						"To deposit this item, reconfigure options in Tombs of Amascut -> Deposit Box -> Allowed Items, " +
-						"or use the right-click menu.",
-					"RL/Tombs of Amascut"
-				);
-			});
+		addFeedbackEntry(e.getMenuEntry());
 	}
 
 	private void interceptUseOnDepositBox(MenuEntryAdded e)
@@ -151,14 +146,49 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 			return;
 		}
 
-		String itemName = Text.removeTags(targetParts[0]).strip();
-		if (isDepositAllowed(itemName))
+		if (isDepositAllowed(targetParts[0]))
 		{
 			return;
 		}
 
 		client.getMenu()
 			.removeMenuEntry(e.getMenuEntry());
+	}
+
+	private void interceptDepositAlls(MenuEntryAdded e)
+	{
+		if (!preventInterfaceDeposit ||
+			!isDepositAllAction(e.getMenuEntry()))
+		{
+			return;
+		}
+
+		e.getMenuEntry()
+			.setDeprioritized(true);
+
+		addFeedbackEntry(e.getMenuEntry());
+	}
+
+	private void addFeedbackEntry(MenuEntry sourceEntry)
+	{
+		// add a feedback action so users aren't confused why they can't deposit
+		client.getMenu()
+			.createMenuEntry(-1)
+			.setType(MenuAction.RUNELITE_WIDGET)
+			.setOption(ACTION_NO_DEPOSIT)
+			.setTarget(sourceEntry.getTarget())
+			.onClick(_clicked ->
+			{
+				client.playSoundEffect(SOUND_EFFECT_DENIED);
+				client.addChatMessage(
+					ChatMessageType.GAMEMESSAGE,
+					"",
+					"Deposit action prevented due to item filters. " +
+						"To deposit this item, reconfigure options in Tombs of Amascut -> Deposit Box -> Allowed Items, " +
+						"or use the right-click menu.",
+					"RL/Tombs of Amascut"
+				);
+			});
 	}
 
 	private boolean isUseAction(MenuEntry e)
@@ -172,6 +202,12 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 		return e.getType() == MenuAction.CC_OP &&
 			(e.getOption().equals("Bank") || e.getOption().startsWith("Deposit-")) &&
 			DEPOSIT_BOX_SLOT_IDS.contains(e.getParam1());
+	}
+
+	private boolean isDepositAllAction(MenuEntry e)
+	{
+		return e.getType() == MenuAction.CC_OP &&
+			(e.getParam1() == InterfaceID.BankDepositbox.DEPOSIT_WORN || e.getParam1() == InterfaceID.BankDepositbox.DEPOSIT_INV);
 	}
 
 }
