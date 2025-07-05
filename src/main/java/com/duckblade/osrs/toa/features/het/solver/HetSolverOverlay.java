@@ -2,6 +2,7 @@ package com.duckblade.osrs.toa.features.het.solver;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.PolygonUtil;
 import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
 import java.awt.Color;
@@ -13,18 +14,45 @@ import java.awt.Shape;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.Client;
+import net.runelite.api.CollisionData;
+import net.runelite.api.CollisionDataFlag;
 import net.runelite.api.GameObject;
 import net.runelite.api.Perspective;
+import static net.runelite.api.Perspective.LOCAL_TILE_SIZE;
+import net.runelite.api.WorldView;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
+import net.runelite.client.util.ColorUtil;
 
 @Singleton
 public class HetSolverOverlay extends Overlay implements PluginLifecycleComponent
 {
+
+	private static final Polygon ARROW = new Polygon(
+		new int[]{
+			+(LOCAL_TILE_SIZE / 8), // box top right
+			+(LOCAL_TILE_SIZE / 8), // box bottom right
+			-(LOCAL_TILE_SIZE / 8), // box bottom left
+			-(LOCAL_TILE_SIZE / 8), // box top left
+			-(5 * LOCAL_TILE_SIZE / 16),
+			0,
+			+(5 * LOCAL_TILE_SIZE / 16),
+		},
+		new int[]{
+			0,
+			-(LOCAL_TILE_SIZE / 4),
+			-(LOCAL_TILE_SIZE / 4),
+			0,
+			0,
+			+(5 * LOCAL_TILE_SIZE / 16),
+			0,
+		},
+		7
+	);
 
 	private final OverlayManager overlayManager;
 	private final Client client;
@@ -129,9 +157,88 @@ public class HetSolverOverlay extends Overlay implements PluginLifecycleComponen
 					g.setColor(Color.red);
 					g.fill(tri);
 				}
+
+				renderPreMoveHint(g, incorrectState);
 			}
 		}
 
 		return null;
+	}
+
+	private void renderPreMoveHint(Graphics2D g, HetTileState incorrectState)
+	{
+		int mirrorX = incorrectState.getX() + hetSolver.getPuzzleBase().getX();
+		int mirrorY = incorrectState.getY() + hetSolver.getPuzzleBase().getY();
+		int preMoveX = mirrorX;
+		int preMoveY = mirrorY;
+
+		int badMirrorFlags = CollisionDataFlag.BLOCK_MOVEMENT_FLOOR |
+			CollisionDataFlag.BLOCK_MOVEMENT_FLOOR_DECORATION |
+			CollisionDataFlag.BLOCK_MOVEMENT_FULL;
+		int badPreFlags = badMirrorFlags;
+
+		LocalPoint centerTile;
+		double angle;
+		switch (incorrectState.getOrientation())
+		{
+			case HetTileState.ORIENTATION_NORTH_EAST:
+				// pre-move from south
+				preMoveY -= 1;
+				angle = 0;
+				badMirrorFlags |= CollisionDataFlag.BLOCK_MOVEMENT_SOUTH;
+				badPreFlags |= CollisionDataFlag.BLOCK_MOVEMENT_NORTH;
+				break;
+
+			case HetTileState.ORIENTATION_SOUTH_EAST:
+				// pre-move from west
+				preMoveX -= 1;
+				angle = 270;
+				badMirrorFlags |= CollisionDataFlag.BLOCK_MOVEMENT_WEST;
+				badPreFlags |= CollisionDataFlag.BLOCK_MOVEMENT_EAST;
+				break;
+
+			case HetTileState.ORIENTATION_SOUTH_WEST:
+				// pre-move from north
+				preMoveY += 1;
+				angle = 180;
+				badMirrorFlags |= CollisionDataFlag.BLOCK_MOVEMENT_NORTH;
+				badPreFlags |= CollisionDataFlag.BLOCK_MOVEMENT_SOUTH;
+				break;
+
+			case HetTileState.ORIENTATION_NORTH_WEST:
+			default:
+				// pre-move from east
+				preMoveX += 1;
+				angle = 90;
+				badMirrorFlags |= CollisionDataFlag.BLOCK_MOVEMENT_EAST;
+				badPreFlags |= CollisionDataFlag.BLOCK_MOVEMENT_WEST;
+				break;
+		}
+
+		// dim the pre-move if impossible
+		g.setColor(new Color(0x2CA82C));
+		WorldView wv = client.getLocalPlayer().getWorldView();
+		CollisionData[] collisionMaps = wv.getCollisionMaps();
+		CollisionData collisionData;
+		// if either are null something has changed in the api layer, let's just assume we can pre-move
+		if (collisionMaps != null && (collisionData = collisionMaps[wv.getPlane()]) != null)
+		{
+			int mirrorFlags = collisionData.getFlags()[mirrorX][mirrorY];
+			int preFlags = collisionData.getFlags()[preMoveX][preMoveY];
+			if ((mirrorFlags & badMirrorFlags) != 0 || (preFlags & badPreFlags) != 0)
+			{
+				g.setColor(ColorUtil.colorWithAlpha(Color.orange, 64));
+			}
+		}
+
+		centerTile = LocalPoint.fromScene(preMoveX, preMoveY, wv);
+		Polygon orientedArrow = PolygonUtil.rotate(ARROW, Math.toRadians(angle));
+		Polygon transposedArrow = PolygonUtil.localPointTranspose(centerTile, orientedArrow);
+		Polygon canvasArrow = PolygonUtil.toCanvas(client, wv, transposedArrow);
+
+		if (canvasArrow != null)
+		{
+			g.fill(canvasArrow);
+		}
 	}
 }
