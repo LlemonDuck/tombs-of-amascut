@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 12;
+	public static final int TARGET_VERSION = 13;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -67,12 +67,13 @@ public class UpdateNotifier implements PluginLifecycleComponent
 	{
 		List<String> updates = new ArrayList<>();
 
-		if (config.updateNotifierLastVersion() < 3)
+		int version = config.updateNotifierLastVersion();
+		if (version < 3)
 		{
 			updates.add("<strong>A bug was fixed that prevented this update panel from appearing. If this is your first time seeing it, some of the below changes might be things you've already been using for a while!</strong>");
 		}
 
-		switch (config.updateNotifierLastVersion())
+		switch (version)
 		{
 			case 0:
 				updates.add("A set of puzzle solvers for the Path of Scabaras have been added, which will overlay solutions for you.");
@@ -132,6 +133,13 @@ public class UpdateNotifier implements PluginLifecycleComponent
 			case 11:
 				updates.add("<strong>Purple Weighting</strong> The weights of specific purples depending on raid level can now be shown on the party board or points panel.");
 				updates.add("<strong>Deposit Box</strong> A new deposit box filtering option can help prevent depositing the wrong items.");
+
+			case 12:
+				if (version == 12)
+				{
+					// unique to people in the last few hours
+					updates.add("<strong>Purple Weighting</strong> An issue with the config migration for 'Allowed Items' has been fixed. If you updated the plugin in the last few hours, those settings may have been rolled back. A big apologies for that if they have been reverted.");
+				}
 		}
 
 		return updates;
