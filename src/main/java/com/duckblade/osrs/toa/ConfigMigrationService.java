@@ -35,6 +35,7 @@ public class ConfigMigrationService
 		migrateHideHpOrbs();
 		migratePickaxeReminder();
 		migrateScabarasMatchingDisplayMode();
+		migrateDepositBoxFilterString();
 	}
 
 	@VisibleForTesting
