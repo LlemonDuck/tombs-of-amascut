@@ -32,15 +32,15 @@ import net.runelite.client.util.ColorUtil;
 public class HetSolverOverlay extends Overlay implements PluginLifecycleComponent
 {
 
-	private static final Polygon ARROW = new Polygon(
+	private static final Polygon PREMOVE_ARROW = new Polygon(
 		new int[]{
 			+(LOCAL_TILE_SIZE / 8), // box top right
 			+(LOCAL_TILE_SIZE / 8), // box bottom right
 			-(LOCAL_TILE_SIZE / 8), // box bottom left
 			-(LOCAL_TILE_SIZE / 8), // box top left
-			-(5 * LOCAL_TILE_SIZE / 16),
-			0,
-			+(5 * LOCAL_TILE_SIZE / 16),
+			-(5 * LOCAL_TILE_SIZE / 16), // head left
+			0, // head top
+			+(5 * LOCAL_TILE_SIZE / 16), // head right
 		},
 		new int[]{
 			0,
@@ -54,9 +54,33 @@ public class HetSolverOverlay extends Overlay implements PluginLifecycleComponen
 		7
 	);
 
+	// just a single line
+	private static final Polygon PREMOVE_COMPACT = new Polygon(
+		new int[]{
+			+(LOCAL_TILE_SIZE / 2), // top left
+			-(LOCAL_TILE_SIZE / 2), // top right
+			0, // center
+		},
+		new int[]{
+			+(LOCAL_TILE_SIZE / 2),
+			+(LOCAL_TILE_SIZE / 2),
+			+(3 * LOCAL_TILE_SIZE / 4),
+		},
+		3
+	);
+
+	public enum PremoveMode
+	{
+		OFF,
+		ARROW,
+		COMPACT,
+	}
+
 	private final OverlayManager overlayManager;
 	private final Client client;
 	private final HetSolver hetSolver;
+
+	private PremoveMode premoveMode;
 
 	@Inject
 	public HetSolverOverlay(OverlayManager overlayManager, Client client, HetSolver hetSolver)
@@ -72,6 +96,8 @@ public class HetSolverOverlay extends Overlay implements PluginLifecycleComponen
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
+		this.premoveMode = config.hetSolverPremoveMode();
+
 		return config.hetSolverEnable() && raidState.getCurrentRoom() == RaidRoom.HET;
 	}
 
@@ -158,14 +184,17 @@ public class HetSolverOverlay extends Overlay implements PluginLifecycleComponen
 					g.fill(tri);
 				}
 
-				renderPreMoveHint(g, incorrectState);
+				if (premoveMode != PremoveMode.OFF)
+				{
+					renderPreMoveArrow(g, incorrectState);
+				}
 			}
 		}
 
 		return null;
 	}
 
-	private void renderPreMoveHint(Graphics2D g, HetTileState incorrectState)
+	private void renderPreMoveArrow(Graphics2D g, HetTileState incorrectState)
 	{
 		int mirrorX = incorrectState.getX() + hetSolver.getPuzzleBase().getX();
 		int mirrorY = incorrectState.getY() + hetSolver.getPuzzleBase().getY();
@@ -232,7 +261,9 @@ public class HetSolverOverlay extends Overlay implements PluginLifecycleComponen
 		}
 
 		centerTile = LocalPoint.fromScene(preMoveX, preMoveY, wv);
-		Polygon orientedArrow = PolygonUtil.rotate(ARROW, Math.toRadians(angle));
+
+		Polygon premoveShape = premoveMode == PremoveMode.ARROW ? PREMOVE_ARROW : PREMOVE_COMPACT;
+		Polygon orientedArrow = PolygonUtil.rotate(premoveShape, Math.toRadians(angle));
 		Polygon transposedArrow = PolygonUtil.localPointTranspose(centerTile, orientedArrow);
 		Polygon canvasArrow = PolygonUtil.toCanvas(client, wv, transposedArrow);
 
