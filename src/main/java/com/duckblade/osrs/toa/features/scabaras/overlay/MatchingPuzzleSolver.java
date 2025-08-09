@@ -18,6 +18,7 @@ import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GroundObjectSpawned;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -28,51 +29,52 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 {
 
 	private static final Map<Integer, String> TILE_NAMES = ImmutableMap.<Integer, String>builder()
-		.put(45365, "Line") // line
-		.put(45366, "Knives") // knives
-		.put(45367, "Crook") // crook
-		.put(45368, "Diamond") // diamond
-		.put(45369, "Hand") // hand
-		.put(45370, "Star") // star
-		.put(45371, "Bird") // bird
-		.put(45372, "W") // wiggle
-		.put(45373, "Boot") // boot
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE1, "Line") // line
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE2, "Knives") // knives
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE3, "Crook") // crook
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE4, "Diamond") // diamond
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE5, "Hand") // hand
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE6, "Star") // star
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE7, "Bird") // bird
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE8, "W") // wiggle
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE9, "Boot") // boot
 		.build();
 
 	private static final Map<Integer, Color> TILE_COLORS = ImmutableMap.<Integer, Color>builder()
-		.put(45365, Color.black) // line
-		.put(45366, Color.red) // knives
-		.put(45367, Color.magenta) // crook
-		.put(45368, Color.blue) // diamond
-		.put(45369, Color.lightGray) // hand
-		.put(45370, Color.cyan) // star
-		.put(45371, Color.pink) // bird
-		.put(45372, Color.yellow) // wiggle
-		.put(45373, Color.green) // boot
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE1, Color.black) // line
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE2, Color.red) // knives
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE3, Color.magenta) // crook
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE4, Color.blue) // diamond
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE5, Color.lightGray) // hand
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE6, Color.cyan) // star
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE7, Color.pink) // bird
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE8, Color.yellow) // wiggle
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE9, Color.green) // boot
 		.build();
 
 	private static final Map<Integer, Integer> TILE_NUMBER = ImmutableMap.<Integer, Integer>builder()
 		// these are intentionally out of id order since line, crook, hand, bird are always auto-completed in solos
-		.put(45365, 1) // line
-		.put(45367, 2) // crook
-		.put(45369, 3) // hand
-		.put(45371, 4) // bird
-		.put(45366, 5) // knives
-		.put(45368, 6) // diamond
-		.put(45370, 7) // star
-		.put(45372, 8) // wiggle
-		.put(45373, 9) // boot
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE1, 1) // line
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE3, 2) // crook
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE5, 3) // hand
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE7, 4) // bird
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE2, 5) // knives
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE4, 6) // diamond
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE6, 7) // star
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE8, 8) // wiggle
+		.put(ObjectID.TOA_SCABARAS_MEMORYGAME_TILE9, 9) // boot
 		.build();
 
-	private static final Map<Integer, Integer> MATCHED_OBJECT_IDS = ImmutableMap.<Integer, Integer>builder().put(45388, 45365) // line
-		.put(45389, 45366) // knives
-		.put(45386, 45367) // crook
-		.put(45391, 45368) // diamond
-		.put(45392, 45369) // hand
-		.put(45387, 45370) // star
-		.put(45393, 45371) // bird
-		.put(45394, 45372) // wiggle
-		.put(45395, 45373) // boot
+	private static final Map<Integer, Integer> MATCHED_OBJECT_IDS = ImmutableMap.<Integer, Integer>builder()
+		.put(ObjectID.TOA_SCABARAS_FX05, ObjectID.TOA_SCABARAS_MEMORYGAME_TILE1) // line
+		.put(ObjectID.TOA_SCABARAS_FX06, ObjectID.TOA_SCABARAS_MEMORYGAME_TILE2) // knives
+		.put(ObjectID.TOA_SCABARAS_FX03, ObjectID.TOA_SCABARAS_MEMORYGAME_TILE3) // crook
+		.put(ObjectID.TOA_SCABARAS_FX08, ObjectID.TOA_SCABARAS_MEMORYGAME_TILE4) // diamond
+		.put(ObjectID.TOA_SCABARAS_FX09, ObjectID.TOA_SCABARAS_MEMORYGAME_TILE5) // hand
+		.put(ObjectID.TOA_SCABARAS_FX04, ObjectID.TOA_SCABARAS_MEMORYGAME_TILE6) // star
+		.put(ObjectID.TOA_SCABARAS_FX10, ObjectID.TOA_SCABARAS_MEMORYGAME_TILE7) // bird
+		.put(ObjectID.TOA_SCABARAS_FX11, ObjectID.TOA_SCABARAS_MEMORYGAME_TILE8) // wiggle
+		.put(ObjectID.TOA_SCABARAS_FX12, ObjectID.TOA_SCABARAS_MEMORYGAME_TILE9) // boot
 		.build();
 
 	private final EventBus eventBus;

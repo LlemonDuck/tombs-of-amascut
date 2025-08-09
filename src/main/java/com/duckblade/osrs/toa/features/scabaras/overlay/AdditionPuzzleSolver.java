@@ -32,6 +32,7 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameTick;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.util.Text;
@@ -46,15 +47,15 @@ public class AdditionPuzzleSolver implements PluginLifecycleComponent
 	@Getter
 	enum AdditionTile
 	{
-		LINE(1, 45345, 45388),
-		KNIVES(2, 45346, 45389),
-		TRIANGLE(3, 45347, 45390),
-		DIAMOND(4, 45348, 45391),
-		HAND(5, 45349, 45392),
-		BIRD(6, 45350, 45393),
-		CROOK(7, 45351, 45386),
-		WIGGLE(8, 45352, 45394),
-		FOOT(9, 45353, 45395),
+		LINE(1, ObjectID.TOA_SCABARAS_TOTALTILES_TILE1, ObjectID.TOA_SCABARAS_FX05),
+		KNIVES(2, ObjectID.TOA_SCABARAS_TOTALTILES_TILE2, ObjectID.TOA_SCABARAS_FX06),
+		TRIANGLE(3, ObjectID.TOA_SCABARAS_TOTALTILES_TILE3, ObjectID.TOA_SCABARAS_FX07),
+		DIAMOND(4, ObjectID.TOA_SCABARAS_TOTALTILES_TILE4, ObjectID.TOA_SCABARAS_FX08),
+		HAND(5, ObjectID.TOA_SCABARAS_TOTALTILES_TILE5, ObjectID.TOA_SCABARAS_FX09),
+		BIRD(6, ObjectID.TOA_SCABARAS_TOTALTILES_TILE6, ObjectID.TOA_SCABARAS_FX10),
+		CROOK(7, ObjectID.TOA_SCABARAS_TOTALTILES_TILE7, ObjectID.TOA_SCABARAS_FX03),
+		WIGGLE(8, ObjectID.TOA_SCABARAS_TOTALTILES_TILE8, ObjectID.TOA_SCABARAS_FX11),
+		FOOT(9, ObjectID.TOA_SCABARAS_TOTALTILES_TILE9, ObjectID.TOA_SCABARAS_FX12),
 		;
 
 		private final int value;

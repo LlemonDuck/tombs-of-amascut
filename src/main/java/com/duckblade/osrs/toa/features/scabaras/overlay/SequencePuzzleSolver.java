@@ -17,6 +17,8 @@ import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GraphicsObjectCreated;
+import net.runelite.api.gameval.ObjectID;
+import net.runelite.api.gameval.SpotanimID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -25,11 +27,6 @@ import net.runelite.client.eventbus.Subscribe;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class SequencePuzzleSolver implements PluginLifecycleComponent
 {
-
-	private static final int GROUND_OBJECT_ID = 45340;
-	private static final int DISPLAY_GAME_OBJECT_ID = 45341;
-	private static final int STEPPED_GAME_OBJECT_ID = 45342;
-	private static final int GRAPHICS_OBJECT_RESET = 302;
 
 	private final EventBus eventBus;
 	private final Client client;
@@ -73,7 +70,7 @@ public class SequencePuzzleSolver implements PluginLifecycleComponent
 
 		switch (e.getGameObject().getId())
 		{
-			case DISPLAY_GAME_OBJECT_ID:
+			case ObjectID.TOA_SCABARAS_SIMONSAYS_TILE_DOWN:
 				if (lastDisplayTick == (lastDisplayTick = client.getTickCount()))
 				{
 					reset();
@@ -84,7 +81,7 @@ public class SequencePuzzleSolver implements PluginLifecycleComponent
 				completedTiles = 0;
 				break;
 
-			case STEPPED_GAME_OBJECT_ID:
+			case ObjectID.TOA_SCABARAS_SIMONSAYS_TILE_DOWN_PLAYER:
 				completedTiles++;
 				break;
 		}
@@ -93,11 +90,11 @@ public class SequencePuzzleSolver implements PluginLifecycleComponent
 	@Subscribe
 	public void onGraphicsObjectCreated(GraphicsObjectCreated e)
 	{
-		if (e.getGraphicsObject().getId() == GRAPHICS_OBJECT_RESET)
+		if (e.getGraphicsObject().getId() == SpotanimID.MM_ROOFCOLLAPSE)
 		{
 			LocalPoint gLoc = e.getGraphicsObject().getLocation();
 			Tile gTile = client.getScene().getTiles()[client.getPlane()][gLoc.getSceneX()][gLoc.getSceneY()];
-			if (gTile.getGroundObject() != null && gTile.getGroundObject().getId() == GROUND_OBJECT_ID)
+			if (gTile.getGroundObject() != null && gTile.getGroundObject().getId() == ObjectID.TOA_SCABARAS_SIMONSAYS_TILE_UP)
 			{
 				reset();
 			}
