@@ -966,17 +966,17 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
-    @ConfigItem(
-        keyName = "useWhiteCameraIcon",
-        name = "White Camera Icon",
-        description = "Replaces the Camera Icon with a white version instead of black. Some resource packs need this for the button icon to be visible",
-        section = SECTION_INVOCATION_SCREENSHOT,
-        position = 3
-    )
-    default boolean useWhiteCameraIcon()
-    {
-        return false;
-    }
+	@ConfigItem(
+		keyName = "useWhiteCameraIcon",
+		name = "White Camera Icon",
+		description = "Replaces the Camera Icon with a white version instead of black. Some resource packs need this for the button icon to be visible",
+		section = SECTION_INVOCATION_SCREENSHOT,
+		position = 3
+	)
+	default boolean useWhiteCameraIcon()
+	{
+		return false;
+	}
 
 	// Points Tracker
 
