@@ -124,16 +124,16 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	{
 		client.getWidgetSpriteCache().reset();
 
-        final BufferedImage camera = config.useWhiteCameraIcon() ? WHITE_CAMERA_IMG : CAMERA_IMG;
+		final BufferedImage camera = config.useWhiteCameraIcon() ? WHITE_CAMERA_IMG : CAMERA_IMG;
 
 		// Add images to a sprite background so it works with resource packs
-        final BufferedImage equipmentSlotTile = getSprite(SpriteID.OptionsBoxes.EMPTY);
-        final BufferedImage cameraImgDefault = overlapImages(camera, equipmentSlotTile);
-        client.getSpriteOverrides().put(CAMERA_OVERRIDE_SPRITE_IDX, ImageUtil.getImageSpritePixels(cameraImgDefault, client));
+		final BufferedImage equipmentSlotTile = getSprite(SpriteID.OptionsBoxes.EMPTY);
+		final BufferedImage cameraImgDefault = overlapImages(camera, equipmentSlotTile);
+		client.getSpriteOverrides().put(CAMERA_OVERRIDE_SPRITE_IDX, ImageUtil.getImageSpritePixels(cameraImgDefault, client));
 
-        final BufferedImage equipmentSlotSelected = getSprite(SpriteID.OptionsBoxes.SELECTED);
-        final BufferedImage cameraImgHovered = overlapImages(camera, equipmentSlotSelected);
-        client.getSpriteOverrides().put(CAMERA_HOVER_OVERRIDE_SPRITE_IDX, ImageUtil.getImageSpritePixels(cameraImgHovered, client));
+		final BufferedImage equipmentSlotSelected = getSprite(SpriteID.OptionsBoxes.SELECTED);
+		final BufferedImage cameraImgHovered = overlapImages(camera, equipmentSlotSelected);
+		client.getSpriteOverrides().put(CAMERA_HOVER_OVERRIDE_SPRITE_IDX, ImageUtil.getImageSpritePixels(cameraImgHovered, client));
 	}
 
 	private void removeCameraIconOverride()
