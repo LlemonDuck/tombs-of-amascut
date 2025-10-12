@@ -42,9 +42,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
-import net.runelite.api.SpriteID;
 import net.runelite.api.SpritePixels;
 import net.runelite.api.events.ScriptPostFired;
+import net.runelite.api.gameval.SpriteID;
 import net.runelite.api.widgets.JavaScriptCallback;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetType;
@@ -54,10 +54,8 @@ import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
-import net.runelite.client.game.SpriteManager;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.util.ImageCapture;
-import net.runelite.client.util.ImageUploadStyle;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.Text;
 
@@ -77,6 +75,7 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	private static final int TOA_PARTY_WIDGET_SCRIPT_ID = 6617;
 
 	private static final BufferedImage CAMERA_IMG = ImageUtil.loadImageResource(InvocationScreenshot.class, "camera.png");
+    private static final BufferedImage WHITE_CAMERA_IMG = ImageUtil.recolorImage(CAMERA_IMG, Color.WHITE);
 	private static final int CAMERA_OVERRIDE_SPRITE_IDX = -420;
 	private static final int CAMERA_HOVER_OVERRIDE_SPRITE_IDX = -421;
 
@@ -84,7 +83,6 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	private final Client client;
 	private final TombsOfAmascutConfig config;
 	private final ClientThread clientThread;
-	private final SpriteManager spriteManager;
 	private final ImageCapture imageCapture;
 	private final ItemManager itemManager;
 
@@ -125,17 +123,17 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	private void addCameraIconOverride()
 	{
 		client.getWidgetSpriteCache().reset();
+
+        final BufferedImage camera = config.useWhiteCameraIcon() ? WHITE_CAMERA_IMG : CAMERA_IMG;
+
 		// Add images to a sprite background so it works with resource packs
-		spriteManager.getSpriteAsync(SpriteID.EQUIPMENT_SLOT_TILE, 0, (img) ->
-		{
-			final BufferedImage cameraImg = overlapImages(CAMERA_IMG, img);
-			client.getSpriteOverrides().put(CAMERA_OVERRIDE_SPRITE_IDX, ImageUtil.getImageSpritePixels(cameraImg, client));
-		});
-		spriteManager.getSpriteAsync(SpriteID.EQUIPMENT_SLOT_SELECTED, 0, (img) ->
-		{
-			final BufferedImage cameraImg = overlapImages(CAMERA_IMG, img);
-			client.getSpriteOverrides().put(CAMERA_HOVER_OVERRIDE_SPRITE_IDX, ImageUtil.getImageSpritePixels(cameraImg, client));
-		});
+        final BufferedImage equipmentSlotTile = getSprite(SpriteID.OptionsBoxes.EMPTY);
+        final BufferedImage cameraImgDefault = overlapImages(camera, equipmentSlotTile);
+        client.getSpriteOverrides().put(CAMERA_OVERRIDE_SPRITE_IDX, ImageUtil.getImageSpritePixels(cameraImgDefault, client));
+
+        final BufferedImage equipmentSlotSelected = getSprite(SpriteID.OptionsBoxes.SELECTED);
+        final BufferedImage cameraImgHovered = overlapImages(camera, equipmentSlotSelected);
+        client.getSpriteOverrides().put(CAMERA_HOVER_OVERRIDE_SPRITE_IDX, ImageUtil.getImageSpritePixels(cameraImgHovered, client));
 	}
 
 	private void removeCameraIconOverride()
@@ -234,7 +232,7 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 		final BufferedImage screenshot = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		final Graphics graphics = screenshot.getGraphics();
 
-		final BufferedImage background = getSprite(SpriteID.DIALOG_BACKGROUND);
+		final BufferedImage background = getSprite(SpriteID.TRADEBACKING);
 		int x = screenshot.getWidth() / background.getWidth() + 1;
 		y = screenshot.getHeight() / background.getHeight() + 1;
 		for (int i = 0; i < x; i++)
@@ -305,7 +303,7 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 		// Convert from ARGB to RGB so it can be stored on the clipboard
 		BufferedImage out = toBufferedImageOfType(screenshot, BufferedImage.TYPE_INT_RGB);
 
-		imageCapture.takeScreenshot(out, "invocationscreenshot", "invocations", true, ImageUploadStyle.CLIPBOARD);
+		imageCapture.saveScreenshot(out, "invocationscreenshot", "invocations", true, true);
 		final String message = new ChatMessageBuilder()
 			.append(ChatColorType.HIGHLIGHT)
 			.append("A screenshot of your current invocations was saved and inserted into your clipboard!")
