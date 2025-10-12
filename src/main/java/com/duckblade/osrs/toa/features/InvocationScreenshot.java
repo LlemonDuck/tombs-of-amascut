@@ -75,7 +75,7 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	private static final int TOA_PARTY_WIDGET_SCRIPT_ID = 6617;
 
 	private static final BufferedImage CAMERA_IMG = ImageUtil.loadImageResource(InvocationScreenshot.class, "camera.png");
-    private static final BufferedImage WHITE_CAMERA_IMG = ImageUtil.recolorImage(CAMERA_IMG, Color.WHITE);
+	private static final BufferedImage WHITE_CAMERA_IMG = ImageUtil.recolorImage(CAMERA_IMG, Color.WHITE);
 	private static final int CAMERA_OVERRIDE_SPRITE_IDX = -420;
 	private static final int CAMERA_HOVER_OVERRIDE_SPRITE_IDX = -421;
 
