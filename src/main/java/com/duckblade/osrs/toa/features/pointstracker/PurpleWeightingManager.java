@@ -4,6 +4,7 @@ import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
+import com.google.common.annotations.VisibleForTesting;
 import java.util.EnumMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -54,7 +55,9 @@ public class PurpleWeightingManager implements PluginLifecycleComponent
 
 	private final Map<Purple, Integer> weights = new EnumMap<>(BASE_WEIGHTS);
 
-	private int raidLevel = 0;
+	@VisibleForTesting
+	int raidLevel = 0;
+
 	private int lastWeightedRaidLevel = 0;
 	private int weightSum = 0;
 
@@ -122,7 +125,7 @@ public class PurpleWeightingManager implements PluginLifecycleComponent
 		}
 	}
 
-	private void reweight()
+	void reweight()
 	{
 		if (this.lastWeightedRaidLevel == this.raidLevel)
 		{
