@@ -129,43 +129,19 @@ public class PurpleWeightingManager implements PluginLifecycleComponent
 			return;
 		}
 
-		if (this.raidLevel >= 500)
-		{
-			weights.put(Purple.LIGHTBEARER, BASE_WEIGHTS.get(Purple.LIGHTBEARER) - 35);
-			weights.put(Purple.OSMUMTENS_FANG, BASE_WEIGHTS.get(Purple.OSMUMTENS_FANG) - 40);
-		}
-		else if (this.raidLevel >= 450)
-		{
-			weights.put(Purple.LIGHTBEARER, BASE_WEIGHTS.get(Purple.LIGHTBEARER) - 30);
-			weights.put(Purple.OSMUMTENS_FANG, BASE_WEIGHTS.get(Purple.OSMUMTENS_FANG) - 30);
-		}
-		else if (this.raidLevel >= 400)
-		{
-			weights.put(Purple.LIGHTBEARER, BASE_WEIGHTS.get(Purple.LIGHTBEARER) - 20);
-			weights.put(Purple.OSMUMTENS_FANG, BASE_WEIGHTS.get(Purple.OSMUMTENS_FANG) - 30);
-		}
-		else if (this.raidLevel >= 350)
-		{
-			weights.put(Purple.LIGHTBEARER, BASE_WEIGHTS.get(Purple.LIGHTBEARER) - 10);
-			weights.put(Purple.OSMUMTENS_FANG, BASE_WEIGHTS.get(Purple.OSMUMTENS_FANG) - 10);
-		}
-		else if (this.raidLevel >= 150)
-		{
-			weights.put(Purple.LIGHTBEARER, BASE_WEIGHTS.get(Purple.LIGHTBEARER));
-			weights.put(Purple.OSMUMTENS_FANG, BASE_WEIGHTS.get(Purple.OSMUMTENS_FANG));
-		}
-		else if (this.raidLevel >= 50)
+		weights.put(Purple.LIGHTBEARER, BASE_WEIGHTS.get(Purple.LIGHTBEARER) - lerpClamped(this.raidLevel, 450, 500, 5));
+		weights.put(Purple.LIGHTBEARER, weights.get(Purple.LIGHTBEARER) - lerpClamped(this.raidLevel, 300, 450, 30));
+
+		weights.put(Purple.OSMUMTENS_FANG, BASE_WEIGHTS.get(Purple.OSMUMTENS_FANG) - lerpClamped(this.raidLevel, 450, 500, 10));
+		weights.put(Purple.OSMUMTENS_FANG, weights.get(Purple.OSMUMTENS_FANG) - lerpClamped(this.raidLevel, 350, 400, 20));
+		weights.put(Purple.OSMUMTENS_FANG, weights.get(Purple.OSMUMTENS_FANG) - lerpClamped(this.raidLevel, 300, 350, 10));
+
+		if (this.raidLevel >= 50 && this.raidLevel <= 150)
 		{
 			// between 50-150, ward+masori+shadow are reduced with an additional 1/50 roll
 			// simulate reducing everything else by 50x by instead increasing these two by 50x
 			weights.put(Purple.LIGHTBEARER, BASE_WEIGHTS.get(Purple.LIGHTBEARER) * 50);
 			weights.put(Purple.OSMUMTENS_FANG, BASE_WEIGHTS.get(Purple.OSMUMTENS_FANG) * 50);
-		}
-		else
-		{
-			// below 50 everything is reduced with additional 1/50, so the proportions are normal again
-			weights.put(Purple.LIGHTBEARER, BASE_WEIGHTS.get(Purple.LIGHTBEARER));
-			weights.put(Purple.OSMUMTENS_FANG, BASE_WEIGHTS.get(Purple.OSMUMTENS_FANG));
 		}
 
 		this.lastWeightedRaidLevel = this.raidLevel;
@@ -174,5 +150,19 @@ public class PurpleWeightingManager implements PluginLifecycleComponent
 			.reduce(0, Integer::sum);
 
 		eventBus.post(new PurpleWeightChanged());
+	}
+
+	private int lerpClamped(int raidLevel, int raidLevelMin, int raidLevelMax, int weightRange)
+	{
+		if (raidLevel <= raidLevelMin)
+		{
+			return 0;
+		}
+		else if (raidLevel >= raidLevelMax)
+		{
+			return weightRange;
+		}
+
+		return (weightRange) * (raidLevel - raidLevelMin) / (raidLevelMax - raidLevelMin);
 	}
 }
