@@ -28,51 +28,51 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 {
 
 	private static final Map<Integer, String> TILE_NAMES = ImmutableMap.<Integer, String>builder()
-		.put(45365, "Line") // line
-		.put(45366, "Knives") // knives
-		.put(45367, "Crook") // crook
-		.put(45368, "Diamond") // diamond
-		.put(45369, "Hand") // hand
-		.put(45370, "Star") // star
-		.put(45371, "Bird") // bird
-		.put(45372, "W") // wiggle
-		.put(45373, "Boot") // boot
+		.put(45356, "Line") // line
+		.put(45357, "Knives") // knives
+		.put(45358, "Crook") // crook
+		.put(45359, "Diamond") // diamond
+		.put(45360, "Hand") // hand
+		.put(45361, "Star") // star
+		.put(45362, "Bird") // bird
+		.put(45363, "W") // wiggle
+		.put(45364, "Boot") // boot
 		.build();
 
 	private static final Map<Integer, Color> TILE_COLORS = ImmutableMap.<Integer, Color>builder()
-		.put(45365, Color.black) // line
-		.put(45366, Color.red) // knives
-		.put(45367, Color.magenta) // crook
-		.put(45368, Color.blue) // diamond
-		.put(45369, Color.lightGray) // hand
-		.put(45370, Color.cyan) // star
-		.put(45371, Color.pink) // bird
-		.put(45372, Color.yellow) // wiggle
-		.put(45373, Color.green) // boot
+		.put(45356, Color.black) // line
+		.put(45357, Color.red) // knives
+		.put(45358, Color.magenta) // crook
+		.put(45359, Color.blue) // diamond
+		.put(45360, Color.lightGray) // hand
+		.put(45361, Color.cyan) // star
+		.put(45362, Color.pink) // bird
+		.put(45363, Color.yellow) // wiggle
+		.put(45364, Color.green) // boot
 		.build();
 
 	private static final Map<Integer, Integer> TILE_NUMBER = ImmutableMap.<Integer, Integer>builder()
 		// these are intentionally out of id order since line, crook, hand, bird are always auto-completed in solos
-		.put(45365, 1) // line
-		.put(45367, 2) // crook
-		.put(45369, 3) // hand
-		.put(45371, 4) // bird
-		.put(45366, 5) // knives
-		.put(45368, 6) // diamond
-		.put(45370, 7) // star
-		.put(45372, 8) // wiggle
-		.put(45373, 9) // boot
+		.put(45356, 1) // line
+		.put(45358, 2) // crook
+		.put(45360, 3) // hand
+		.put(45362, 4) // bird
+		.put(45357, 5) // knives
+		.put(45359, 6) // diamond
+		.put(45361, 7) // star
+		.put(45363, 8) // wiggle
+		.put(45364, 9) // boot
 		.build();
 
-	private static final Map<Integer, Integer> MATCHED_OBJECT_IDS = ImmutableMap.<Integer, Integer>builder().put(45388, 45365) // line
-		.put(45389, 45366) // knives
-		.put(45386, 45367) // crook
-		.put(45391, 45368) // diamond
-		.put(45392, 45369) // hand
-		.put(45387, 45370) // star
-		.put(45393, 45371) // bird
-		.put(45394, 45372) // wiggle
-		.put(45395, 45373) // boot
+	private static final Map<Integer, Integer> MATCHED_OBJECT_IDS = ImmutableMap.<Integer, Integer>builder().put(45388, 1) // line
+		.put(45389, 45357) // knives
+		.put(45386, 45358) // crook
+		.put(45391, 45359) // diamond
+		.put(45392, 45360) // hand
+		.put(45387, 45361) // star
+		.put(45393, 45362) // bird
+		.put(45394, 45363) // wiggle
+		.put(45395, 45364) // boot
 		.build();
 
 	private final EventBus eventBus;
