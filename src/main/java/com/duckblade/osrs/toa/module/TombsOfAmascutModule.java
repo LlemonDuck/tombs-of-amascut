@@ -52,10 +52,11 @@ import com.duckblade.osrs.toa.features.tomb.SarcophagusRecolorer;
 import com.duckblade.osrs.toa.features.updatenotifier.UpdateNotifier;
 import com.duckblade.osrs.toa.util.RaidCompletionTracker;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.google.inject.multibindings.Multibinder;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.config.ConfigManager;
 
@@ -66,58 +67,118 @@ public class TombsOfAmascutModule extends AbstractModule
 	@Override
 	protected void configure()
 	{
-		Multibinder<PluginLifecycleComponent> lifecycleComponents = Multibinder.newSetBinder(binder(), PluginLifecycleComponent.class);
-		lifecycleComponents.addBinding().to(AdditionPuzzleSolver.class);
-		lifecycleComponents.addBinding().to(AdrenalineCooldown.class);
-		lifecycleComponents.addBinding().to(AkkhaShadowHealth.class);
-		lifecycleComponents.addBinding().to(AkkhaShadowHealthOverlay.class);
-		lifecycleComponents.addBinding().to(ApmekenBaboonIndicator.class);
-		lifecycleComponents.addBinding().to(ApmekenBaboonIndicatorOverlay.class);
-		lifecycleComponents.addBinding().to(ApmekenWaveInstaller.class);
-		lifecycleComponents.addBinding().to(BabaSarcophagusWarning.class);
-		lifecycleComponents.addBinding().to(BeamTimerOverlay.class);
-		lifecycleComponents.addBinding().to(BeamTimerTracker.class);
-		lifecycleComponents.addBinding().to(CameraShakeDisabler.class);
-		lifecycleComponents.addBinding().to(CursedPhalanxDetector.class);
-		lifecycleComponents.addBinding().to(DepositBoxFilter.class);
-		lifecycleComponents.addBinding().to(DepositBoxFilterOverlay.class);
-		lifecycleComponents.addBinding().to(DepositPickaxeOverlay.class);
-		lifecycleComponents.addBinding().to(DepositPickaxePreventEntry.class);
-		lifecycleComponents.addBinding().to(DepositPickaxeSwap.class);
-		lifecycleComponents.addBinding().to(DryStreakTracker.class);
-		lifecycleComponents.addBinding().to(FadeDisabler.class);
-		lifecycleComponents.addBinding().to(HetSolver.class);
-		lifecycleComponents.addBinding().to(HetSolverOverlay.class);
-		lifecycleComponents.addBinding().to(HpOrbManager.class);
-		lifecycleComponents.addBinding().to(InvocationPresetsManager.class);
-		lifecycleComponents.addBinding().to(InvocationScreenshot.class);
-		lifecycleComponents.addBinding().to(LeftClickBankAll.class);
-		lifecycleComponents.addBinding().to(LightPuzzleSolver.class);
-		lifecycleComponents.addBinding().to(MatchingPuzzleSolver.class);
-		lifecycleComponents.addBinding().to(ObeliskPuzzleSolver.class);
-		lifecycleComponents.addBinding().to(PartyPointsTracker.class);
-		lifecycleComponents.addBinding().to(PathLevelTracker.class);
-		lifecycleComponents.addBinding().to(PointsOverlay.class);
-		lifecycleComponents.addBinding().to(PointsTracker.class);
-		lifecycleComponents.addBinding().to(PurpleWeightingManager.class);
-		lifecycleComponents.addBinding().to(PurpleWeightingPartyBoardManager.class);
-		lifecycleComponents.addBinding().to(QuickProceedSwaps.class);
-		lifecycleComponents.addBinding().to(RaidCompletionTracker.class);
-		lifecycleComponents.addBinding().to(RaidStateTracker.class);
-		lifecycleComponents.addBinding().to(SarcophagusOpeningSoundPlayer.class);
-		lifecycleComponents.addBinding().to(SarcophagusRecolorer.class);
-		lifecycleComponents.addBinding().to(ScabarasOverlayManager.class);
-		lifecycleComponents.addBinding().to(ScabarasPanelManager.class);
-		lifecycleComponents.addBinding().to(SequencePuzzleSolver.class);
-		lifecycleComponents.addBinding().to(SkipObeliskOverlay.class);
-		lifecycleComponents.addBinding().to(SmellingSaltsCooldown.class);
-		lifecycleComponents.addBinding().to(SplitsOverlay.class);
-		lifecycleComponents.addBinding().to(SplitsTracker.class);
-		lifecycleComponents.addBinding().to(SwarmerOverlay.class);
-		lifecycleComponents.addBinding().to(SwarmerPanelManager.class);
-		lifecycleComponents.addBinding().to(SwarmerDataManager.class);
-		lifecycleComponents.addBinding().to(TargetTimeManager.class);
-		lifecycleComponents.addBinding().to(UpdateNotifier.class);
+		bind(ComponentManager.class);
+	}
+
+
+	@Provides
+	Set<PluginLifecycleComponent> lifecycleComponents(
+		AdditionPuzzleSolver additionPuzzleSolver,
+		AdrenalineCooldown adrenalineCooldown,
+		AkkhaShadowHealth akkhaShadowHealth,
+		AkkhaShadowHealthOverlay akkhaShadowHealthOverlay,
+		ApmekenBaboonIndicator apmekenBaboonIndicator,
+		ApmekenBaboonIndicatorOverlay apmekenBaboonIndicatorOverlay,
+		ApmekenWaveInstaller apmekenWaveInstaller,
+		BabaSarcophagusWarning babaSarcophagusWarning,
+		BeamTimerOverlay beamTimerOverlay,
+		BeamTimerTracker beamTimerTracker,
+		CameraShakeDisabler cameraShakeDisabler,
+		CursedPhalanxDetector cursedPhalanxDetector,
+		DepositBoxFilter depositBoxFilter,
+		DepositBoxFilterOverlay depositBoxFilterOverlay,
+		DepositPickaxeOverlay depositPickaxeOverlay,
+		DepositPickaxePreventEntry depositPickaxePreventEntry,
+		DepositPickaxeSwap depositPickaxeSwap,
+		DryStreakTracker dryStreakTracker,
+		FadeDisabler fadeDisabler,
+		HetSolver hetSolver,
+		HetSolverOverlay hetSolverOverlay,
+		HpOrbManager hpOrbManager,
+		InvocationPresetsManager invocationPresetsManager,
+		InvocationScreenshot invocationScreenshot,
+		LeftClickBankAll leftClickBankAll,
+		LightPuzzleSolver lightPuzzleSolver,
+		MatchingPuzzleSolver matchingPuzzleSolver,
+		ObeliskPuzzleSolver obeliskPuzzleSolver,
+		PartyPointsTracker partyPointsTracker,
+		PathLevelTracker pathLevelTracker,
+		PointsOverlay pointsOverlay,
+		PointsTracker pointsTracker,
+		PurpleWeightingManager purpleWeightingManager,
+		PurpleWeightingPartyBoardManager purpleWeightingPartyBoardManager,
+		QuickProceedSwaps quickProceedSwaps,
+		RaidCompletionTracker raidCompletionTracker,
+		RaidStateTracker raidStateTracker,
+		SarcophagusOpeningSoundPlayer sarcophagusOpeningSoundPlayer,
+		SarcophagusRecolorer sarcophagusRecolorer,
+		ScabarasOverlayManager scabarasOverlayManager,
+		ScabarasPanelManager scabarasPanelManager,
+		SequencePuzzleSolver sequencePuzzleSolver,
+		SkipObeliskOverlay skipObeliskOverlay,
+		SmellingSaltsCooldown smellingSaltsCooldown,
+		SplitsOverlay splitsOverlay,
+		SplitsTracker splitsTracker,
+		SwarmerOverlay swarmerOverlay,
+		SwarmerPanelManager swarmerPanelManager,
+		SwarmerDataManager swarmerDataManager,
+		TargetTimeManager targetTimeManager,
+		UpdateNotifier updateNotifier
+	)
+	{
+		return ImmutableSet.of(
+			additionPuzzleSolver,
+			adrenalineCooldown,
+			akkhaShadowHealth,
+			akkhaShadowHealthOverlay,
+			apmekenBaboonIndicator,
+			apmekenBaboonIndicatorOverlay,
+			apmekenWaveInstaller,
+			babaSarcophagusWarning,
+			beamTimerOverlay,
+			beamTimerTracker,
+			cameraShakeDisabler,
+			cursedPhalanxDetector,
+			depositBoxFilter,
+			depositBoxFilterOverlay,
+			depositPickaxeOverlay,
+			depositPickaxePreventEntry,
+			depositPickaxeSwap,
+			dryStreakTracker,
+			fadeDisabler,
+			hetSolver,
+			hetSolverOverlay,
+			hpOrbManager,
+			invocationPresetsManager,
+			invocationScreenshot,
+			leftClickBankAll,
+			lightPuzzleSolver,
+			matchingPuzzleSolver,
+			obeliskPuzzleSolver,
+			partyPointsTracker,
+			pathLevelTracker,
+			pointsOverlay,
+			pointsTracker,
+			purpleWeightingManager,
+			purpleWeightingPartyBoardManager,
+			quickProceedSwaps,
+			raidCompletionTracker,
+			raidStateTracker,
+			sarcophagusOpeningSoundPlayer,
+			sarcophagusRecolorer,
+			scabarasOverlayManager,
+			scabarasPanelManager,
+			sequencePuzzleSolver,
+			skipObeliskOverlay,
+			smellingSaltsCooldown,
+			splitsOverlay,
+			splitsTracker,
+			swarmerOverlay,
+			swarmerPanelManager,
+			swarmerDataManager,
+			targetTimeManager,
+			updateNotifier
+		);
 	}
 
 	@Provides
