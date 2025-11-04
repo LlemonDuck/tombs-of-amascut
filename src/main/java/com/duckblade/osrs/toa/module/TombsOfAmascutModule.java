@@ -42,6 +42,7 @@ import com.duckblade.osrs.toa.features.scabaras.overlay.ObeliskPuzzleSolver;
 import com.duckblade.osrs.toa.features.scabaras.overlay.ScabarasOverlayManager;
 import com.duckblade.osrs.toa.features.scabaras.overlay.SequencePuzzleSolver;
 import com.duckblade.osrs.toa.features.scabaras.panel.ScabarasPanelManager;
+import com.duckblade.osrs.toa.features.timetracking.SplitsInfoBox;
 import com.duckblade.osrs.toa.features.timetracking.SplitsOverlay;
 import com.duckblade.osrs.toa.features.timetracking.SplitsTracker;
 import com.duckblade.osrs.toa.features.timetracking.TargetTimeManager;
@@ -117,6 +118,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		SequencePuzzleSolver sequencePuzzleSolver,
 		SkipObeliskOverlay skipObeliskOverlay,
 		SmellingSaltsCooldown smellingSaltsCooldown,
+		SplitsInfoBox splitsInfoBox,
 		SplitsOverlay splitsOverlay,
 		SplitsTracker splitsTracker,
 		SwarmerOverlay swarmerOverlay,
@@ -171,6 +173,7 @@ public class TombsOfAmascutModule extends AbstractModule
 			sequencePuzzleSolver,
 			skipObeliskOverlay,
 			smellingSaltsCooldown,
+			splitsInfoBox,
 			splitsOverlay,
 			splitsTracker,
 			swarmerOverlay,

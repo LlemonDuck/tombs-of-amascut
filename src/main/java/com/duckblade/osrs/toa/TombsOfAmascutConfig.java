@@ -1091,6 +1091,30 @@ public interface TombsOfAmascutConfig extends Config
 		return SplitsMode.OFF;
 	}
 
+	@ConfigItem(
+		keyName = "splitsInfobox",
+		name = "Splits Infobox",
+		description = "Show room splits as an infobox.",
+		position = 3,
+		section = SECTION_TIME_TRACKING
+	)
+	default boolean splitsInfobox()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "splitsInfoboxHoverSplits",
+		name = "Splits Infobox Hover",
+		description = "What type of splits to show when hovering over the infobox.",
+		position = 4,
+		section = SECTION_TIME_TRACKING
+	)
+	default SplitsMode splitsInfoboxHoverSplits()
+	{
+		return SplitsMode.OFF;
+	}
+
 	// Deposit box
 
 	String KEY_DEPOSIT_BOX_FILTER_STRING_FIRST = "depositBoxFilterStringFirstPass";

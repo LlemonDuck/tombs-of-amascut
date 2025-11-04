@@ -27,7 +27,7 @@ import net.runelite.client.util.Text;
 public class TargetTimeManager implements PluginLifecycleComponent
 {
 
-	private static final int SCRIPT_TOA_TIME_UPDATE_TIMER = 6581;
+	static final int SCRIPT_TOA_TIME_UPDATE_TIMER = 6581;
 	static final int WIDGET_TIMER = WidgetUtil.packComponentId(481, 46);
 
 	private static final String NO_TARGET_TIME_PREFIX = "You enter the Tombs of Amascut";
