@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 13;
+	public static final int TARGET_VERSION = 14;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -140,6 +140,9 @@ public class UpdateNotifier implements PluginLifecycleComponent
 					// unique to people in the last few hours
 					updates.add("<strong>Purple Weighting</strong> An issue with the config migration for 'Allowed Items' has been fixed. If you updated the plugin in the last few hours, those settings may have been rolled back. A big apologies for that if they have been reverted.");
 				}
+
+			case 13:
+				updates.add("<strong>(Time Tracking -> Splits Infobox)</strong> You can now use an infobox for splits instead of the bulky overlay.");
 		}
 
 		return updates;
