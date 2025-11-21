@@ -42,12 +42,21 @@ import net.runelite.client.util.ColorUtil;
 public class PointsTracker implements PluginLifecycleComponent
 {
 
+	// todo puzzles:
+		// 50 per puzzle completed AND 50 to each player in the lane on completion
+		// memory: 100 pts per tile matched only to the second player
+	// todo apmeken:
+		// 25 per pillar repaired / 25 per vent neutralized
+		// -25 for mistimed pillar repair / vent
+		// 25 to sight on corruption clear / -25 on fail
+		// 25 to healer on corruption cure
+
 	public static final String EVENT_NAME = "raidCompletedPoints";
 
 	/* I have some insider knowledge here that the blog was describing points earning slightly wrong wrt deaths.
 	 * Points are earned to both total and room points at the same time,
 	 * rather than being queued up in room points and added onto total after the room.
-	 * When dying, you preserve the room points amount toward cap, but subtract 20% from total.
+	 * When dying, you subtract 20% from total.
 	 * There is no special behaviour when wiping a room; the 20% points lost is intended to account for that.
 	 */
 
@@ -61,7 +70,6 @@ public class PointsTracker implements PluginLifecycleComponent
 
 	private static final int BASE_POINTS = 5000;
 	private static final int MAX_ROOM_POINTS = 20_000;
-	private static final int CRONDIS_MAX_ROOM_POINTS = 10_000;
 
 	private static final int MAX_TOTAL_POINTS = 64_000;
 
@@ -70,7 +78,7 @@ public class PointsTracker implements PluginLifecycleComponent
 	private static final Map<Integer, Double> DAMAGE_POINTS_FACTORS = ImmutableMap.<Integer, Double>builder()
 		.put(NpcID.TOA_WARDEN_TUMEKEN_CORE, 0.0)
 		.put(NpcID.TOA_WARDEN_ELIDINIS_CORE, 0.0)
-		.put(NpcID.WARDENS_P3_ORB_BLUE, 0.0)
+		.put(NpcID.WARDENS_P3_ORB_BLUE, 1.0)
 		.put(NpcID.TOA_BABA_BOULDER, 0.0)
 		.put(NpcID.TOA_BABA_BOULDER_WEAK, 0.0)
 		.put(NpcID.TOA_PATH_APMEKEN_BABOON_MELEE_1, 1.2)
@@ -93,6 +101,7 @@ public class PointsTracker implements PluginLifecycleComponent
 		.put(NpcID.TOA_KEPHRI_GUARDIAN_RANGED, 0.5)
 		.put(NpcID.TOA_KEPHRI_GUARDIAN_MELEE, 0.5)
 		.put(NpcID.TOA_KEPHRI_GUARDIAN_MAGE, 0.5)
+		.put(NpcID.TOA_KEPHRI_SHIELD_SCARAB, 1.0)
 		.put(NpcID.TOA_HET_GOAL_VULNERABLE, 2.5)
 		.put(NpcID.TOA_WARDENS_P1_OBELISK_NPC_INACTIVE, 1.5)
 		.put(NpcID.TOA_WARDENS_P1_OBELISK_NPC, 1.5)
@@ -113,6 +122,7 @@ public class PointsTracker implements PluginLifecycleComponent
 		.put(NpcID.TOA_WARDEN_ELIDINIS_PHASE3_CHARGING, 2.5)
 		.put(NpcID.TOA_WARDEN_TUMEKEN_PHASE3, 2.5)
 		.put(NpcID.TOA_WARDEN_TUMEKEN_PHASE3_CHARGING, 2.5)
+		// todo tree is 2
 		.build();
 
 	// these have a cap at 3 "downs"
@@ -251,14 +261,15 @@ public class PointsTracker implements PluginLifecycleComponent
 		}
 		else if (e.getMessage().startsWith(ROOM_FAIL_MESSAGE))
 		{
+			personalRoomPoints = 0;
 			wardenDowns = 0;
+
+			updatePersonalPartyPoints(true);
 		}
 		else if (e.getMessage().startsWith(ROOM_FINISH_MESSAGE))
 		{
 			personalRoomPoints = 0;
-
-			boolean isWardens = e.getMessage().contains("Wardens");
-			updatePersonalPartyPoints(isWardens);
+			updatePersonalPartyPoints(true);
 		}
 	}
 
@@ -281,7 +292,7 @@ public class PointsTracker implements PluginLifecycleComponent
 		if (e.getHitsplat().isMine())
 		{
 			int pointsEarned = (int) (e.getHitsplat().getAmount() * factor);
-			int roomMax = raidStateTracker.getCurrentState().getCurrentRoom() == RaidRoom.CRONDIS ? CRONDIS_MAX_ROOM_POINTS : MAX_ROOM_POINTS;
+			int roomMax = getRoomPointsCap();
 			if (personalRoomPoints + pointsEarned > roomMax)
 			{
 				pointsEarned = roomMax - personalRoomPoints;
@@ -408,6 +419,21 @@ public class PointsTracker implements PluginLifecycleComponent
 				.put("personalPoints", getPersonalTotalPoints())
 				.build()
 		));
+	}
+
+	private int getRoomPointsCap()
+	{
+		switch (raidStateTracker.getCurrentState().getCurrentRoom())
+		{
+			case WARDENS:
+				return MAX_ROOM_POINTS * 3;
+
+			case ZEBAK:
+				return MAX_ROOM_POINTS / 2;
+
+			default:
+				return MAX_ROOM_POINTS;
+		}
 	}
 
 }
