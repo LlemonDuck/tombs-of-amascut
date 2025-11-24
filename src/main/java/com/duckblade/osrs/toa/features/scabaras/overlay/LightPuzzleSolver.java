@@ -24,6 +24,7 @@ import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameTick;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -33,8 +34,7 @@ import net.runelite.client.eventbus.Subscribe;
 public class LightPuzzleSolver implements PluginLifecycleComponent
 {
 
-	private static final int GROUND_OBJECT_LIGHT_BACKGROUND = 45344;
-	private static final int GAME_OBJECT_LIGHT_ENABLED = 45384;
+	private static final int GAME_OBJECT_LIGHT_ENABLED = ObjectID.TOA_SCABARAS_FX01;
 
 	private static final Point[] SCENE_COORD_STARTS = {
 		new Point(36, 56),
@@ -137,7 +137,7 @@ public class LightPuzzleSolver implements PluginLifecycleComponent
 		{
 			Tile startTile = sceneTiles[sceneCoordStart.getX()][sceneCoordStart.getY()];
 			GroundObject groundObject = startTile.getGroundObject();
-			if (groundObject != null && groundObject.getId() == GROUND_OBJECT_LIGHT_BACKGROUND)
+			if (groundObject != null && groundObject.getId() == ObjectID.TOA_SCABARAS_LIGHTSOUT_TILE_OFF)
 			{
 				return sceneCoordStart;
 			}
