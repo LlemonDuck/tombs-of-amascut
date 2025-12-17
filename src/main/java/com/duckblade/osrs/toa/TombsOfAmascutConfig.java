@@ -237,9 +237,72 @@ public interface TombsOfAmascutConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "hideOnHit",
+		name = "Hide Swarm on XP Drop",
+		description = "Instantly hide swarms when you gain XP from attacking them",
+		position = 1,
+		section = SECTION_KEPHRI
+	)
+	default boolean hideOnHit()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "hideHighSwarm",
+		name = "Hide High Wave Swarm",
+		description = "Hide swarm NPCs above the wave threshold",
+		position = 2,
+		section = SECTION_KEPHRI
+	)
+	default boolean hideHighSwarm()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "hideHighNumber",
+		name = "Hide High Wave Overlay",
+		description = "Hide swarm wave number overlay above the threshold",
+		position = 3,
+		section = SECTION_KEPHRI
+	)
+	default boolean hideHighNumber()
+	{
+		return false;
+	}
+
+	@Range(min = 1, max = 50)
+	@ConfigItem(
+		keyName = "waveThreshold",
+		name = "Phase 1 Threshold",
+		description = "Hide swarms over this wave in phase 1",
+		position = 4,
+		section = SECTION_KEPHRI
+	)
+	default int waveThreshold()
+	{
+		return 20;
+	}
+
+	@Range(min = 1, max = 50)
+	@ConfigItem(
+		keyName = "waveThresholdPhase2",
+		name = "Phase 2 Threshold",
+		description = "Hide swarms over this wave in phase 2",
+		position = 5,
+		section = SECTION_KEPHRI
+	)
+	default int waveThresholdPhase2()
+	{
+		return 17;
+	}
+
+
+	@ConfigItem(
 		name = "Font Type",
 		description = "Type of font",
-		position = 1,
+		position = 6,
 		keyName = "fontType",
 		section = SECTION_KEPHRI
 	)
@@ -251,7 +314,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Use Bold Font",
 		description = "Font style of swarm overlay.",
-		position = 2,
+		position = 7,
 		keyName = "useBoldFont",
 		section = SECTION_KEPHRI
 	)
@@ -263,7 +326,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Font Size",
 		description = "Font size of swarm overlay.",
-		position = 3,
+		position = 8,
 		keyName = "swarmerFontSize",
 		section = SECTION_KEPHRI
 	)
@@ -277,7 +340,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Side Panel",
 		description = "Show a side panel with summary data for previous raids.",
-		position = 4,
+		position = 9,
 		keyName = "swarmerSidePanel",
 		section = SECTION_KEPHRI
 	)
@@ -289,7 +352,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Font Color",
 		description = "Font color of swarm overlay.",
-		position = 4,
+		position = 10,
 		keyName = "swarmerFontColor",
 		section = SECTION_KEPHRI
 	)
@@ -301,7 +364,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		name = "Save on Fail",
 		description = "Save swarmer data on room fail.",
-		position = 5,
+		position = 11,
 		keyName = "swarmerSaveOnFail",
 		section = SECTION_KEPHRI
 	)
@@ -309,6 +372,7 @@ public interface TombsOfAmascutConfig extends Config
 	{
 		return false;
 	}
+
 
 	// Apmeken
 
