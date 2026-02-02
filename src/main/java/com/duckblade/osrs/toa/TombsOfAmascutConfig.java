@@ -1,5 +1,6 @@
 package com.duckblade.osrs.toa;
 
+import com.duckblade.osrs.toa.features.HelpfulSpiritHighlighter;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps.QuickProceedEnableMode;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerFonts;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerPanelManager;
@@ -1319,4 +1320,35 @@ public interface TombsOfAmascutConfig extends Config
 	)
 	void setPurpleDryStreakCount(int count);
 
+	@ConfigSection(
+			name = "Helpful Spirit",
+			description = "Configuration for Helpful Spirit supplies.",
+			position = 14,
+			closedByDefault = true
+	)
+	String SECTION_HELPFUL_SPIRIT = "sectionHelpfulSpirit";
+
+	@ConfigItem(
+			keyName = "firstHelpfulSpiritSelection",
+			name = "First Helpful Spirit Selection",
+			description = "First Helpful Spirit resource option to highlight",
+			position = 0,
+			section = SECTION_HELPFUL_SPIRIT
+	)
+	default HelpfulSpiritHighlighter.HelpfulSpiritBundleType firstHelpfulSpiritSelection()
+	{
+		return HelpfulSpiritHighlighter.HelpfulSpiritBundleType.CHAOS;
+	}
+
+	@ConfigItem(
+			keyName = "secondHelpfulSpiritSelection",
+			name = "Second Helpful Spirit Selection",
+			description = "Second Helpful Spirit resource option to highlight",
+			position = 1,
+			section = SECTION_HELPFUL_SPIRIT
+	)
+	default HelpfulSpiritHighlighter.HelpfulSpiritBundleType secondHelpfulSpiritSelection()
+	{
+		return HelpfulSpiritHighlighter.HelpfulSpiritBundleType.LIFE;
+	}
 }

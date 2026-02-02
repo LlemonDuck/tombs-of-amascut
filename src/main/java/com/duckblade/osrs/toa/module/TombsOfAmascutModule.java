@@ -1,16 +1,7 @@
 package com.duckblade.osrs.toa.module;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
-import com.duckblade.osrs.toa.features.AdrenalineCooldown;
-import com.duckblade.osrs.toa.features.CameraShakeDisabler;
-import com.duckblade.osrs.toa.features.DepositBoxFilter;
-import com.duckblade.osrs.toa.features.DepositBoxFilterOverlay;
-import com.duckblade.osrs.toa.features.FadeDisabler;
-import com.duckblade.osrs.toa.features.InvocationScreenshot;
-import com.duckblade.osrs.toa.features.LeftClickBankAll;
-import com.duckblade.osrs.toa.features.PathLevelTracker;
-import com.duckblade.osrs.toa.features.QuickProceedSwaps;
-import com.duckblade.osrs.toa.features.SmellingSaltsCooldown;
+import com.duckblade.osrs.toa.features.*;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicator;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicatorOverlay;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
@@ -93,6 +84,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		DepositPickaxeSwap depositPickaxeSwap,
 		DryStreakTracker dryStreakTracker,
 		FadeDisabler fadeDisabler,
+		HelpfulSpiritHighlighter helpfulSpiritHighlighter,
 		HetSolver hetSolver,
 		HetSolverOverlay hetSolverOverlay,
 		HpOrbManager hpOrbManager,
@@ -148,6 +140,7 @@ public class TombsOfAmascutModule extends AbstractModule
 			depositPickaxeSwap,
 			dryStreakTracker,
 			fadeDisabler,
+			helpfulSpiritHighlighter,
 			hetSolver,
 			hetSolverOverlay,
 			hpOrbManager,
