@@ -2,6 +2,8 @@ package com.duckblade.osrs.toa.features;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.RaidRoom;
+import com.duckblade.osrs.toa.util.RaidStateChanged;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
@@ -11,6 +13,7 @@ import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.plugins.raids.solver.Room;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -26,15 +29,14 @@ import java.util.regex.Pattern;
 public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycleComponent {
     private static final String ROOM_COMPLETE_PREFIX = "Challenge complete";
     private static final Pattern ROOM_COMPLETE_PATTERN =
-            Pattern.compile("Challenge complete: ([A-Za-z-]+).*Total:.*?([0-9]+:[.0-9]+).*");
+            Pattern.compile("Challenge complete: (?:Path of )?([A-Za-z-]+).*Total:.*?([0-9]+:[.0-9]+).*");
 
     private final EventBus eventBus;
     private final Client client;
     private final TombsOfAmascutConfig config;
     private final OverlayManager overlayManager;
 
-    // Tracks the number of rooms completed; boss rooms and puzzle rooms are counted separately,
-    // so the helpful spirit appears at a pathCompleteCount of 4 and 8.
+    // Tracks the number of bosses completed; the helpful spirit appears at a count of 2 and 4
     private int pathCompleteCount = 0;
 
     @Inject
@@ -58,7 +60,7 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
     @Override
     public Dimension render(Graphics2D graphics) {
         HelpfulSpiritBundleType selection;
-        if (pathCompleteCount == 4) {
+        if (pathCompleteCount == 2) {
             selection = config.firstHelpfulSpiritSelection();
         } else {
             selection = config.secondHelpfulSpiritSelection();
@@ -99,7 +101,7 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
         }
 
         HelpfulSpiritBundleType selection;
-        if (pathCompleteCount == 4) {
+        if (pathCompleteCount == 2) {
             selection = config.firstHelpfulSpiritSelection();
         } else {
             selection = config.secondHelpfulSpiritSelection();
@@ -112,31 +114,25 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
         }
     }
 
-    /**
-     * Track completion of each room to increment pathCompleteCount
-     */
     @Subscribe
-    public void onChatMessage(ChatMessage e)
-    {
-        if (e.getType() != ChatMessageType.GAMEMESSAGE)
-        {
-            return;
-        }
-
-        String msg = e.getMessage();
-        if (!msg.startsWith(ROOM_COMPLETE_PREFIX))
-        {
-            return;
-        }
-
-        if (ROOM_COMPLETE_PATTERN.matcher(msg).matches())
-        {
+    public void onRaidStateChanged(RaidStateChanged e) {
+        RaidRoom prevRoom = e.getPreviousState().getCurrentRoom();
+        RaidRoom newRoom = e.getNewState().getCurrentRoom();
+        log.debug("Raid State Changed: Previous room was " + prevRoom + ", new room is " + newRoom);
+        // Reset number of paths complete upon starting new raid.
+        // Increment once player has returned to Nexus upon killing a boss.
+        if (prevRoom == null) {
+            pathCompleteCount = 0;
+            log.debug("Reset path complete count to 0");
+        } else if (newRoom == RaidRoom.NEXUS) {
             pathCompleteCount += 1;
+            log.debug("Path complete count is now: " + pathCompleteCount);
         }
     }
 
     @Override
     public void startUp() {
+        pathCompleteCount = 0;
         eventBus.register(this);
         overlayManager.add(this);
     }
