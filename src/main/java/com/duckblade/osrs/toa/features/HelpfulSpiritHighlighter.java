@@ -5,15 +5,12 @@ import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidStateChanged;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.MenuAction;
-import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.plugins.raids.solver.Room;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -22,15 +19,10 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.*;
-import java.util.regex.Pattern;
 
 @Singleton
 @Slf4j
 public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycleComponent {
-    private static final String ROOM_COMPLETE_PREFIX = "Challenge complete";
-    private static final Pattern ROOM_COMPLETE_PATTERN =
-            Pattern.compile("Challenge complete: (?:Path of )?([A-Za-z-]+).*Total:.*?([0-9]+:[.0-9]+).*");
-
     private final EventBus eventBus;
     private final Client client;
     private final TombsOfAmascutConfig config;
@@ -114,13 +106,17 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
         }
     }
 
+    /**
+     * Keep track of player's progress through the raid so that the correct helpful spirit bundle is highlighted at the
+     * correct time.
+     */
     @Subscribe
     public void onRaidStateChanged(RaidStateChanged e) {
         RaidRoom prevRoom = e.getPreviousState().getCurrentRoom();
         RaidRoom newRoom = e.getNewState().getCurrentRoom();
         log.debug("Raid State Changed: Previous room was " + prevRoom + ", new room is " + newRoom);
-        // Reset number of paths complete upon starting new raid.
-        // Increment once player has returned to Nexus upon killing a boss.
+        // Upon starting a new raid, reset number of paths complete.
+        // Increment once player has returned to Nexus after killing a boss.
         if (prevRoom == null) {
             pathCompleteCount = 0;
             log.debug("Reset path complete count to 0");
