@@ -47,30 +47,26 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
         setLayer(OverlayLayer.ABOVE_WIDGETS);
     }
 
-    @Override
-    public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
-    {
-        return config.enableHelpfulSpiritHighlight();
-    }
-
     /**
      * Draws an outline around the correct helpful spirit bundle
      */
     @Override
     public Dimension render(Graphics2D graphics) {
-        BundleType selection;
-        if (pathCompleteCount == 2) {
-            selection = config.firstHelpfulSpiritSelection();
-        } else {
-            selection = config.secondHelpfulSpiritSelection();
+        // Only display highlighting if player has set checkbox to true
+        if (config.enableHelpfulSpiritHighlight()) {
+            BundleType selection;
+            if (pathCompleteCount == 2) {
+                selection = config.firstHelpfulSpiritSelection();
+            } else {
+                selection = config.secondHelpfulSpiritSelection();
+            }
+            Widget button = client.getWidget(selection.widgetId);
+            if (button != null && !button.isHidden()) {
+                Rectangle answerRect = button.getBounds();
+                graphics.setColor(Color.CYAN);
+                graphics.draw(answerRect);
+            }
         }
-        Widget button = client.getWidget(selection.widgetId);
-        if (button != null && !button.isHidden()) {
-            Rectangle answerRect = button.getBounds();
-            graphics.setColor(Color.CYAN);
-            graphics.draw(answerRect);
-        }
-
         return null;
     }
 
@@ -99,6 +95,11 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
             return;
         }
 
+        // Only disable clicks if player has set checkbox to true
+        if (!config.enableHelpfulSpiritHighlight()) {
+            return;
+        }
+
         BundleType selection;
         if (pathCompleteCount == 2) {
             selection = config.firstHelpfulSpiritSelection();
@@ -124,6 +125,8 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
         log.debug("Raid State Changed: Previous room was " + prevRoom + ", new room is " + newRoom);
         // Upon starting a new raid, reset number of paths complete.
         // Increment once player has returned to Nexus after killing a boss.
+        // Track this regardless of whether player has enabled the plugin, so that if they click the checkbox halfway
+        // through the raid, the plugin will still behave as expected.
         if (prevRoom == null) {
             pathCompleteCount = 0;
             log.debug("Reset path complete count to 0");
