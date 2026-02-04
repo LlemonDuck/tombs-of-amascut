@@ -3,6 +3,7 @@ package com.duckblade.osrs.toa.features;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidRoom;
+import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateChanged;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -46,12 +47,18 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
         setLayer(OverlayLayer.ABOVE_WIDGETS);
     }
 
+    @Override
+    public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
+    {
+        return config.enableHelpfulSpiritHighlight();
+    }
+
     /**
      * Draws an outline around the correct helpful spirit bundle
      */
     @Override
     public Dimension render(Graphics2D graphics) {
-        HelpfulSpiritBundleType selection;
+        BundleType selection;
         if (pathCompleteCount == 2) {
             selection = config.firstHelpfulSpiritSelection();
         } else {
@@ -86,13 +93,13 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
 
         int widgetId = widget.getId();
         // If button being clicked isn't one of the Helpful Spirit bundle buttons, let the click go through as normal
-        if (!(widgetId == HelpfulSpiritBundleType.CHAOS.widgetId ||
-                widgetId == HelpfulSpiritBundleType.POWER.widgetId ||
-                widgetId == HelpfulSpiritBundleType.LIFE.widgetId)) {
+        if (!(widgetId == BundleType.CHAOS.widgetId ||
+                widgetId == BundleType.POWER.widgetId ||
+                widgetId == BundleType.LIFE.widgetId)) {
             return;
         }
 
-        HelpfulSpiritBundleType selection;
+        BundleType selection;
         if (pathCompleteCount == 2) {
             selection = config.firstHelpfulSpiritSelection();
         } else {
@@ -139,13 +146,13 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
         overlayManager.remove(this);
     }
 
-    public enum HelpfulSpiritBundleType {
+    public enum BundleType {
         LIFE(50921478),
         CHAOS(50921481),
         POWER(50921484);
 
         private final int widgetId;
-        HelpfulSpiritBundleType(int widgetId) {
+        BundleType(int widgetId) {
             this.widgetId = widgetId;
         }
     }

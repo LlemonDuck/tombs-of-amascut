@@ -1329,26 +1329,38 @@ public interface TombsOfAmascutConfig extends Config
 	String SECTION_HELPFUL_SPIRIT = "sectionHelpfulSpirit";
 
 	@ConfigItem(
-			keyName = "firstHelpfulSpiritSelection",
-			name = "First Helpful Spirit Selection",
-			description = "First Helpful Spirit resource option to highlight",
+			name = "Enable Helpful Spirit Highlight",
+			description = "Highlight selected Helpful Spirit bundle and prevent misclicks on other bundles",
 			position = 0,
+			keyName = "enableHelpfulSpiritHighlight",
 			section = SECTION_HELPFUL_SPIRIT
 	)
-	default HelpfulSpiritHighlighter.HelpfulSpiritBundleType firstHelpfulSpiritSelection()
+	default boolean enableHelpfulSpiritHighlight()
 	{
-		return HelpfulSpiritHighlighter.HelpfulSpiritBundleType.CHAOS;
+		return false;
+	}
+
+	@ConfigItem(
+			keyName = "firstHelpfulSpiritSelection",
+			name = "First Bundle Selection",
+			description = "First Helpful Spirit resource option to highlight",
+			position = 1,
+			section = SECTION_HELPFUL_SPIRIT
+	)
+	default HelpfulSpiritHighlighter.BundleType firstHelpfulSpiritSelection()
+	{
+		return HelpfulSpiritHighlighter.BundleType.CHAOS;
 	}
 
 	@ConfigItem(
 			keyName = "secondHelpfulSpiritSelection",
-			name = "Second Helpful Spirit Selection",
+			name = "Second Bundle Selection",
 			description = "Second Helpful Spirit resource option to highlight",
-			position = 1,
+			position = 2,
 			section = SECTION_HELPFUL_SPIRIT
 	)
-	default HelpfulSpiritHighlighter.HelpfulSpiritBundleType secondHelpfulSpiritSelection()
+	default HelpfulSpiritHighlighter.BundleType secondHelpfulSpiritSelection()
 	{
-		return HelpfulSpiritHighlighter.HelpfulSpiritBundleType.LIFE;
+		return HelpfulSpiritHighlighter.BundleType.LIFE;
 	}
 }
