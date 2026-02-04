@@ -3,7 +3,6 @@ package com.duckblade.osrs.toa.features;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidRoom;
-import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateChanged;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
