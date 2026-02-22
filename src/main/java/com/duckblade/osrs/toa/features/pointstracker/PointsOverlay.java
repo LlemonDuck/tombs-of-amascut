@@ -3,6 +3,7 @@ package com.duckblade.osrs.toa.features.pointstracker;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidState;
+import com.duckblade.osrs.toa.util.RaidRoom;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import javax.inject.Inject;
@@ -44,8 +45,12 @@ public class PointsOverlay extends OverlayPanel implements PluginLifecycleCompon
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
-		return config.pointsTrackerOverlayEnable() &&
-			raidState.isInRaid();
+		PointsTrackerOverlayEnableMode mode = config.pointsTrackerOverlayEnable();
+
+		return raidState.isInRaid()
+			&& (mode == PointsTrackerOverlayEnableMode.ON
+				|| (mode == PointsTrackerOverlayEnableMode.TREASURE_ROOM
+					&& raidState.getCurrentRoom() == RaidRoom.TOMB));
 	}
 
 	@Override
