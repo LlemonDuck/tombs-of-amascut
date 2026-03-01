@@ -6,12 +6,14 @@ import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_DEPOSIT_BOX_FILTER
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_MENU_SWAP;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_PREVENT_EXIT;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HP_ORB_MODE;
+import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_POINTS_TRACKER_MODE;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_QUICK_PROCEED_ENABLE_MODE;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_SCABARAS_MATCHING_DISPLAY_MODE_NAME;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
+import com.duckblade.osrs.toa.features.pointstracker.PointsTrackerOverlayEnableMode;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
@@ -36,6 +38,7 @@ public class ConfigMigrationService
 		migratePickaxeReminder();
 		migrateScabarasMatchingDisplayMode();
 		migrateDepositBoxFilterString();
+		migratePointsTrackerOverlay();
 	}
 
 	@VisibleForTesting
@@ -98,6 +101,17 @@ public class ConfigMigrationService
 				KEY_DEPOSIT_BOX_FILTER_STRING_FIRST, content,
 				KEY_DEPOSIT_BOX_FILTER_STRING_SECOND, content
 			)
+		);
+	}
+
+	@VisibleForTesting
+	void migratePointsTrackerOverlay()
+	{
+		migrate(
+			"pointsTrackerOverlayEnable",
+			KEY_POINTS_TRACKER_MODE,
+			Boolean.class,
+			enabled -> enabled ? PointsTrackerOverlayEnableMode.ALWAYS : PointsTrackerOverlayEnableMode.OFF
 		);
 	}
 
