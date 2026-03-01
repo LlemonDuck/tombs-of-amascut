@@ -139,9 +139,9 @@ public class PurpleWeightingManager implements PluginLifecycleComponent
 		weights.put(Purple.OSMUMTENS_FANG, weights.get(Purple.OSMUMTENS_FANG) - lerpClamped(this.raidLevel, 350, 400, 20));
 		weights.put(Purple.OSMUMTENS_FANG, weights.get(Purple.OSMUMTENS_FANG) - lerpClamped(this.raidLevel, 300, 350, 10));
 
-		if (this.raidLevel >= 50 && this.raidLevel <= 150)
+		if (this.raidLevel >= 50 && this.raidLevel < 150)
 		{
-			// between 50-150, ward+masori+shadow are reduced with an additional 1/50 roll
+			// between 50-149, ward+masori+shadow are reduced with an additional 1/50 roll
 			// simulate reducing everything else by 50x by instead increasing these two by 50x
 			weights.put(Purple.LIGHTBEARER, BASE_WEIGHTS.get(Purple.LIGHTBEARER) * 50);
 			weights.put(Purple.OSMUMTENS_FANG, BASE_WEIGHTS.get(Purple.OSMUMTENS_FANG) * 50);
