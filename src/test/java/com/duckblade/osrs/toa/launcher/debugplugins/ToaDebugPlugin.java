@@ -40,10 +40,6 @@ public class ToaDebugPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
-		((Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(Level.WARN);
-		((Logger) LoggerFactory.getLogger("com.duckblade.osrs.toa")).setLevel(Level.DEBUG);
-		((Logger) LoggerFactory.getLogger("com.duckblade.osrs.toa")).setLevel(Level.DEBUG);
-
 		overlayManager.add(hetSolverDebugOverlay);
 		overlayManager.add(shadowOverridesOverlay);
 		overlayManager.add(stateOverlay);
@@ -54,7 +50,6 @@ public class ToaDebugPlugin extends Plugin
 	@Override
 	protected void shutDown() throws Exception
 	{
-		((Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(Level.DEBUG);
 		overlayManager.remove(hetSolverDebugOverlay);
 		overlayManager.remove(shadowOverridesOverlay);
 		overlayManager.remove(stateOverlay);
