@@ -45,12 +45,17 @@ public class PointsOverlay extends OverlayPanel implements PluginLifecycleCompon
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
-		PointsTrackerOverlayEnableMode mode = config.pointsTrackerOverlayEnableMode();
+		switch (config.pointsTrackerOverlayEnableMode())
+		{
+			case ON:
+				return raidState.isInRaid();
 
-		return raidState.isInRaid()
-			&& (mode == PointsTrackerOverlayEnableMode.ON
-				|| (mode == PointsTrackerOverlayEnableMode.TREASURE_ROOM
-					&& raidState.getCurrentRoom() == RaidRoom.TOMB));
+			case TREASURE_ROOM:
+				return raidState.getCurrentRoom() == RaidRoom.TOMB;
+
+			default:
+				return false;
+		}
 	}
 
 	@Override
