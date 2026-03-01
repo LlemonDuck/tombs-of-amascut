@@ -47,10 +47,10 @@ public class PointsOverlay extends OverlayPanel implements PluginLifecycleCompon
 	{
 		switch (config.pointsTrackerOverlayEnableMode())
 		{
-			case ON:
+			case ALWAYS:
 				return raidState.isInRaid();
 
-			case TREASURE_ROOM:
+			case TREASURE_ROOM_ONLY:
 				return raidState.getCurrentRoom() == RaidRoom.TOMB;
 
 			default:

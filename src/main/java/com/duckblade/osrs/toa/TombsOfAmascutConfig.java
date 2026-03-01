@@ -981,8 +981,9 @@ public interface TombsOfAmascutConfig extends Config
 
 	// Points Tracker
 
+	String KEY_POINTS_TRACKER_MODE = "pointsTrackerOverlayMode";
 	@ConfigItem(
-		keyName = "pointsTrackerOverlayEnableMode",
+		keyName = KEY_POINTS_TRACKER_MODE,
 		name = "Enable Overlay",
 		description = "Show points earned within the raid.",
 		position = 0,
@@ -990,7 +991,7 @@ public interface TombsOfAmascutConfig extends Config
 	)
 	default PointsTrackerOverlayEnableMode pointsTrackerOverlayEnableMode()
 	{
-		return PointsTrackerOverlayEnableMode.ON;
+		return PointsTrackerOverlayEnableMode.ALWAYS;
 	}
 
 	@ConfigItem(
