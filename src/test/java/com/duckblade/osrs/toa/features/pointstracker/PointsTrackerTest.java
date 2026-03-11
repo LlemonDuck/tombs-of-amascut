@@ -11,7 +11,9 @@ import net.runelite.api.Client;
 import net.runelite.api.Tile;
 import net.runelite.api.TileItem;
 import net.runelite.api.events.ItemSpawned;
+import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.gameval.ItemID;
+import net.runelite.api.gameval.VarPlayerID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.PluginMessage;
@@ -22,6 +24,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -76,6 +80,18 @@ public class PointsTrackerTest
 	}
 
 	@Test
+	void testVarpBehaviour()
+	{
+		VarbitChanged evt = new VarbitChanged();
+		evt.setVarpId(VarPlayerID.TOA_PERSONAL_CONTRIBUTION);
+		evt.setValue(12345);
+		pointsTracker.onVarbitChanged(evt);
+
+		assertEquals(12345, pointsTracker.getPersonalTotalPoints());
+		verify(partyPointsTracker).sendPointsUpdate(12345);
+	}
+
+	@Test
 	void testPointsEvent()
 	{
 		when(partyPointsTracker.isInParty()).thenReturn(true);
@@ -90,7 +106,10 @@ public class PointsTrackerTest
 		ItemSpawned earnPointsEvent = new ItemSpawned(mock(Tile.class), bigBanana);
 		pointsTracker.onItemSpawned(earnPointsEvent);
 
-		RaidStateChanged raidEndEvent = new RaidStateChanged(new RaidState(false, true, RaidRoom.WARDENS, 1), new RaidState(false, true, RaidRoom.TOMB, 1));
+		RaidStateChanged raidEndEvent = new RaidStateChanged(
+			new RaidState(false, true, RaidRoom.WARDENS, 1),
+			new RaidState(false, true, RaidRoom.TOMB, 1)
+		);
 		pointsTracker.onRaidStateChanged(raidEndEvent);
 
 		PluginMessage pointsEvent = subscriber.getCaptured();

@@ -7,6 +7,7 @@ import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateChanged;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.awt.Color;
@@ -28,8 +29,10 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.ItemSpawned;
+import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.gameval.ItemID;
 import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.VarPlayerID;
 import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -157,6 +160,7 @@ public class PointsTracker implements PluginLifecycleComponent
 	private int teamSize;
 	private int raidLevel;
 	private int wardenDowns;
+	private boolean pointsFinalized;
 
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
@@ -231,7 +235,6 @@ public class PointsTracker implements PluginLifecycleComponent
 				break;
 
 			case HET:
-			case WARDENS:
 				nonPartyPoints += 300;
 				break;
 		}
@@ -248,8 +251,15 @@ public class PointsTracker implements PluginLifecycleComponent
 		if (e.getMessage().startsWith(START_MESSAGE))
 		{
 			reset();
+			return;
 		}
-		else if (e.getMessage().startsWith(DEATH_MESSAGE))
+
+		if (pointsFinalized)
+		{
+			return;
+		}
+
+		if (e.getMessage().startsWith(DEATH_MESSAGE))
 		{
 			personalTotalPoints -= (int) Math.max(0.2 * personalTotalPoints, 1000);
 			if (personalTotalPoints < 0)
@@ -276,6 +286,11 @@ public class PointsTracker implements PluginLifecycleComponent
 	@Subscribe
 	public void onHitsplatApplied(HitsplatApplied e)
 	{
+		if (pointsFinalized)
+		{
+			return;
+		}
+
 		if (e.getHitsplat().getAmount() < 1 || !(e.getActor() instanceof NPC))
 		{
 			return;
@@ -308,6 +323,11 @@ public class PointsTracker implements PluginLifecycleComponent
 	@Subscribe
 	public void onItemSpawned(ItemSpawned e)
 	{
+		if (pointsFinalized)
+		{
+			return;
+		}
+
 		if (MVP_ITEMS.contains(e.getItem().getId()) && !seenMvpItems.contains(e.getItem().getId()))
 		{
 			personalTotalPoints += 300 * teamSize;
@@ -319,6 +339,11 @@ public class PointsTracker implements PluginLifecycleComponent
 	@Subscribe
 	public void onAnimationChanged(AnimationChanged e)
 	{
+		if (pointsFinalized)
+		{
+			return;
+		}
+
 		if (!(e.getActor() instanceof NPC) || !P2_WARDENS.contains(((NPC) e.getActor()).getId()))
 		{
 			return;
@@ -327,6 +352,21 @@ public class PointsTracker implements PluginLifecycleComponent
 		if (e.getActor().getAnimation() == ANIMATION_ID_WARDEN_DOWN)
 		{
 			wardenDowns++;
+		}
+	}
+
+	@Subscribe
+	public void onVarbitChanged(VarbitChanged e)
+	{
+		// as of client rev 232, personal points are transmitted to the client at the END OF THE RAID ONLY
+		if (e.getVarpId() == VarPlayerID.TOA_PERSONAL_CONTRIBUTION)
+		{
+			personalRoomPoints = 0;
+			personalTotalPoints = e.getValue() + BASE_POINTS;
+			nonPartyPoints = 0;
+			pointsFinalized = true;
+
+			updatePersonalPartyPoints(true);
 		}
 	}
 
@@ -370,13 +410,14 @@ public class PointsTracker implements PluginLifecycleComponent
 
 	private void reset()
 	{
-		this.personalTotalPoints = BASE_POINTS;
-		this.personalRoomPoints = 0;
-		this.nonPartyPoints = 0;
-		this.teamSize = 0;
-		this.raidLevel = -1;
-		this.wardenDowns = 0;
-		this.seenMvpItems.clear();
+		personalTotalPoints = BASE_POINTS;
+		personalRoomPoints = 0;
+		nonPartyPoints = 0;
+		teamSize = 0;
+		raidLevel = -1;
+		wardenDowns = 0;
+		seenMvpItems.clear();
+		pointsFinalized = false;
 
 		partyPointsTracker.clearPartyPointsMap();
 		updatePersonalPartyPoints(true);
