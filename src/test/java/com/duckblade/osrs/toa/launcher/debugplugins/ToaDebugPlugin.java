@@ -1,7 +1,5 @@
 package com.duckblade.osrs.toa.launcher.debugplugins;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 import com.google.inject.Provides;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -10,7 +8,6 @@ import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
-import org.slf4j.LoggerFactory;
 
 @Singleton
 @PluginDescriptor(

@@ -7,7 +7,6 @@ import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateChanged;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.awt.Color;
@@ -46,13 +45,13 @@ public class PointsTracker implements PluginLifecycleComponent
 {
 
 	// todo puzzles:
-		// 50 per puzzle completed AND 50 to each player in the lane on completion
-		// memory: 100 pts per tile matched only to the second player
+	// 50 per puzzle completed AND 50 to each player in the lane on completion
+	// memory: 100 pts per tile matched only to the second player
 	// todo apmeken:
-		// 25 per pillar repaired / 25 per vent neutralized
-		// -25 for mistimed pillar repair / vent
-		// 25 to sight on corruption clear / -25 on fail
-		// 25 to healer on corruption cure
+	// 25 per pillar repaired / 25 per vent neutralized
+	// -25 for mistimed pillar repair / vent
+	// 25 to sight on corruption clear / -25 on fail
+	// 25 to healer on corruption cure
 
 	public static final String EVENT_NAME = "raidCompletedPoints";
 
