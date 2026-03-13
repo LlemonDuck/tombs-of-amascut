@@ -39,7 +39,7 @@ dependencies {
 }
 
 group = 'com.duckblade.osrs'
-version = '2.15.0'
+version = '2.16.0'
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
