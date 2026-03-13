@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.NpcChanged;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -23,9 +24,6 @@ import net.runelite.client.eventbus.Subscribe;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class ObeliskPuzzleSolver implements PluginLifecycleComponent
 {
-
-	private static final int OBELISK_ID_INACTIVE = 11698;
-	private static final int OBELISK_ID_ACTIVE = 11699;
 
 	private final EventBus eventBus;
 
@@ -59,7 +57,7 @@ public class ObeliskPuzzleSolver implements PluginLifecycleComponent
 	@Subscribe
 	public void onNpcChanged(NpcChanged e)
 	{
-		if (e.getNpc().getId() == OBELISK_ID_ACTIVE)
+		if (e.getNpc().getId() == NpcID.TOA_SCABARAS_GUESSER_OBELISK_HIT)
 		{
 			LocalPoint obeliskTile = e.getNpc().getLocalLocation();
 			if (!obeliskOrder.contains(obeliskTile))
@@ -69,7 +67,7 @@ public class ObeliskPuzzleSolver implements PluginLifecycleComponent
 
 			activeObelisks++;
 		}
-		else if (e.getNpc().getId() == OBELISK_ID_INACTIVE)
+		else if (e.getNpc().getId() == NpcID.TOA_SCABARAS_GUESSER_OBELISK)
 		{
 			activeObelisks = 0;
 		}
