@@ -6,6 +6,7 @@ import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerPanelManager;
 import com.duckblade.osrs.toa.features.het.solver.HetSolverOverlay;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
 import com.duckblade.osrs.toa.features.pointstracker.OverlayPurpleWeightDisplayMode;
+import com.duckblade.osrs.toa.features.pointstracker.PointsTrackerOverlayEnableMode;
 import com.duckblade.osrs.toa.features.scabaras.ScabarasHelperMode;
 import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.timetracking.SplitsMode;
@@ -980,16 +981,17 @@ public interface TombsOfAmascutConfig extends Config
 
 	// Points Tracker
 
+	String KEY_POINTS_TRACKER_MODE = "pointsTrackerOverlayMode";
 	@ConfigItem(
-		keyName = "pointsTrackerOverlayEnable",
+		keyName = KEY_POINTS_TRACKER_MODE,
 		name = "Enable Overlay",
 		description = "Show points earned within the raid.",
 		position = 0,
 		section = SECTION_POINTS_TRACKER
 	)
-	default boolean pointsTrackerOverlayEnable()
+	default PointsTrackerOverlayEnableMode pointsTrackerOverlayEnableMode()
 	{
-		return true;
+		return PointsTrackerOverlayEnableMode.ALWAYS;
 	}
 
 	@ConfigItem(

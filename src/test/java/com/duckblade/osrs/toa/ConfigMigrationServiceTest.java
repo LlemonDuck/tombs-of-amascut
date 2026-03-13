@@ -6,12 +6,14 @@ import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_DEPOSIT_BOX_FILTER
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_MENU_SWAP;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_PREVENT_EXIT;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HP_ORB_MODE;
+import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_POINTS_TRACKER_MODE;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_QUICK_PROCEED_ENABLE_MODE;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_SCABARAS_MATCHING_DISPLAY_MODE_NAME;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
+import com.duckblade.osrs.toa.features.pointstracker.PointsTrackerOverlayEnableMode;
 import com.duckblade.osrs.toa.features.scabaras.overlay.MatchingTileDisplayMode;
 import net.runelite.client.config.ConfigManager;
 import org.junit.jupiter.api.Test;
@@ -91,6 +93,37 @@ class ConfigMigrationServiceTest
 	{
 		when(configManager.getConfiguration(CONFIG_GROUP, "hideHpOrbs", Boolean.class)).thenReturn(null);
 		configMigrationService.migrateHideHpOrbs();
+
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@Test
+	void pointsTrackerOverlayEnableFalse()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "pointsTrackerOverlayEnable", Boolean.class)).thenReturn(false);
+		configMigrationService.migratePointsTrackerOverlay();
+
+		verify(configManager).unsetConfiguration(CONFIG_GROUP, "pointsTrackerOverlayEnable");
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_POINTS_TRACKER_MODE, PointsTrackerOverlayEnableMode.OFF);
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@Test
+	void pointsTrackerOverlayEnableTrue()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "pointsTrackerOverlayEnable", Boolean.class)).thenReturn(true);
+		configMigrationService.migratePointsTrackerOverlay();
+
+		verify(configManager).unsetConfiguration(CONFIG_GROUP, "pointsTrackerOverlayEnable");
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_POINTS_TRACKER_MODE, PointsTrackerOverlayEnableMode.ALWAYS);
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@Test
+	void pointsTrackerOverlayEnableNull()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "pointsTrackerOverlayEnable", Boolean.class)).thenReturn(null);
+		configMigrationService.migratePointsTrackerOverlay();
 
 		verifyNoMoreInteractions(configManager);
 	}
