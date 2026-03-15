@@ -14,23 +14,37 @@ import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Actor;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.NpcID;
+import net.runelite.api.Player;
 import net.runelite.api.Point;
+import net.runelite.api.Renderable;
+import net.runelite.api.Skill;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.ChatMessage;
+import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
+import net.runelite.api.events.StatChanged;
+import net.runelite.client.callback.ClientThread;
+import net.runelite.client.callback.Hooks;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.party.PartyMember;
+import net.runelite.client.party.PartyService;
+import net.runelite.client.party.WSClient;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -49,27 +63,40 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	private static final String ROOM_FAIL_MESSAGE = "Your party failed to complete";
 
 	private final Client client;
+	private final ClientThread clientThread;
+	private final Hooks hooks;
 	private final EventBus eventBus;
 	private final OverlayManager overlayManager;
+	private final WSClient wsClient;
+	private final PartyService partyService;
 	private final TombsOfAmascutConfig config;
 	private final SwarmerDataManager swarmerDataManager;
 	private final SwarmerPanel swarmerPanel;
 
 	private final Map<Integer, SwarmNpc> aliveSwarms = new HashMap<>();
 	private final Map<Integer, Map<Integer, Integer>> leaks = new HashMap<>();
+	private final Set<Integer> deadSwarmIndexes = new HashSet<>();
+	private final Map<Skill, Integer> previousXpMap = new EnumMap<>(Skill.class);
 
 	private int waveNumber;
 	private int kephriDownCount;
+	private int currentPhase = 1;
 
 	private boolean isKephriDowned;
 	private int lastSpawnTick;
 
+	private final Hooks.RenderableDrawListener drawListener = this::shouldDraw;
+
 	@Inject
-	public SwarmerOverlay(Client client, EventBus eventBus, OverlayManager overlayManager, TombsOfAmascutConfig config, SwarmerDataManager swarmerDataManager, SwarmerPanel swarmerPanel)
+	public SwarmerOverlay(Client client, ClientThread clientThread, Hooks hooks, EventBus eventBus, OverlayManager overlayManager, WSClient wsClient, PartyService partyService, TombsOfAmascutConfig config, SwarmerDataManager swarmerDataManager, SwarmerPanel swarmerPanel)
 	{
 		this.client = client;
+		this.clientThread = clientThread;
+		this.hooks = hooks;
 		this.eventBus = eventBus;
 		this.overlayManager = overlayManager;
+		this.wsClient = wsClient;
+		this.partyService = partyService;
 		this.config = config;
 		this.swarmerDataManager = swarmerDataManager;
 		this.swarmerPanel = swarmerPanel;
@@ -91,12 +118,17 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	{
 		eventBus.register(this);
 		overlayManager.add(this);
+		wsClient.registerMessage(SwarmKilled.class);
+		clientThread.invoke(this::initializePreviousXpMap);
+		hooks.registerRenderableDrawListener(drawListener);
 		reset();
 	}
 
 	@Override
 	public void shutDown()
 	{
+		hooks.unregisterRenderableDrawListener(drawListener);
+		wsClient.unregisterMessage(SwarmKilled.class);
 		eventBus.unregister(this);
 		overlayManager.remove(this);
 		reset();
@@ -106,10 +138,87 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	{
 		leaks.clear();
 		aliveSwarms.clear();
+		deadSwarmIndexes.clear();
+		previousXpMap.clear();
 		isKephriDowned = false;
 		lastSpawnTick = -1;
 		waveNumber = 0;
 		kephriDownCount = 0;
+		currentPhase = 1;
+	}
+
+	private void initializePreviousXpMap()
+	{
+		previousXpMap.clear();
+		for (Skill skill : Skill.values())
+		{
+			previousXpMap.put(skill, client.getSkillExperience(skill));
+		}
+	}
+
+	private boolean shouldDraw(Renderable renderable, boolean drawingUI)
+	{
+		if (!config.hideOnHit() && !config.hideHighSwarm())
+		{
+			return true;
+		}
+
+		if (renderable instanceof NPC)
+		{
+			NPC npc = (NPC) renderable;
+			if (npc.getId() != NpcID.SCARAB_SWARM_11723)
+			{
+				return true;
+			}
+
+			int npcIndex = npc.getIndex();
+
+			// Don't draw dead swarms (hit by player)
+			if (config.hideOnHit() && deadSwarmIndexes.contains(npcIndex))
+			{
+				return false;
+			}
+
+			// Check if we should hide high wave swarms
+			if (config.hideHighSwarm())
+			{
+				SwarmNpc swarm = aliveSwarms.get(npcIndex);
+				if (swarm != null && swarm.getWaveSpawned() > getCurrentThreshold())
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	private int getCurrentThreshold()
+	{
+		return currentPhase == 1 ? config.waveThreshold() : config.waveThresholdPhase2();
+	}
+
+	public boolean isHidden(NPC npc)
+	{
+		if (npc.getId() != NpcID.SCARAB_SWARM_11723)
+		{
+			return false;
+		}
+
+		if (config.hideOnHit() && deadSwarmIndexes.contains(npc.getIndex()))
+		{
+			return true;
+		}
+
+		if (config.hideHighSwarm())
+		{
+			SwarmNpc swarm = aliveSwarms.get(npc.getIndex());
+			if (swarm != null && swarm.getWaveSpawned() > getCurrentThreshold())
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Subscribe
@@ -129,6 +238,129 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 
 			SwarmNpc swarm = new SwarmNpc(npc, waveNumber);
 			aliveSwarms.put(npc.getIndex(), swarm);
+
+			// If this is a high wave swarm and we're hiding them, mark it as dead immediately
+			if (config.hideHighSwarm() && waveNumber > getCurrentThreshold())
+			{
+				deadSwarmIndexes.add(npc.getIndex());
+				if (!npc.isDead())
+				{
+					npc.setDead(true);
+				}
+			}
+		}
+	}
+
+	@Subscribe
+	public void onNpcDespawned(NpcDespawned event)
+	{
+		NPC npc = event.getNpc();
+		if (npc.getId() == NpcID.SCARAB_SWARM_11723)
+		{
+			deadSwarmIndexes.remove(npc.getIndex());
+		}
+	}
+
+	@Subscribe
+	public void onStatChanged(StatChanged event)
+	{
+		if (!config.hideOnHit() || !isKephriDowned || aliveSwarms.isEmpty())
+		{
+			return;
+		}
+
+		Skill skill = event.getSkill();
+		int xpAfter = client.getSkillExperience(skill);
+		Integer xpBeforeObj = previousXpMap.get(skill);
+
+		// Allow the first XP drop we see to immediately hide a swarm
+		if (xpBeforeObj == null)
+		{
+			previousXpMap.put(skill, xpAfter);
+		}
+		else
+		{
+			previousXpMap.put(skill, xpAfter);
+			if (xpAfter <= xpBeforeObj)
+			{
+				return;
+			}
+		}
+
+		// XP gained - hide the swarm we're currently attacking
+		Player player = client.getLocalPlayer();
+		if (player == null)
+		{
+			return;
+		}
+
+		Actor interacting = player.getInteracting();
+		if (!(interacting instanceof NPC))
+		{
+			return;
+		}
+
+		NPC interactingNpc = (NPC) interacting;
+		if (interactingNpc.getId() != NpcID.SCARAB_SWARM_11723)
+		{
+			return;
+		}
+
+		int npcIndex = interactingNpc.getIndex();
+		SwarmNpc scarab = aliveSwarms.get(npcIndex);
+
+		if (scarab != null && !deadSwarmIndexes.contains(npcIndex))
+		{
+			// Add to dead list first so shouldDraw filters it immediately
+			deadSwarmIndexes.add(npcIndex);
+
+			// Remove from alive swarms so overlay doesn't render it
+			aliveSwarms.remove(npcIndex);
+
+			// Set the NPC as dead
+			if (!interactingNpc.isDead())
+			{
+				interactingNpc.setDead(true);
+			}
+
+			broadcastSwarmKilled(npcIndex);
+		}
+	}
+
+	@Subscribe
+	public void onSwarmKilled(SwarmKilled message)
+	{
+		PartyMember local = partyService.getLocalMember();
+		if (local != null && local.getMemberId() == message.getMemberId())
+		{
+			return;
+		}
+
+		clientThread.invokeLater(() -> markSwarmKilled(message.getNpcIndex()));
+	}
+
+	private void broadcastSwarmKilled(int npcIndex)
+	{
+		if (partyService.getLocalMember() != null)
+		{
+			partyService.send(new SwarmKilled(npcIndex));
+		}
+
+		markSwarmKilled(npcIndex);
+	}
+
+	private void markSwarmKilled(int npcIndex)
+	{
+		deadSwarmIndexes.add(npcIndex);
+		aliveSwarms.remove(npcIndex);
+
+		for (NPC npc : client.getNpcs())
+		{
+			if (npc != null && npc.getIndex() == npcIndex && !npc.isDead())
+			{
+				npc.setDead(true);
+				break;
+			}
 		}
 	}
 
@@ -183,6 +415,13 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 			kephriDownCount++;
 			waveNumber = 0;
 			aliveSwarms.clear();
+			deadSwarmIndexes.clear();
+
+			// Cycle phases when Kephri goes down
+			if (kephriDownCount > 1)
+			{
+				currentPhase = (currentPhase == 1) ? 2 : 1;
+			}
 		}
 		else if (isKephriDowned && npc.getAnimation() == ANIMATION_KEPHRI_UP)
 		{
@@ -241,6 +480,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 		graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		aliveSwarms.values()
 			.stream()
+			.filter(swarm -> !shouldFilterSwarm(swarm))
 			.collect(Collectors.groupingBy(swarm -> swarm.getNpc().getWorldLocation()))
 			.values()
 			.forEach(tileSwarms ->
@@ -253,6 +493,31 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 				}
 			});
 		return null;
+	}
+
+	private boolean shouldFilterSwarm(SwarmNpc swarm)
+	{
+		// Don't show if the swarm is marked as dead (hit by player)
+		if (config.hideOnHit() && deadSwarmIndexes.contains(swarm.getNpc().getIndex()))
+		{
+			return true;
+		}
+
+		// Don't show if the NPC itself is being hidden
+		if (isHidden(swarm.getNpc()))
+		{
+			return true;
+		}
+
+		// Don't show if hiding high wave numbers and this swarm is above phase-specific threshold
+		if (config.hideHighNumber())
+		{
+			if (swarm.getWaveSpawned() > getCurrentThreshold())
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void draw(Graphics2D graphics, SwarmNpc swarmer, int offset)
