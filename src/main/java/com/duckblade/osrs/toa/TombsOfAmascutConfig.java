@@ -452,6 +452,18 @@ public interface TombsOfAmascutConfig extends Config
 		return new Color(0x40FFC800, true);
 	}
 
+	@ConfigItem(
+		name = "Issue Helper",
+		description = "Shows skull markers on pillars and vents when the sight player fixes issues.",
+		position = 11,
+		keyName = "apmekenIssueHelper",
+		section = SECTION_APMEKEN
+	)
+	default boolean apmekenIssueHelper()
+	{
+		return true;
+	}
+
 	// Het
 
 	@ConfigItem(
