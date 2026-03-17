@@ -358,7 +358,8 @@ public class PointsTracker implements PluginLifecycleComponent
 	public void onVarbitChanged(VarbitChanged e)
 	{
 		// as of client rev 232, personal points are transmitted to the client at the END OF THE RAID ONLY
-		if (e.getVarpId() == VarPlayerID.TOA_PERSONAL_CONTRIBUTION)
+		if (e.getVarpId() == VarPlayerID.TOA_PERSONAL_CONTRIBUTION &&
+			e.getValue() > 0)
 		{
 			personalRoomPoints = 0;
 			personalTotalPoints = e.getValue() + BASE_POINTS;
