@@ -311,6 +311,18 @@ public interface TombsOfAmascutConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+		name = "Only Label Healing Swarms",
+		description = "Only display labels for swarms that can heal Kephri.",
+		position = 6,
+		keyName = "swarmerOnlyLabelHealing",
+		section = SECTION_KEPHRI
+	)
+	default boolean swarmerOnlyLabelHealing()
+	{
+		return false;
+	}
+
 	// Apmeken
 
 	@ConfigItem(

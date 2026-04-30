@@ -63,6 +63,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 
 	private boolean isKephriDowned;
 	private int lastSpawnTick;
+	private int kephriNpcIndex = -1;
 
 	@Inject
 	public SwarmerOverlay(Client client, EventBus eventBus, OverlayManager overlayManager, TombsOfAmascutConfig config, SwarmerDataManager swarmerDataManager, SwarmerPanel swarmerPanel)
@@ -110,6 +111,7 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 		lastSpawnTick = -1;
 		waveNumber = 0;
 		kephriDownCount = 0;
+		kephriNpcIndex = -1;
 	}
 
 	@Subscribe
@@ -177,6 +179,8 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 
 	private void handleKephriAnimationChanged(NPC npc)
 	{
+		kephriNpcIndex = npc.getIndex();
+
 		if (!isKephriDowned && npc.getAnimation() == ANIMATION_KEPHRI_DOWN)
 		{
 			isKephriDowned = true;
@@ -188,6 +192,44 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 		{
 			isKephriDowned = false;
 		}
+	}
+
+	private boolean canSwarmHealKephri(SwarmNpc swarm)
+	{
+		int wave = swarm.getWaveSpawned();
+		int npcIndex = swarm.getNpc().getIndex();
+
+		// First down
+		if (kephriDownCount == 1)
+		{
+			if (wave >= 1 && wave <= 18)
+			{
+				return true;
+			}
+
+			// special case: swarm 19
+			if (wave == 19 && kephriNpcIndex != -1 && npcIndex < kephriNpcIndex)
+			{
+				return true;
+			}
+		}
+
+		// Second down
+		if (kephriDownCount == 2)
+		{
+			if (wave >= 1 && wave <= 14)
+			{
+				return true;
+			}
+
+			// special case: swarm 15
+			if (wave == 15 && kephriNpcIndex != -1 && npcIndex < kephriNpcIndex)
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Subscribe
@@ -257,6 +299,11 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 
 	private void draw(Graphics2D graphics, SwarmNpc swarmer, int offset)
 	{
+		if (config.swarmerOnlyLabelHealing() && !canSwarmHealKephri(swarmer))
+		{
+			return;
+		}
+
 		String text = String.valueOf(swarmer.getWaveSpawned());
 
 		Point canvasTextLocation = swarmer.getNpc().getCanvasTextLocation(graphics, text, 0);
