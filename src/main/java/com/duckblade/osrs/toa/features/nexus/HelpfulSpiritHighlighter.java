@@ -1,4 +1,4 @@
-package com.duckblade.osrs.toa.features;
+package com.duckblade.osrs.toa.features.nexus;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
@@ -83,7 +83,7 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		Widget button = client.getWidget(this.getCurrentBundleType().widgetId);
+		Widget button = client.getWidget(this.getCurrentBundleType().getWidgetId());
 		if (button != null && !button.isHidden())
 		{
 			Rectangle answerRect = button.getBounds();
@@ -114,15 +114,15 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
 
 		int widgetId = widget.getId();
 		// If button being clicked isn't one of the Helpful Spirit bundle buttons, let the click go through as normal
-		if (!(widgetId == BundleType.CHAOS.widgetId ||
-			widgetId == BundleType.POWER.widgetId ||
-			widgetId == BundleType.LIFE.widgetId))
+		if (!(widgetId == BundleType.CHAOS.getWidgetId() ||
+			widgetId == BundleType.POWER.getWidgetId() ||
+			widgetId == BundleType.LIFE.getWidgetId()))
 		{
 			return;
 		}
 
 		// If user is attempting to click the wrong bundle option, stop the click
-		if (widgetId != this.getCurrentBundleType().widgetId)
+		if (widgetId != this.getCurrentBundleType().getWidgetId())
 		{
 			event.consume();
 		}
@@ -134,17 +134,4 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
 		return isFirstPass ? config.firstHelpfulSpiritSelection() : config.secondHelpfulSpiritSelection();
 	}
 
-	public enum BundleType
-	{
-		LIFE(50921478),
-		CHAOS(50921481),
-		POWER(50921484);
-
-		private final int widgetId;
-
-		BundleType(int widgetId)
-		{
-			this.widgetId = widgetId;
-		}
-	}
 }

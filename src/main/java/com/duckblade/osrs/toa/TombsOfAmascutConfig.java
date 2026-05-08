@@ -1,6 +1,6 @@
 package com.duckblade.osrs.toa;
 
-import com.duckblade.osrs.toa.features.HelpfulSpiritHighlighter;
+import com.duckblade.osrs.toa.features.nexus.BundleType;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps.QuickProceedEnableMode;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerFonts;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerPanelManager;
@@ -1347,9 +1347,9 @@ public interface TombsOfAmascutConfig extends Config
 			position = 1,
 			section = SECTION_HELPFUL_SPIRIT
 	)
-	default HelpfulSpiritHighlighter.BundleType firstHelpfulSpiritSelection()
+	default BundleType firstHelpfulSpiritSelection()
 	{
-		return HelpfulSpiritHighlighter.BundleType.CHAOS;
+		return BundleType.CHAOS;
 	}
 
 	@ConfigItem(
@@ -1359,8 +1359,8 @@ public interface TombsOfAmascutConfig extends Config
 			position = 2,
 			section = SECTION_HELPFUL_SPIRIT
 	)
-	default HelpfulSpiritHighlighter.BundleType secondHelpfulSpiritSelection()
+	default BundleType secondHelpfulSpiritSelection()
 	{
-		return HelpfulSpiritHighlighter.BundleType.LIFE;
+		return BundleType.LIFE;
 	}
 }

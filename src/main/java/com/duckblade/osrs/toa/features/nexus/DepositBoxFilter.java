@@ -1,4 +1,4 @@
-package com.duckblade.osrs.toa.features;
+package com.duckblade.osrs.toa.features.nexus;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
