@@ -29,11 +29,8 @@ import com.duckblade.osrs.toa.TombsOfAmascutPlugin;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidState;
 import java.io.File;
-import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.events.GameObjectSpawned;
@@ -111,9 +108,9 @@ public class SarcophagusOpeningSoundPlayer implements PluginLifecycleComponent
 		{
 			audioPlayer.play(f, config.chestAudioVolume());
 		}
-		catch (UnsupportedAudioFileException | IOException | LineUnavailableException e)
+		catch (Exception e)
 		{
-			log.warn("Failed to play toa chest audio");
+			log.warn("Failed to play toa chest audio", e);
 		}
 	}
 }
