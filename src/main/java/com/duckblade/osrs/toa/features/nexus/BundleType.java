@@ -13,4 +13,16 @@ public enum BundleType
 
 	private final int widgetId;
 
+	public static BundleType byWidgetId(int widgetId)
+	{
+		for (BundleType type : values())
+		{
+			if (type.getWidgetId() == widgetId)
+			{
+				return type;
+			}
+		}
+		return null;
+	}
+
 }

@@ -1329,13 +1329,25 @@ public interface TombsOfAmascutConfig extends Config
 	String SECTION_HELPFUL_SPIRIT = "sectionHelpfulSpirit";
 
 	@ConfigItem(
-			name = "Enable Helpful Spirit Highlight",
-			description = "Highlight selected Helpful Spirit bundle and prevent misclicks on other bundles",
+			name = "Highlight Correct Bundle",
+			description = "Highlight selected Helpful Spirit bundle.",
 			position = 0,
-			keyName = "enableHelpfulSpiritHighlight",
+			keyName = "enableHighlightBundles",
 			section = SECTION_HELPFUL_SPIRIT
 	)
-	default boolean enableHelpfulSpiritHighlight()
+	default boolean enableHighlightBundles()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			name = "Deprioritize Other Bundles",
+			description = "Prevent misclicks on other Helpful Spirit bundles.",
+			position = 1,
+			keyName = "deprioritizeOtherBundles",
+			section = SECTION_HELPFUL_SPIRIT
+	)
+	default boolean deprioritizeOtherBundles()
 	{
 		return false;
 	}
