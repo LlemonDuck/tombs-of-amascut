@@ -2,14 +2,15 @@ package com.duckblade.osrs.toa.features.nexus;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.runelite.api.gameval.InterfaceID;
 
 @RequiredArgsConstructor
 @Getter
 public enum BundleType
 {
-	LIFE(50921478),
-	CHAOS(50921481),
-	POWER(50921484);
+	LIFE(InterfaceID.ToaMidraidLoot.SELECT_BUTTON_1),
+	CHAOS(InterfaceID.ToaMidraidLoot.SELECT_BUTTON_2),
+	POWER(InterfaceID.ToaMidraidLoot.SELECT_BUTTON_3);
 
 	private final int widgetId;
 
