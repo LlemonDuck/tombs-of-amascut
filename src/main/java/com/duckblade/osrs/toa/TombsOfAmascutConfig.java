@@ -1361,7 +1361,7 @@ public interface TombsOfAmascutConfig extends Config
 	)
 	default BundleType firstHelpfulSpiritSelection()
 	{
-		return BundleType.CHAOS;
+		return BundleType.POWER;
 	}
 
 	@ConfigItem(
