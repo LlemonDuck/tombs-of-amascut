@@ -3,7 +3,9 @@ package com.duckblade.osrs.toa.features;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidRoom;
+import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateChanged;
+import com.duckblade.osrs.toa.util.RaidStateTracker;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -36,7 +38,8 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
 
 	@Inject
 	public HelpfulSpiritHighlighter(
-		EventBus eventBus, Client client,
+		EventBus eventBus,
+		Client client,
 		TombsOfAmascutConfig config,
 		OverlayManager overlayManager
 	)
@@ -50,31 +53,49 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 	}
 
+	@Override
+	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
+	{
+		return config.enableHelpfulSpiritHighlight() &&
+			raidState.getCurrentRoom() == RaidRoom.NEXUS;
+	}
+
+	@Override
+	public void startUp()
+	{
+		pathCompleteCount = 0;
+		eventBus.register(this);
+		overlayManager.add(this);
+	}
+
+	@Override
+	public void shutDown()
+	{
+		eventBus.unregister(this);
+		overlayManager.remove(this);
+	}
+
 	/**
 	 * Draws an outline around the correct helpful spirit bundle
 	 */
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		// Only display highlighting if player has set checkbox to true
-		if (config.enableHelpfulSpiritHighlight())
+		BundleType selection;
+		if (pathCompleteCount == 2)
 		{
-			BundleType selection;
-			if (pathCompleteCount == 2)
-			{
-				selection = config.firstHelpfulSpiritSelection();
-			}
-			else
-			{
-				selection = config.secondHelpfulSpiritSelection();
-			}
-			Widget button = client.getWidget(selection.widgetId);
-			if (button != null && !button.isHidden())
-			{
-				Rectangle answerRect = button.getBounds();
-				graphics.setColor(Color.CYAN);
-				graphics.draw(answerRect);
-			}
+			selection = config.firstHelpfulSpiritSelection();
+		}
+		else
+		{
+			selection = config.secondHelpfulSpiritSelection();
+		}
+		Widget button = client.getWidget(selection.widgetId);
+		if (button != null && !button.isHidden())
+		{
+			Rectangle answerRect = button.getBounds();
+			graphics.setColor(Color.CYAN);
+			graphics.draw(answerRect);
 		}
 		return null;
 	}
@@ -154,21 +175,6 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
 			pathCompleteCount += 1;
 			log.debug("Path complete count is now: " + pathCompleteCount);
 		}
-	}
-
-	@Override
-	public void startUp()
-	{
-		pathCompleteCount = 0;
-		eventBus.register(this);
-		overlayManager.add(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
-		overlayManager.remove(this);
 	}
 
 	public enum BundleType
