@@ -103,7 +103,7 @@ public class AdditionPuzzleSolver implements PluginLifecycleComponent
 		.put(45, ImmutableSet.of(0, 1, 2, 3, 4, 5, 10))
 		.build();
 
-	private static final Pattern TARGET_NUMBER_PATTERN = Pattern.compile("The number (\\d+) has been hastily chipped into the stone.");
+	private static final Pattern TARGET_NUMBER_PATTERN = Pattern.compile("The number @.*@(\\d+) has been hastily chipped into the stone.");
 
 	private final EventBus eventBus;
 	private final Client client;
