@@ -5,9 +5,10 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 import lombok.experimental.UtilityClass;
 import net.runelite.api.Client;
-import net.runelite.api.InventoryID;
 import net.runelite.api.ItemContainer;
-import net.runelite.api.ItemID;
+import net.runelite.api.gameval.InventoryID;
+import net.runelite.api.gameval.ItemID;
+import net.runelite.api.gameval.VarbitID;
 
 @UtilityClass
 public class PickaxeUtil
@@ -22,40 +23,39 @@ public class PickaxeUtil
 		ItemID.ADAMANT_PICKAXE,
 		ItemID.RUNE_PICKAXE,
 		ItemID.DRAGON_PICKAXE,
-		ItemID.DRAGON_PICKAXE_12797,
-		ItemID.DRAGON_PICKAXE_OR,
-		ItemID.DRAGON_PICKAXE_OR_25376,
+		ItemID.DRAGON_PICKAXE_PRETTY,
+		ItemID.ZALCANO_PICKAXE,
+		ItemID.TRAILBLAZER_PICKAXE_NO_INFERNAL,
 		ItemID.INFERNAL_PICKAXE,
-		ItemID.INFERNAL_PICKAXE_OR,
-		ItemID.INFERNAL_PICKAXE_UNCHARGED,
-		ItemID.INFERNAL_PICKAXE_UNCHARGED_25369,
+		ItemID.INFERNAL_PICKAXE_EMPTY,
+		ItemID.TRAILBLAZER_PICKAXE,
+		ItemID.TRAILBLAZER_PICKAXE_EMPTY,
 		ItemID.CRYSTAL_PICKAXE,
-		ItemID.CRYSTAL_PICKAXE_23863,
 		ItemID.CRYSTAL_PICKAXE_INACTIVE,
-		ItemID._3RD_AGE_PICKAXE,
-		ItemID.GILDED_PICKAXE,
-		ItemID.ECHO_PICKAXE
+		ItemID._3A_PICKAXE,
+		ItemID.TRAIL_GILDED_PICKAXE,
+		ItemID.LEAGUE_TRAILBLAZER_PICKAXE,
+		ItemID.TRAILBLAZER_RELOADED_PICKAXE,
+		ItemID.TRAILBLAZER_RELOADED_PICKAXE_EMPTY,
+		ItemID.TRAILBLAZER_RELOADED_PICKAXE_NO_INFERNAL
 	);
-
-	private static final int VARBIT_PICKAXE_STORAGE = 14440;
 
 	public static boolean hasPickaxe(Client client)
 	{
-
-		ItemContainer inv = client.getItemContainer(InventoryID.INVENTORY);
-		ItemContainer equip = client.getItemContainer(InventoryID.EQUIPMENT);
+		ItemContainer inv = client.getItemContainer(InventoryID.INV);
+		ItemContainer equip = client.getItemContainer(InventoryID.WORN);
 		if (inv == null && equip == null)
 		{
 			return false;
 		}
 
-		return (inv != null && InventoryUtil.containsAny(inv, PICKAXE_IDS)) ||
-			(equip != null && InventoryUtil.containsAny(equip, PICKAXE_IDS));
+		return (InventoryUtil.containsAny(inv, PICKAXE_IDS)) ||
+			(InventoryUtil.containsAny(equip, PICKAXE_IDS));
 	}
 
 	public static boolean pickaxeIsInStorage(Client client)
 	{
-		return client.getVarbitValue(VARBIT_PICKAXE_STORAGE) != 0;
+		return client.getVarbitValue(VarbitID.TOA_PICKAXE_STORED) != 0;
 	}
 
 }
