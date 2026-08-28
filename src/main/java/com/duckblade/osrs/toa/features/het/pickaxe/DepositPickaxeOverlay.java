@@ -15,12 +15,11 @@ import javax.inject.Singleton;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
-import net.runelite.api.NullObjectID;
-import net.runelite.api.ObjectID;
 import net.runelite.api.Point;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
+import net.runelite.api.gameval.ObjectID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.Overlay;
@@ -33,10 +32,10 @@ import net.runelite.client.ui.overlay.OverlayUtil;
 public class DepositPickaxeOverlay extends Overlay implements PluginLifecycleComponent
 {
 
-	private static final int OBJECT_AKKHA_ENTRY = ObjectID.ENTRY_45131;
-	private static final int OBJECT_RAID_ENTRY = ObjectID.ENTRY_46089;
-	private static final int OBJECT_EMPTY_CAVITY = NullObjectID.NULL_49566;
-	private static final int OBJECT_STATUE = NullObjectID.NULL_45468;
+	private static final int OBJECT_AKKHA_ENTRY = net.runelite.api.gameval.ObjectID.TOA_DOOR_CONTINUE;
+	private static final int OBJECT_RAID_ENTRY = net.runelite.api.gameval.ObjectID.TOA_LOBBY_RAID_ENTRY;
+	private static final int OBJECT_EMPTY_CAVITY = ObjectID.TOA_LOBBY_WALL02_CAVITY_PARENT;
+	private static final int OBJECT_STATUE = ObjectID.TOA_HET_STATUE_PARENT;
 	private static final Color OVERLAY_COLOR = new Color(225, 163, 12);
 	private static final String WARNING_TEXT = "Deposit a pickaxe.";
 
