@@ -100,26 +100,8 @@ public class ApmekenBaboonIndicator implements PluginLifecycleComponent
 
 	private void removeNpc(final NPC npc)
 	{
-		final int id = npc.getId();
-
-		switch (id)
-		{
-			case NpcID.TOA_PATH_APMEKEN_BABOON_ZOMBIE:
-				volatileBaboons.remove(npc);
-			case NpcID.TOA_PATH_APMEKEN_BABOON_MELEE_1:
-			case NpcID.TOA_PATH_APMEKEN_BABOON_MELEE_2:
-			case NpcID.TOA_PATH_APMEKEN_BABOON_MAGIC_1:
-			case NpcID.TOA_PATH_APMEKEN_BABOON_MAGIC_2:
-			case NpcID.TOA_PATH_APMEKEN_BABOON_RANGED_1:
-			case NpcID.TOA_PATH_APMEKEN_BABOON_RANGED_2:
-			case NpcID.TOA_PATH_APMEKEN_BABOON_SHAMAN:
-			case NpcID.TOA_PATH_APMEKEN_BABOON_CURSED:
-			case NpcID.TOA_PATH_APMEKEN_BABOON_THRALL:
-				baboons.remove(npc);
-				break;
-			default:
-				break;
-		}
+		volatileBaboons.remove(npc);
+		baboons.remove(npc);
 	}
 
 }
