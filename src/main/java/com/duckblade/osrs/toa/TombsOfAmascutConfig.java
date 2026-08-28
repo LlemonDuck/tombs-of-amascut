@@ -1,5 +1,7 @@
 package com.duckblade.osrs.toa;
 
+import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveHelperMode;
+import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveOverlay;
 import com.duckblade.osrs.toa.features.nexus.BundleType;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps.QuickProceedEnableMode;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerFonts;
@@ -326,16 +328,17 @@ public interface TombsOfAmascutConfig extends Config
 
 	// Apmeken
 
+	String KEY_APMEKEN_WAVE_HELPER_MODE = "apmekenWaveHelperMode";
 	@ConfigItem(
-		keyName = "apmekenWaveHelper",
-		name = "Apmeken Wave Helper",
+		keyName = KEY_APMEKEN_WAVE_HELPER_MODE,
+		name = "Wave Helper",
 		description = "When entering the Path of Apmeken, displays a list of the waves in the RuneLite side panel.",
 		position = 0,
 		section = SECTION_APMEKEN
 	)
-	default boolean apmekenWaveHelper()
+	default ApmekenWaveHelperMode apmekenWaveHelperMode()
 	{
-		return true;
+		return ApmekenWaveHelperMode.OVERLAY;
 	}
 
 	@ConfigItem(

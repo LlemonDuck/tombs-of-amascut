@@ -1,9 +1,5 @@
 package com.duckblade.osrs.toa.features.apmeken;
 
-import static com.duckblade.osrs.toa.features.apmeken.Baboon.*;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import java.util.List;
 import java.util.Map;
 import javax.inject.Singleton;
 import javax.swing.BorderFactory;
@@ -17,19 +13,6 @@ import net.runelite.client.ui.PluginPanel;
 @Singleton
 public class ApmekenWavePanel extends PluginPanel
 {
-
-	private static final List<Map<Baboon, Integer>> WAVES = ImmutableList.of(
-		ImmutableMap.of(BRAWLER, 2),
-		ImmutableMap.of(THROWER, 1, MAGE, 1),
-		ImmutableMap.of(SHAMAN, 1, BRAWLER, 2),
-		ImmutableMap.of(THROWER, 2, VOLATILE, 1),
-		ImmutableMap.of(MAGE, 2, CURSED, 1),
-		ImmutableMap.of(THROWER, 2, SHAMAN, 1, VOLATILE, 1, CURSED, 1),
-		ImmutableMap.of(MAGE, 1, SHAMAN, 2, VOLATILE, 1),
-		ImmutableMap.of(BRAWLER, 2, SHAMAN, 2, CURSED, 1),
-		ImmutableMap.of(BRAWLER, 1, THROWER, 1, SHAMAN, 1, CURSED, 2),
-		ImmutableMap.of(SHAMAN, 2, VOLATILE, 3)
-	);
 
 	public ApmekenWavePanel()
 	{
@@ -45,7 +28,7 @@ public class ApmekenWavePanel extends PluginPanel
 		add(headerLabel);
 
 		int waveNum = 1;
-		for (Map<Baboon, Integer> wave : WAVES)
+		for (Map<Baboon, Integer> wave : Baboon.WAVES)
 		{
 			JPanel rowPanel = new JPanel();
 			rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.Y_AXIS));
@@ -59,7 +42,7 @@ public class ApmekenWavePanel extends PluginPanel
 				JLabel spawnLabel = new JLabel(count + "x " + baboon.getDisplayName());
 				spawnLabel.setHorizontalAlignment(SwingConstants.LEFT);
 				spawnLabel.setFont(FontManager.getRunescapeFont());
-				spawnLabel.setForeground(baboon.getColor());
+				spawnLabel.setForeground(baboon.getSidePanelColor());
 				rowPanel.add(spawnLabel);
 			});
 		}

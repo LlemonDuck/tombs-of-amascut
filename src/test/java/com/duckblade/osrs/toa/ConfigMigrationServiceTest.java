@@ -1,6 +1,7 @@
 package com.duckblade.osrs.toa;
 
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.CONFIG_GROUP;
+import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_APMEKEN_WAVE_HELPER_MODE;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_DEPOSIT_BOX_FILTER_STRING_FIRST;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_DEPOSIT_BOX_FILTER_STRING_SECOND;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_MENU_SWAP;
@@ -11,6 +12,7 @@ import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_QUICK_PROCEED_ENAB
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_SCABARAS_MATCHING_DISPLAY_MODE_NAME;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
+import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveHelperMode;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
 import com.duckblade.osrs.toa.features.pointstracker.PointsTrackerOverlayEnableMode;
@@ -282,6 +284,41 @@ class ConfigMigrationServiceTest
 		configMigrationService.migrateDepositBoxFilterString();
 
 		verify(configManager).getConfiguration(CONFIG_GROUP, "depositBoxFilterString", String.class);
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@Test
+	void migrateApmekenWaveHelperOn()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "apmekenWaveHelper", Boolean.class))
+			.thenReturn(true);
+		configMigrationService.migrateApmekenWaveHelper();
+
+		verify(configManager).unsetConfiguration(CONFIG_GROUP, "apmekenWaveHelper");
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_APMEKEN_WAVE_HELPER_MODE, (Object) ApmekenWaveHelperMode.SIDE_PANEL);
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@Test
+	void migrateApmekenWaveHelperOff()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "apmekenWaveHelper", Boolean.class))
+			.thenReturn(false);
+		configMigrationService.migrateApmekenWaveHelper();
+
+		verify(configManager).unsetConfiguration(CONFIG_GROUP, "apmekenWaveHelper");
+		verify(configManager).setConfiguration(CONFIG_GROUP, KEY_APMEKEN_WAVE_HELPER_MODE, (Object) ApmekenWaveHelperMode.OFF);
+		verifyNoMoreInteractions(configManager);
+	}
+
+	@Test
+	void migrateApmekenWaveHelperNull()
+	{
+		when(configManager.getConfiguration(CONFIG_GROUP, "apmekenWaveHelper", Boolean.class))
+			.thenReturn(null);
+		configMigrationService.migrateApmekenWaveHelper();
+
+		verify(configManager).getConfiguration(CONFIG_GROUP, "apmekenWaveHelper", Boolean.class);
 		verifyNoMoreInteractions(configManager);
 	}
 

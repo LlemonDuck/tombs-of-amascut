@@ -1,6 +1,7 @@
 package com.duckblade.osrs.toa;
 
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.CONFIG_GROUP;
+import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_APMEKEN_WAVE_HELPER_MODE;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_DEPOSIT_BOX_FILTER_STRING_FIRST;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_DEPOSIT_BOX_FILTER_STRING_SECOND;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_HET_PICKAXE_MENU_SWAP;
@@ -11,6 +12,8 @@ import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_QUICK_PROCEED_ENAB
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_SCABARAS_MATCHING_DISPLAY_MODE_NAME;
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
+import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveHelperMode;
+import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveOverlay;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
 import com.duckblade.osrs.toa.features.pointstracker.PointsTrackerOverlayEnableMode;
@@ -39,6 +42,7 @@ public class ConfigMigrationService
 		migrateScabarasMatchingDisplayMode();
 		migrateDepositBoxFilterString();
 		migratePointsTrackerOverlay();
+		migrateApmekenWaveHelper();
 	}
 
 	@VisibleForTesting
@@ -112,6 +116,17 @@ public class ConfigMigrationService
 			KEY_POINTS_TRACKER_MODE,
 			Boolean.class,
 			enabled -> enabled ? PointsTrackerOverlayEnableMode.ALWAYS : PointsTrackerOverlayEnableMode.OFF
+		);
+	}
+
+	@VisibleForTesting
+	void migrateApmekenWaveHelper()
+	{
+		migrate(
+			"apmekenWaveHelper",
+			KEY_APMEKEN_WAVE_HELPER_MODE,
+			Boolean.class,
+			enabled -> enabled ? ApmekenWaveHelperMode.SIDE_PANEL : ApmekenWaveHelperMode.OFF
 		);
 	}
 

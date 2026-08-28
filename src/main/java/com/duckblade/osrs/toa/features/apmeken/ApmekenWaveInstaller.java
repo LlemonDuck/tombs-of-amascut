@@ -28,8 +28,8 @@ public class ApmekenWaveInstaller implements PluginLifecycleComponent
 	@Override
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
-		return config.apmekenWaveHelper() &&
-			raidState.getCurrentRoom() == RaidRoom.APMEKEN;
+		return raidState.getCurrentRoom() == RaidRoom.APMEKEN &&
+			config.apmekenWaveHelperMode() == ApmekenWaveHelperMode.SIDE_PANEL;
 	}
 
 	@Override
