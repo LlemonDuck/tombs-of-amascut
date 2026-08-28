@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 16;
+	public static final int TARGET_VERSION = 17;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -150,6 +150,11 @@ public class UpdateNotifier implements PluginLifecycleComponent
 
 			case 15:
 				updates.add("<string>(Helpful Spirit)</strong> now has additional options to prevent misclicks on the wrong bundles.");
+
+			case 16:
+				updates.add("<string>(Path of Scabaras -> Addition)</strong> fixed an issue preventing solving caused by a recent engine update.");
+				updates.add("<string>(Path of Apmeken -> Wave Helper)</strong> added an overlay helper for wave spawns.");
+				updates.add("<string>(Path of Het)</strong> now recognizes the trailblazer reloaded dragon pickaxe.");
 		}
 
 		return updates;
