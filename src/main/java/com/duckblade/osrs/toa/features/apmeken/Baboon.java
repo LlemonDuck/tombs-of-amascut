@@ -16,6 +16,8 @@ public enum Baboon
 	THRALL("Thrall", new Color(92, 99, 115)),
 	VOLATILE("Volatile", new Color(118, 107, 79)),
 	CURSED("Cursed", new Color(64, 149, 126)),
+	SPECIAL("Special (Shaman, Volatile, Cursed)", new Color(166, 77, 121))
+	// Special was added in an update, just means any of the above
 	;
 
 	private final String displayName;

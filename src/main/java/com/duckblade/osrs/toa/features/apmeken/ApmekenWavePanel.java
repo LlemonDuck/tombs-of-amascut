@@ -19,16 +19,14 @@ public class ApmekenWavePanel extends PluginPanel
 {
 
 	private static final List<Map<Baboon, Integer>> WAVES = ImmutableList.of(
-		ImmutableMap.of(BRAWLER, 2),
-		ImmutableMap.of(THROWER, 1, MAGE, 1),
-		ImmutableMap.of(SHAMAN, 1, BRAWLER, 2),
-		ImmutableMap.of(THROWER, 2, VOLATILE, 1),
-		ImmutableMap.of(MAGE, 2, CURSED, 1),
-		ImmutableMap.of(THROWER, 2, SHAMAN, 1, VOLATILE, 1, CURSED, 1),
-		ImmutableMap.of(MAGE, 1, SHAMAN, 2, VOLATILE, 1),
-		ImmutableMap.of(BRAWLER, 2, SHAMAN, 2, CURSED, 1),
-		ImmutableMap.of(BRAWLER, 1, THROWER, 1, SHAMAN, 1, CURSED, 2),
-		ImmutableMap.of(SHAMAN, 2, VOLATILE, 3)
+		ImmutableMap.of(BRAWLER, 2, SHAMAN, 1),  // 1
+		ImmutableMap.of(THROWER, 2, VOLATILE, 1),  // 2
+		ImmutableMap.of(MAGE, 2, CURSED, 1),  // 3
+		ImmutableMap.of(THROWER, 2, SPECIAL, 3),  // 4
+		ImmutableMap.of(MAGE, 2, SHAMAN, 1, SPECIAL, 2),  // 5
+		ImmutableMap.of(BRAWLER, 2, SHAMAN, 1, SPECIAL, 2),  // 6
+		ImmutableMap.of(BRAWLER, 1, THROWER, 1, SHAMAN, 1, CURSED, 2),  // 7
+		ImmutableMap.of(SHAMAN, 1, VOLATILE, 2, SPECIAL, 2)  // 8
 	);
 
 	public ApmekenWavePanel()
