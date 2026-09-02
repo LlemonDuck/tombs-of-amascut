@@ -4,6 +4,7 @@ import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.features.*;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicator;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicatorOverlay;
+import com.duckblade.osrs.toa.features.apmeken.ApmekenIssueHelper;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
 import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealth;
 import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealthOverlay;
@@ -74,6 +75,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		AkkhaShadowHealthOverlay akkhaShadowHealthOverlay,
 		ApmekenBaboonIndicator apmekenBaboonIndicator,
 		ApmekenBaboonIndicatorOverlay apmekenBaboonIndicatorOverlay,
+		ApmekenIssueHelper apmekenIssueHelper,
 		ApmekenWaveInstaller apmekenWaveInstaller,
 		BabaSarcophagusWarning babaSarcophagusWarning,
 		BeamTimerOverlay beamTimerOverlay,
@@ -130,6 +132,7 @@ public class TombsOfAmascutModule extends AbstractModule
 			akkhaShadowHealthOverlay,
 			apmekenBaboonIndicator,
 			apmekenBaboonIndicatorOverlay,
+			apmekenIssueHelper,
 			apmekenWaveInstaller,
 			babaSarcophagusWarning,
 			beamTimerOverlay,
