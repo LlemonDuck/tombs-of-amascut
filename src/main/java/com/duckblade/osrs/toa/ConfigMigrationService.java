@@ -13,7 +13,6 @@ import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_SCABARAS_MATCHING_
 import static com.duckblade.osrs.toa.TombsOfAmascutConfig.KEY_SCABARAS_MATCHING_DISPLAY_MODE_TILE;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveHelperMode;
-import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveOverlay;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeMode;
 import com.duckblade.osrs.toa.features.hporbs.HpOrbMode;
 import com.duckblade.osrs.toa.features.pointstracker.PointsTrackerOverlayEnableMode;

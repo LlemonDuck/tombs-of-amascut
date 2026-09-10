@@ -1,7 +1,6 @@
 package com.duckblade.osrs.toa;
 
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveHelperMode;
-import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveOverlay;
 import com.duckblade.osrs.toa.features.nexus.BundleType;
 import com.duckblade.osrs.toa.features.QuickProceedSwaps.QuickProceedEnableMode;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerFonts;
