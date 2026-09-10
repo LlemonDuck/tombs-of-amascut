@@ -22,6 +22,7 @@ import net.runelite.api.gameval.InterfaceID;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.util.Text;
+import net.runelite.client.util.WildcardMatcher;
 
 @Slf4j
 @Singleton
@@ -101,9 +102,11 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 
 	boolean isDepositAllowed(String itemName)
 	{
+		String sanitizedItem = Text.removeTags(itemName).strip().toLowerCase();
 		boolean isFirstPass = raidCompletionTracker.getCompletedBosses().size() <= 4; // 2 paths + 2 bosses
 		return (isFirstPass ?  allowedItemNamesFirstPass : allowedItemNamesSecondPass)
-			.contains(Text.removeTags(itemName).strip().toLowerCase());
+			.stream()
+			.anyMatch(pattern -> WildcardMatcher.matches(pattern, sanitizedItem));
 	}
 
 	private void interceptDepositAction(MenuEntryAdded e)
