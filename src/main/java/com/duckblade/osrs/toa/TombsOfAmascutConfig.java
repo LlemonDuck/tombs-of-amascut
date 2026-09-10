@@ -1296,6 +1296,18 @@ public interface TombsOfAmascutConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+		keyName = "partyBoardShowIgnores",
+		name = "Show Ignores on Party Board",
+		description = "Highlights party board members that are on your ignore list.",
+		position = 8,
+		section = SECTION_MISCELLANEOUS
+	)
+	default boolean partyBoardShowIgnores()
+	{
+		return true;
+	}
+
 	// Hidden
 
 	@ConfigItem(
