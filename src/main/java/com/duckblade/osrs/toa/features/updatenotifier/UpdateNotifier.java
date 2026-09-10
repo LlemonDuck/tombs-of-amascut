@@ -19,7 +19,7 @@ import net.runelite.client.util.ImageUtil;
 public class UpdateNotifier implements PluginLifecycleComponent
 {
 
-	public static final int TARGET_VERSION = 17;
+	public static final int TARGET_VERSION = 18;
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(UpdateNotifier.class, "icon.png");
 
 	private final ClientToolbar clientToolbar;
@@ -149,12 +149,16 @@ public class UpdateNotifier implements PluginLifecycleComponent
 				updates.add("<strong>(Points Tracker -> Enable Overlay)</strong> A new option exists to only show the points overlay when in the tomb (loot room).");
 
 			case 15:
-				updates.add("<string>(Helpful Spirit)</strong> now has additional options to prevent misclicks on the wrong bundles.");
+				updates.add("<strong>(Helpful Spirit)</strong> now has additional options to prevent misclicks on the wrong bundles.");
 
 			case 16:
-				updates.add("<string>(Path of Scabaras -> Addition)</strong> fixed an issue preventing solving caused by a recent engine update.");
-				updates.add("<string>(Path of Apmeken -> Wave Helper)</strong> added an overlay helper for wave spawns.");
-				updates.add("<string>(Path of Het)</strong> now recognizes the trailblazer reloaded dragon pickaxe.");
+				updates.add("<strong>(Path of Scabaras -> Addition)</strong> fixed an issue preventing solving caused by a recent engine update.");
+				updates.add("<strong>(Path of Apmeken -> Wave Helper)</strong> added an overlay helper for wave spawns.");
+				updates.add("<strong>(Path of Het)</strong> now recognizes the trailblazer reloaded dragon pickaxe.");
+
+			case 17:
+				updates.add("<strong>(Miscellaneous -> Show Ignores on Party Board)</strong> can now highlight players on your ignore list for avoidance.");
+				updates.add("<strong>(Deposit Box)</strong> now supports wildcard expressions, e.g. '*super combat*'.");
 		}
 
 		return updates;
