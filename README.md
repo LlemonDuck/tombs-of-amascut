@@ -31,8 +31,6 @@ or replacing them with linear health bars.
 Displays an update panel with a changelog upon entering the ToA lobby
 after major plugin updates.
 
-![Update Notifier Preview](docs/update-notifier.png)
-
 ### 🚀 Salts Cooldown
 
 Prevents wasting smelling salts by adding a cooldown to the Crush option.
@@ -40,8 +38,6 @@ Prevents wasting smelling salts by adding a cooldown to the Crush option.
 ### 🚀 Deposit Pot Filter
 
 Prevents accidental item deposits by restricting depositable items to a configurable filter list.
-
-![Deposit Pot Filter Preview](docs/deposit-pot-filter.png)
 
 </details>
 
@@ -63,8 +59,6 @@ Font style and size can be controlled by the matching options.
 Displays wave numbers on scarab swarms in the kephri room as they spawn.
 The side panel will show logs of previous raid's leaked swarms.
 Font color, style and size can be controlled by the matching options.
-
-![Swarmer Example](docs/kephri/swarms.png "Swarmer Example")
 
 </details>
 
@@ -101,8 +95,6 @@ Clicking on Het's seal the tick prior to the beam being cast
 (when the indicator is green) will enable you to get an extra hit on the seal. 
 In solos, this can be used for a consistent "1-down".
 
-![Beam Timer Example](docs/het/beam-timer.gif)
-
 ### 🚀 Mirror Puzzle Solver
 
 Displays solutions for the mirror puzzle by showing
@@ -112,14 +104,10 @@ and which dirty mirrors require cleaning.
 Place mirrors on the marked tiles with the reflective face 
 aligned with the filled-in portion of the red triangle.
 
-![Mirror Solve Example](docs/het/mirror-solve.gif)
-
 ### 🚀 Deposit-pickaxe Swap
 
 While holding a pickaxe, swaps the left-click option to "Deposit-pickaxe"
 on the statue in the mirror puzzle room.
-
-![](docs/het/deposit-pickaxe.gif)
 
 ### 🚀 Pickaxe Reminders
 
@@ -129,8 +117,6 @@ until you have deposited your pickaxe into the holder statue.
 To override, use the right-click menu on the entryway.
 
 A visual warning can also be enabled for each with the matching option.
-
-![Pickaxe Reminder](docs/het/pickaxe-reminder.png)
 
 </details>
 
@@ -143,31 +129,22 @@ A visual warning can also be enabled for each with the matching option.
 
 Highlights a path through the tiles that will add up to the target number.
 
-![](docs/scabaras/addition.gif)
-
 #### Lights
 
 Shows the tiles that need to be flipped to solve the puzzle.
-
-![](docs/scabaras/lights.gif)
 
 #### Obelisks
 
 Highlights the correct obelisk pattern as it is discovered by the player.
 
-![](docs/scabaras/obelisks.gif)
-
 #### Sequence
 
 Shows the tile sequence after the pattern is shown.
-
-![](docs/scabaras/sequence.gif)
 
 #### Matching
 
 Highlights each tile image a unique colour after it has been flipped once.
 
-![](docs/scabaras/matching.gif)
 </details>
 
 <details>
@@ -255,9 +232,6 @@ Whether to use the currently-installed resource pack
 (from the Resource Packs plugin)
 can be toggled using the matching option.
 
-![Screenshot Button](docs/invocations/screenshot-button.png)
-
-![Example Invocations Screenshot](docs/invocations/screenshot-example.png)
 </details>
 
 <details>
