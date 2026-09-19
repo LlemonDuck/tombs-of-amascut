@@ -6,12 +6,15 @@ import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicator;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicatorOverlay;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveOverlay;
+import com.duckblade.osrs.toa.features.apmeken.VolatileBaboonCountdown;
 import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealth;
 import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealthOverlay;
 import com.duckblade.osrs.toa.features.boss.baba.BabaSarcophagusWarning;
+import com.duckblade.osrs.toa.features.boss.kephri.KephriHighlights;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerDataManager;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerOverlay;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerPanelManager;
+import com.duckblade.osrs.toa.features.boss.zebak.ZebakWaveOverlay;
 import com.duckblade.osrs.toa.features.het.beamtimer.BeamTimerOverlay;
 import com.duckblade.osrs.toa.features.het.beamtimer.BeamTimerTracker;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeOverlay;
@@ -29,6 +32,8 @@ import com.duckblade.osrs.toa.features.pointstracker.PointsOverlay;
 import com.duckblade.osrs.toa.features.pointstracker.PointsTracker;
 import com.duckblade.osrs.toa.features.pointstracker.PurpleWeightingManager;
 import com.duckblade.osrs.toa.features.pointstracker.PurpleWeightingPartyBoardManager;
+import com.duckblade.osrs.toa.features.reminders.SpellbookWarningOverlay;
+import com.duckblade.osrs.toa.features.reminders.ToaInventoryOverlay;
 import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.scabaras.overlay.AdditionPuzzleSolver;
 import com.duckblade.osrs.toa.features.scabaras.overlay.LightPuzzleSolver;
@@ -123,6 +128,11 @@ public class TombsOfAmascutModule extends AbstractModule
 		SwarmerPanelManager swarmerPanelManager,
 		SwarmerDataManager swarmerDataManager,
 		TargetTimeManager targetTimeManager,
+		ToaInventoryOverlay toaInventoryOverlay,
+		SpellbookWarningOverlay spellbookWarningOverlay,
+		KephriHighlights kephriHighlights,
+		ZebakWaveOverlay zebakWaveOverlay,
+		VolatileBaboonCountdown volatileBaboonCountdown,
 		UpdateNotifier updateNotifier
 	)
 	{
@@ -181,6 +191,11 @@ public class TombsOfAmascutModule extends AbstractModule
 			swarmerPanelManager,
 			swarmerDataManager,
 			targetTimeManager,
+			toaInventoryOverlay,
+			spellbookWarningOverlay,
+			kephriHighlights,
+			zebakWaveOverlay,
+			volatileBaboonCountdown,
 			updateNotifier
 		);
 	}

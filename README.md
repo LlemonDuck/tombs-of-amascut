@@ -13,6 +13,19 @@ Utilities and information for raiding the Tombs of Amascut.
 <details>
 <summary>Miscellaneous</summary>
 
+### Visual Inventory and Lobby Reminders
+
+Optional pulsing inventory highlights make the Keris partisan of the sun and
+both doses of Ambrosia easier to locate in ToA. The partisan is green above
+50 current Prayer and red at 50 or below; Ambrosia is green.
+
+In the entrance lobby, optional overhead reminders show the current spellbook
+and warn when no Dragon or Abyssal dagger variant is in the inventory.
+The reminders are independent and are hidden while the bank is open.
+
+These settings are disabled by default. The additions only draw overlays;
+they do not click, move, switch equipment, or perform game actions.
+
 ### 🚀 Quick Proceed
 Swaps all left-click "Enter", "Pass", etc. options
 to be left-click "Quick-Enter", "Quick-Pass", etc.
@@ -54,6 +67,13 @@ Font style and size can be controlled by the matching options.
 <details>
 <summary>Kephri</summary>
 
+### Explosive Eggs and Arcane Scarabs
+
+Optional rainbow highlights pulse over the small explosive eggs. Larger hatching
+eggs are excluded. A separate option adds a flashing red tile outline and
+"KILL ARCANE SCARAB" label to Arcane Scarabs while they are present.
+Both settings are disabled by default.
+
 ### 🚀 Swarmer
 
 Displays wave numbers on scarab swarms in the kephri room as they spawn.
@@ -64,6 +84,12 @@ Font color, style and size can be controlled by the matching options.
 
 <details>
 <summary>Path of Apmeken</summary>
+
+### Volatile Baboon Countdown
+
+An optional three-tick countdown starts when a volatile baboon's explosion
+animation is observed. This is separate from the existing explosion-radius
+highlight and is disabled by default.
 
 ### 🕰️ Apmeken Wave Helper (legacy)
 
@@ -82,6 +108,17 @@ Baboon thralls are not highlighted by default.
 
 Highlights the explosion area around each Volatile Baboon.
 The colour can be controlled by the matching option.
+
+</details>
+
+<details>
+<summary>Zebak</summary>
+
+### Wave Highlights
+
+An optional cyan outline and translucent fill mark the current tiles occupied
+by normal and bloody Zebak waves. This highlights the existing wave NPCs;
+it does not predict future wave positions. Disabled by default.
 
 </details>
 

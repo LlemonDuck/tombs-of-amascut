@@ -145,6 +145,14 @@ public interface TombsOfAmascutConfig extends Config
 	)
 	String SECTION_DEPOSIT_BOX = "sectionDepositBox";
 
+	@ConfigSection(
+		name = "Zebak",
+		description = "Configuration for the Zebak room.",
+		position = 14,
+		closedByDefault = true
+	)
+	String SECTION_ZEBAK = "sectionZebak";
+
 	// Akkha
 
 	@ConfigItem(
@@ -1403,4 +1411,101 @@ public interface TombsOfAmascutConfig extends Config
 	{
 		return BundleType.LIFE;
 	}
+
+	@ConfigItem(
+		keyName = "flashKeris",
+		name = "Flash Keris Partisan",
+		description = "Flashes the sun partisan green above 50 Prayer and red at 50 or below in ToA.",
+		section = SECTION_MISCELLANEOUS,
+		position = 30
+	)
+	default boolean flashKeris()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "flashAmbrosia",
+		name = "Flash Ambrosia",
+		description = "Flashes both Ambrosia doses green in ToA.",
+		section = SECTION_MISCELLANEOUS,
+		position = 31
+	)
+	default boolean flashAmbrosia()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "spellbookWarning",
+		name = "Lobby Spellbook Reminder",
+		description = "Shows the current spellbook above the player in the ToA lobby while the bank is closed.",
+		section = SECTION_MISCELLANEOUS,
+		position = 32
+	)
+	default boolean spellbookWarning()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "daggerWarning",
+		name = "Lobby Dagger Reminder",
+		description = "Warns in the ToA lobby when no Dragon or Abyssal dagger variant is in the inventory.",
+		section = SECTION_MISCELLANEOUS,
+		position = 33
+	)
+	default boolean daggerWarning()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "flashKephriEggs",
+		name = "Flash Explosive Eggs",
+		description = "Highlights small explosive Kephri eggs in pulsing rainbow colours.",
+		section = SECTION_KEPHRI,
+		position = 7
+	)
+	default boolean flashKephriEggs()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "arcaneScarabWarning",
+		name = "Arcane Scarab Warning",
+		description = "Highlights Arcane Scarabs with a flashing red outline and kill reminder.",
+		section = SECTION_KEPHRI,
+		position = 8
+	)
+	default boolean arcaneScarabWarning()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "highlightZebakWaves",
+		name = "Highlight Waves",
+		description = "Outlines the current Zebak wave tiles in cyan.",
+		section = SECTION_ZEBAK,
+		position = 0
+	)
+	default boolean highlightZebakWaves()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "volatileBaboonTimer",
+		name = "Volatile Baboon Countdown",
+		description = "Shows a three-tick countdown after a volatile baboon starts its explosion animation.",
+		section = SECTION_APMEKEN,
+		position = 11
+	)
+	default boolean volatileBaboonTimer()
+	{
+		return false;
+	}
+
 }
