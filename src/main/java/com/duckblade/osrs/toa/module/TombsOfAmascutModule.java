@@ -13,6 +13,7 @@ import com.duckblade.osrs.toa.features.boss.baba.BabaSarcophagusWarning;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerDataManager;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerOverlay;
 import com.duckblade.osrs.toa.features.boss.kephri.swarmer.SwarmerPanelManager;
+import com.duckblade.osrs.toa.features.boss.zebak.ZebakWaveOverlay;
 import com.duckblade.osrs.toa.features.het.beamtimer.BeamTimerOverlay;
 import com.duckblade.osrs.toa.features.het.beamtimer.BeamTimerTracker;
 import com.duckblade.osrs.toa.features.het.pickaxe.DepositPickaxeOverlay;
@@ -125,7 +126,8 @@ public class TombsOfAmascutModule extends AbstractModule
 		SwarmerDataManager swarmerDataManager,
 		TargetTimeManager targetTimeManager,
 		UpdateNotifier updateNotifier,
-		VolatileBaboonCountdown volatileBaboonCountdown
+		VolatileBaboonCountdown volatileBaboonCountdown,
+		ZebakWaveOverlay zebakWaveOverlay
 	)
 	{
 		return ImmutableSet.of(
@@ -184,7 +186,8 @@ public class TombsOfAmascutModule extends AbstractModule
 			swarmerDataManager,
 			targetTimeManager,
 			updateNotifier,
-			volatileBaboonCountdown
+			volatileBaboonCountdown,
+			zebakWaveOverlay
 		);
 	}
 

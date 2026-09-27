@@ -65,9 +65,17 @@ public interface TombsOfAmascutConfig extends Config
 	String SECTION_KEPHRI = "sectionKephri";
 
 	@ConfigSection(
+		name = "Zebak",
+		description = "Configuration for the Zebak room.",
+		position = 4,
+		closedByDefault = true
+	)
+	String SECTION_ZEBAK = "sectionZebak";
+
+	@ConfigSection(
 		name = "Path of Apmeken",
 		description = "Options for the Path of Apmeken.",
-		position = 4,
+		position = 5,
 		closedByDefault = true
 	)
 	String SECTION_APMEKEN = "sectionApmeken";
@@ -75,7 +83,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Het",
 		description = "Helpers for the Path of Het.",
-		position = 5,
+		position = 6,
 		closedByDefault = true
 	)
 	String SECTION_HET = "sectionHet";
@@ -83,7 +91,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Path of Scabaras",
 		description = "Options for the puzzles in the Path of Scabaras.",
-		position = 6,
+		position = 7,
 		closedByDefault = true
 	)
 	String SECTION_SCABARAS = "sectionScabaras";
@@ -91,7 +99,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Burial Tomb",
 		description = "Configuration for the burial tomb.",
-		position = 7,
+		position = 8,
 		closedByDefault = true
 	)
 	String SECTION_BURIAL_TOMB = "sectionBurialTomb";
@@ -99,7 +107,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Purple Weights",
 		description = "Configuration for displaying the likelihood of certain purples over others based on raid level.",
-		position = 8,
+		position = 9,
 		closedByDefault = true
 	)
 	String SECTION_PURPLE_WEIGHTS = "sectionPurpleWeights";
@@ -108,7 +116,7 @@ public interface TombsOfAmascutConfig extends Config
 		name = "Points Tracker",
 		description = "<html>Tracks points for the raid, used in calculating drop chance." +
 			"<br/>NOTE: For teams, you MUST use the RuneLite Party plugin to receive team drop chance.</html>",
-		position = 9,
+		position = 10,
 		closedByDefault = true
 	)
 	String SECTION_POINTS_TRACKER = "sectionPointsTracker";
@@ -116,7 +124,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Presets",
 		description = "Save presets of invocations to quickly restore your invocations between runs of different types.",
-		position = 10,
+		position = 11,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_PRESETS = "invocationPresetsSection";
@@ -124,7 +132,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Invocation Screenshot",
 		description = "All config options related to the Invocation Screenshot functionality",
-		position = 11,
+		position = 12,
 		closedByDefault = true
 	)
 	String SECTION_INVOCATION_SCREENSHOT = "invocationScreenshotSection";
@@ -132,7 +140,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Time Tracking",
 		description = "Time tracking and splits.",
-		position = 12,
+		position = 13,
 		closedByDefault = true
 	)
 	String SECTION_TIME_TRACKING = "sectionTimeTracking";
@@ -140,7 +148,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigSection(
 		name = "Deposit Box",
 		description = "Prevents accidentally depositing the wrong items at the deposit box.",
-		position = 12,
+		position = 14,
 		closedByDefault = true
 	)
 	String SECTION_DEPOSIT_BOX = "sectionDepositBox";
@@ -321,6 +329,20 @@ public interface TombsOfAmascutConfig extends Config
 		section = SECTION_KEPHRI
 	)
 	default boolean swarmerOnlyLabelHealing()
+	{
+		return false;
+	}
+
+	// Zebak
+
+	@ConfigItem(
+		keyName = "highlightZebakWaves",
+		name = "Highlight Waves",
+		description = "Outlines the current Zebak wave tiles in cyan.",
+		section = SECTION_ZEBAK,
+		position = 0
+	)
+	default boolean highlightZebakWaves()
 	{
 		return false;
 	}

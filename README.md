@@ -88,6 +88,15 @@ explosion animation is observed.
 </details>
 
 <details>
+<summary>Zebak</summary>
+
+### 🚀 Wave Highlights
+
+Shows true-tile locations of the Zebak waves.
+
+</details>
+
+<details>
 <summary>Path of Het</summary>
 
 ### 🚀 Beam Timer
