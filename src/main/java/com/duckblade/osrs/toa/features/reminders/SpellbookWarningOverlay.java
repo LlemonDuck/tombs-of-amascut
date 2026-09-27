@@ -2,17 +2,17 @@ package com.duckblade.osrs.toa.features.reminders;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.InventoryUtil;
 import com.duckblade.osrs.toa.util.RaidState;
+import com.google.common.collect.ImmutableSet;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.Client;
-import net.runelite.api.InventoryID;
-import net.runelite.api.Item;
-import net.runelite.api.ItemContainer;
 import net.runelite.api.Player;
 import net.runelite.api.Point;
 import net.runelite.api.gameval.InterfaceID;
@@ -29,6 +29,26 @@ import net.runelite.client.ui.overlay.OverlayUtil;
 @Singleton
 public class SpellbookWarningOverlay extends Overlay implements PluginLifecycleComponent
 {
+
+	private static final Set<Integer> DAGGER_IDS = ImmutableSet.of(
+		ItemID.DRAGON_DAGGER,
+		ItemID.DRAGON_DAGGER_P,
+		ItemID.DRAGON_DAGGER_P_,
+		ItemID.DRAGON_DAGGER_P__,
+		ItemID.ABYSSAL_DAGGER,
+		ItemID.ABYSSAL_DAGGER_P,
+		ItemID.ABYSSAL_DAGGER_P_,
+		ItemID.ABYSSAL_DAGGER_P__,
+		ItemID.BR_DRAGON_DAGGER,
+		ItemID.BH_ABYSSAL_DAGGER_IMBUE,
+		ItemID.BH_ABYSSAL_DAGGER_P_IMBUE,
+		ItemID.BH_ABYSSAL_DAGGER_P__IMBUE,
+		ItemID.BH_ABYSSAL_DAGGER_P___IMBUE,
+		ItemID.BH_DRAGON_DAGGER_CORRUPTED,
+		ItemID.BH_DRAGON_DAGGER_P_CORRUPTED,
+		ItemID.BH_DRAGON_DAGGER_P__CORRUPTED,
+		ItemID.BH_DRAGON_DAGGER_P___CORRUPTED
+	);
 
 	private static final Color WARNING_TEXT = new Color(190, 80, 255);
 	private static final Color MISSING_DAGGER_TEXT = new Color(255, 50, 50);
@@ -88,7 +108,7 @@ public class SpellbookWarningOverlay extends Overlay implements PluginLifecycleC
 			OverlayUtil.renderTextLocation(graphics, spellbookLocation, spellbookText, WARNING_TEXT);
 		}
 
-		if (config.daggerWarning() && !hasDagger(client.getItemContainer(InventoryID.INVENTORY)))
+		if (config.daggerWarning() && !InventoryUtil.containsAny(client, DAGGER_IDS))
 		{
 			final String daggerText = "dagger not in inventory";
 			final Point daggerLocation = player.getCanvasTextLocation(
@@ -118,50 +138,6 @@ public class SpellbookWarningOverlay extends Overlay implements PluginLifecycleC
 				return "ARCEUUS";
 			default:
 				return "UNKNOWN";
-		}
-	}
-
-	static boolean hasDagger(ItemContainer inventory)
-	{
-		if (inventory == null)
-		{
-			return false;
-		}
-
-		for (Item item : inventory.getItems())
-		{
-			if (isDagger(item.getId()))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
-	static boolean isDagger(int itemId)
-	{
-		switch (itemId)
-		{
-			case ItemID.DRAGON_DAGGER:
-			case ItemID.DRAGON_DAGGER_P:
-			case ItemID.DRAGON_DAGGER_P_:
-			case ItemID.DRAGON_DAGGER_P__:
-			case ItemID.ABYSSAL_DAGGER:
-			case ItemID.ABYSSAL_DAGGER_P:
-			case ItemID.ABYSSAL_DAGGER_P_:
-			case ItemID.ABYSSAL_DAGGER_P__:
-			case ItemID.BR_DRAGON_DAGGER:
-			case ItemID.BH_ABYSSAL_DAGGER_IMBUE:
-			case ItemID.BH_ABYSSAL_DAGGER_P_IMBUE:
-			case ItemID.BH_ABYSSAL_DAGGER_P__IMBUE:
-			case ItemID.BH_ABYSSAL_DAGGER_P___IMBUE:
-			case ItemID.BH_DRAGON_DAGGER_CORRUPTED:
-			case ItemID.BH_DRAGON_DAGGER_P_CORRUPTED:
-			case ItemID.BH_DRAGON_DAGGER_P__CORRUPTED:
-			case ItemID.BH_DRAGON_DAGGER_P___CORRUPTED:
-				return true;
-			default:
-				return false;
 		}
 	}
 }
