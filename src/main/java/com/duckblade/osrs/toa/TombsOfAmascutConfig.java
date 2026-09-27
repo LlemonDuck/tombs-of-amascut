@@ -467,6 +467,18 @@ public interface TombsOfAmascutConfig extends Config
 		return new Color(0x40FFC800, true);
 	}
 
+	@ConfigItem(
+		keyName = "volatileBaboonTimer",
+		name = "Volatile Baboon Countdown",
+		description = "Shows a three-tick countdown after a volatile baboon starts its explosion animation.",
+		section = SECTION_APMEKEN,
+		position = 11
+	)
+	default boolean volatileBaboonTimer()
+	{
+		return false;
+	}
+
 	// Het
 
 	@ConfigItem(

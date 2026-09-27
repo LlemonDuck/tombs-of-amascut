@@ -6,6 +6,7 @@ import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicator;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicatorOverlay;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveOverlay;
+import com.duckblade.osrs.toa.features.apmeken.VolatileBaboonCountdown;
 import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealth;
 import com.duckblade.osrs.toa.features.boss.akkha.AkkhaShadowHealthOverlay;
 import com.duckblade.osrs.toa.features.boss.baba.BabaSarcophagusWarning;
@@ -123,7 +124,8 @@ public class TombsOfAmascutModule extends AbstractModule
 		SwarmerPanelManager swarmerPanelManager,
 		SwarmerDataManager swarmerDataManager,
 		TargetTimeManager targetTimeManager,
-		UpdateNotifier updateNotifier
+		UpdateNotifier updateNotifier,
+		VolatileBaboonCountdown volatileBaboonCountdown
 	)
 	{
 		return ImmutableSet.of(
@@ -181,7 +183,8 @@ public class TombsOfAmascutModule extends AbstractModule
 			swarmerPanelManager,
 			swarmerDataManager,
 			targetTimeManager,
-			updateNotifier
+			updateNotifier,
+			volatileBaboonCountdown
 		);
 	}
 

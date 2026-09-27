@@ -78,10 +78,12 @@ The highlight style and colour for each baboon can be controlled by the matching
 To disable a specific type of baboon highlighting, set its opacity to 0.
 Baboon thralls are not highlighted by default.
 
-### 🚀 Volatile Baboon Radius
+### 🚀 Volatile Baboon Radius and Countdown
 
 Highlights the explosion area around each Volatile Baboon.
 The colour can be controlled by the matching option.
+A three-tick countdown can also be shown when a volatile baboon's
+explosion animation is observed.
 
 </details>
 
