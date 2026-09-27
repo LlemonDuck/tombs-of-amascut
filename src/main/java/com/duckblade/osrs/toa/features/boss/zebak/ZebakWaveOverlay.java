@@ -13,7 +13,10 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import net.runelite.api.Client;
 import net.runelite.api.NPC;
+import net.runelite.api.Perspective;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.gameval.NpcID;
@@ -31,13 +34,15 @@ public class ZebakWaveOverlay extends Overlay implements PluginLifecycleComponen
 
 	private final OverlayManager overlayManager;
 	private final EventBus eventBus;
+	private final Client client;
 	private final Set<NPC> waves = new HashSet<>();
 
 	@Inject
-	public ZebakWaveOverlay(OverlayManager overlayManager, EventBus eventBus)
+	public ZebakWaveOverlay(OverlayManager overlayManager, EventBus eventBus, Client client)
 	{
 		this.overlayManager = overlayManager;
 		this.eventBus = eventBus;
+		this.client = client;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 	}
@@ -84,7 +89,14 @@ public class ZebakWaveOverlay extends Overlay implements PluginLifecycleComponen
 	{
 		for (NPC wave : waves)
 		{
-			Polygon tile = wave.getCanvasTilePoly();
+			// server-side tile, which leads the rendered position by up to a tick
+			LocalPoint trueTile = LocalPoint.fromWorld(wave.getWorldView(), wave.getWorldLocation());
+			if (trueTile == null)
+			{
+				continue;
+			}
+
+			Polygon tile = Perspective.getCanvasTilePoly(client, trueTile);
 			if (tile != null)
 			{
 				OverlayUtil.renderPolygon(graphics, tile, Color.CYAN, new Color(0, 180, 255, 55), new BasicStroke(4));
