@@ -1342,6 +1342,30 @@ public interface TombsOfAmascutConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "flashKeris",
+		name = "Flash Keris Partisan",
+		description = "Flashes the Keris partisan of the sun green/red if it is usable/not.",
+		position = 9,
+		section = SECTION_MISCELLANEOUS
+	)
+	default boolean flashKeris()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "flashAmbrosia",
+		name = "Flash Ambrosia",
+		description = "Flashes Ambrosia green.",
+		position = 10,
+		section = SECTION_MISCELLANEOUS
+	)
+	default boolean flashAmbrosia()
+	{
+		return false;
+	}
+
 	// Hidden
 
 	@ConfigItem(

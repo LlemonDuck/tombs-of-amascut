@@ -31,6 +31,7 @@ import com.duckblade.osrs.toa.features.pointstracker.PointsOverlay;
 import com.duckblade.osrs.toa.features.pointstracker.PointsTracker;
 import com.duckblade.osrs.toa.features.pointstracker.PurpleWeightingManager;
 import com.duckblade.osrs.toa.features.pointstracker.PurpleWeightingPartyBoardManager;
+import com.duckblade.osrs.toa.features.reminders.ToaInventoryOverlay;
 import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.scabaras.overlay.AdditionPuzzleSolver;
 import com.duckblade.osrs.toa.features.scabaras.overlay.LightPuzzleSolver;
@@ -125,6 +126,7 @@ public class TombsOfAmascutModule extends AbstractModule
 		SwarmerPanelManager swarmerPanelManager,
 		SwarmerDataManager swarmerDataManager,
 		TargetTimeManager targetTimeManager,
+		ToaInventoryOverlay toaInventoryOverlay,
 		UpdateNotifier updateNotifier,
 		VolatileBaboonCountdown volatileBaboonCountdown,
 		ZebakWaveOverlay zebakWaveOverlay
@@ -185,6 +187,7 @@ public class TombsOfAmascutModule extends AbstractModule
 			swarmerPanelManager,
 			swarmerDataManager,
 			targetTimeManager,
+			toaInventoryOverlay,
 			updateNotifier,
 			volatileBaboonCountdown,
 			zebakWaveOverlay

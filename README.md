@@ -13,6 +13,12 @@ Utilities and information for raiding the Tombs of Amascut.
 <details>
 <summary>Miscellaneous</summary>
 
+### 🚀 Visual Inventory Reminders
+
+Highlights the following items in your inventory
+* Keris partisan of the sun (red when below 50 prayer, green when above)
+* Ambrosia
+
 ### 🚀 Quick Proceed
 Swaps all left-click "Enter", "Pass", etc. options
 to be left-click "Quick-Enter", "Quick-Pass", etc.
@@ -38,6 +44,12 @@ Prevents wasting smelling salts by adding a cooldown to the Crush option.
 ### 🚀 Deposit Pot Filter
 
 Prevents accidental item deposits by restricting depositable items to a configurable filter list.
+
+### 🚀 Visual Inventory Reminders
+
+Highlights the following items in your inventory
+* Keris partisan of the sun (red when below 50 prayer, green when above)
+* Ambrosia
 
 </details>
 
