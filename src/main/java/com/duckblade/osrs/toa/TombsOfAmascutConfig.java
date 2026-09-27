@@ -1366,6 +1366,30 @@ public interface TombsOfAmascutConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+		keyName = "spellbookWarning",
+		name = "Lobby Spellbook Reminder",
+		description = "Shows the current spellbook above the player in the ToA lobby while the bank is closed.",
+		position = 11,
+		section = SECTION_MISCELLANEOUS
+	)
+	default boolean spellbookWarning()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "daggerWarning",
+		name = "Lobby Dagger Reminder",
+		description = "Warns in the ToA lobby when no Dragon or Abyssal dagger variant is in the inventory.",
+		position = 12,
+		section = SECTION_MISCELLANEOUS
+	)
+	default boolean daggerWarning()
+	{
+		return false;
+	}
+
 	// Hidden
 
 	@ConfigItem(

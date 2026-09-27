@@ -19,6 +19,11 @@ Highlights the following items in your inventory
 * Keris partisan of the sun (red when below 50 prayer, green when above)
 * Ambrosia
 
+### 🚀 Lobby Spellbook and Dagger Reminder
+
+Warns against starting the raid when you are on the wrong spellbook,
+or when you do not have a dragon dagger.
+
 ### 🚀 Quick Proceed
 Swaps all left-click "Enter", "Pass", etc. options
 to be left-click "Quick-Enter", "Quick-Pass", etc.
