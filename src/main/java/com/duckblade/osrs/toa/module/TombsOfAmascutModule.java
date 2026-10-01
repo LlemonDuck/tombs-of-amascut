@@ -1,7 +1,16 @@
 package com.duckblade.osrs.toa.module;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
-import com.duckblade.osrs.toa.features.*;
+import com.duckblade.osrs.toa.features.AdrenalineCooldown;
+import com.duckblade.osrs.toa.features.CameraShakeDisabler;
+import com.duckblade.osrs.toa.features.FadeDisabler;
+import com.duckblade.osrs.toa.features.IgnoreListPartyBoardHighlighter;
+import com.duckblade.osrs.toa.features.InvocationScreenshot;
+import com.duckblade.osrs.toa.features.LeftClickBankAll;
+import com.duckblade.osrs.toa.features.LobbyEntranceWarning;
+import com.duckblade.osrs.toa.features.PathLevelTracker;
+import com.duckblade.osrs.toa.features.QuickProceedSwaps;
+import com.duckblade.osrs.toa.features.SmellingSaltsCooldown;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicator;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenBaboonIndicatorOverlay;
 import com.duckblade.osrs.toa.features.apmeken.ApmekenWaveInstaller;
@@ -31,7 +40,8 @@ import com.duckblade.osrs.toa.features.pointstracker.PointsOverlay;
 import com.duckblade.osrs.toa.features.pointstracker.PointsTracker;
 import com.duckblade.osrs.toa.features.pointstracker.PurpleWeightingManager;
 import com.duckblade.osrs.toa.features.pointstracker.PurpleWeightingPartyBoardManager;
-import com.duckblade.osrs.toa.features.reminders.SpellbookWarningOverlay;
+import com.duckblade.osrs.toa.features.reminders.LobbyDaggerWarning;
+import com.duckblade.osrs.toa.features.reminders.LobbySpellbookWarning;
 import com.duckblade.osrs.toa.features.reminders.ToaInventoryOverlay;
 import com.duckblade.osrs.toa.features.scabaras.SkipObeliskOverlay;
 import com.duckblade.osrs.toa.features.scabaras.overlay.AdditionPuzzleSolver;
@@ -102,6 +112,9 @@ public class TombsOfAmascutModule extends AbstractModule
 		InvocationScreenshot invocationScreenshot,
 		LeftClickBankAll leftClickBankAll,
 		LightPuzzleSolver lightPuzzleSolver,
+		LobbyDaggerWarning lobbyDaggerWarning,
+		LobbyEntranceWarning lobbyEntranceWarning,
+		LobbySpellbookWarning lobbySpellbookWarning,
 		MatchingPuzzleSolver matchingPuzzleSolver,
 		ObeliskPuzzleSolver obeliskPuzzleSolver,
 		PartyPointsTracker partyPointsTracker,
@@ -120,7 +133,6 @@ public class TombsOfAmascutModule extends AbstractModule
 		SequencePuzzleSolver sequencePuzzleSolver,
 		SkipObeliskOverlay skipObeliskOverlay,
 		SmellingSaltsCooldown smellingSaltsCooldown,
-		SpellbookWarningOverlay spellbookWarningOverlay,
 		SplitsInfoBox splitsInfoBox,
 		SplitsOverlay splitsOverlay,
 		SplitsTracker splitsTracker,
@@ -164,6 +176,9 @@ public class TombsOfAmascutModule extends AbstractModule
 			invocationScreenshot,
 			leftClickBankAll,
 			lightPuzzleSolver,
+			lobbyDaggerWarning,
+			lobbyEntranceWarning,
+			lobbySpellbookWarning,
 			matchingPuzzleSolver,
 			obeliskPuzzleSolver,
 			partyPointsTracker,
@@ -182,7 +197,6 @@ public class TombsOfAmascutModule extends AbstractModule
 			sequencePuzzleSolver,
 			skipObeliskOverlay,
 			smellingSaltsCooldown,
-			spellbookWarningOverlay,
 			splitsInfoBox,
 			splitsOverlay,
 			splitsTracker,
@@ -194,6 +208,20 @@ public class TombsOfAmascutModule extends AbstractModule
 			updateNotifier,
 			volatileBaboonCountdown,
 			zebakWaveOverlay
+		);
+	}
+
+	@Provides
+	Set<LobbyEntranceWarning.Check> lobbyEntranceWarnings(
+		DepositPickaxeOverlay depositPickaxeOverlay,
+		LobbyDaggerWarning lobbyDaggerWarning,
+		LobbySpellbookWarning spellbookCheck
+	)
+	{
+		return ImmutableSet.of(
+			depositPickaxeOverlay,
+			lobbyDaggerWarning,
+			spellbookCheck
 		);
 	}
 

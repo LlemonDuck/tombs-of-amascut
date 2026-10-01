@@ -1,6 +1,7 @@
 package com.duckblade.osrs.toa.features.het.pickaxe;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
+import com.duckblade.osrs.toa.features.LobbyEntranceWarning;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
@@ -29,13 +30,11 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
 @Singleton
-public class DepositPickaxeOverlay extends Overlay implements PluginLifecycleComponent
+public class DepositPickaxeOverlay
+	extends Overlay
+	implements PluginLifecycleComponent, LobbyEntranceWarning.Check
 {
 
-	private static final int OBJECT_AKKHA_ENTRY = net.runelite.api.gameval.ObjectID.TOA_DOOR_CONTINUE;
-	private static final int OBJECT_RAID_ENTRY = net.runelite.api.gameval.ObjectID.TOA_LOBBY_RAID_ENTRY;
-	private static final int OBJECT_EMPTY_CAVITY = ObjectID.TOA_LOBBY_WALL02_CAVITY_PARENT;
-	private static final int OBJECT_STATUE = ObjectID.TOA_HET_STATUE_PARENT;
 	private static final Color OVERLAY_COLOR = new Color(225, 163, 12);
 	private static final String WARNING_TEXT = "Deposit a pickaxe.";
 
@@ -128,13 +127,12 @@ public class DepositPickaxeOverlay extends Overlay implements PluginLifecycleCom
 	{
 		switch (e.getGameObject().getId())
 		{
-			case OBJECT_EMPTY_CAVITY:
-			case OBJECT_STATUE:
+			case ObjectID.TOA_LOBBY_WALL02_CAVITY_PARENT:
+			case ObjectID.TOA_HET_STATUE_PARENT:
 				highlightObjects.put(e.getGameObject(), true);
 				break;
 
-			case OBJECT_RAID_ENTRY:
-			case OBJECT_AKKHA_ENTRY:
+			case ObjectID.TOA_DOOR_CONTINUE:
 				entry = e.getGameObject();
 				break;
 		}
@@ -145,13 +143,12 @@ public class DepositPickaxeOverlay extends Overlay implements PluginLifecycleCom
 	{
 		switch (e.getGameObject().getId())
 		{
-			case OBJECT_EMPTY_CAVITY:
-			case OBJECT_STATUE:
+			case ObjectID.TOA_LOBBY_WALL02_CAVITY_PARENT:
+			case ObjectID.TOA_HET_STATUE_PARENT:
 				highlightObjects.remove(e.getGameObject());
 				break;
 
-			case OBJECT_RAID_ENTRY:
-			case OBJECT_AKKHA_ENTRY:
+			case ObjectID.TOA_DOOR_CONTINUE:
 				entry = null;
 				break;
 		}
@@ -166,4 +163,21 @@ public class DepositPickaxeOverlay extends Overlay implements PluginLifecycleCom
 		}
 	}
 
+	@Override
+	public boolean isTriggered()
+	{
+		return !PickaxeUtil.hasPickaxe(client);
+	}
+
+	@Override
+	public String getText()
+	{
+		return WARNING_TEXT;
+	}
+
+	@Override
+	public Color getColor()
+	{
+		return OVERLAY_COLOR;
+	}
 }

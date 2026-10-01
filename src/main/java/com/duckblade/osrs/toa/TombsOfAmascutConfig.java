@@ -1369,7 +1369,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		keyName = "spellbookWarning",
 		name = "Lobby Spellbook Reminder",
-		description = "Shows the current spellbook above the player in the ToA lobby while the bank is closed.",
+		description = "Shows the current spellbook over the ToA raid entrance while the bank is closed.",
 		position = 11,
 		section = SECTION_MISCELLANEOUS
 	)
@@ -1381,7 +1381,7 @@ public interface TombsOfAmascutConfig extends Config
 	@ConfigItem(
 		keyName = "daggerWarning",
 		name = "Lobby Dagger Reminder",
-		description = "Warns in the ToA lobby when no Dragon or Abyssal dagger variant is in the inventory.",
+		description = "Warns over the ToA raid entrance when no Dragon or Abyssal dagger variant is in the inventory.",
 		position = 12,
 		section = SECTION_MISCELLANEOUS
 	)

@@ -2,6 +2,7 @@ package com.duckblade.osrs.toa.features.het.pickaxe;
 
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
+import com.duckblade.osrs.toa.util.MenuEntryUtil;
 import com.duckblade.osrs.toa.util.RaidRoom;
 import com.duckblade.osrs.toa.util.RaidState;
 import com.duckblade.osrs.toa.util.RaidStateTracker;
@@ -9,7 +10,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;
-import net.runelite.api.MenuEntry;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -48,23 +48,18 @@ public class DepositPickaxePreventEntry implements PluginLifecycleComponent
 		// don't lift out isEntry, it's more expensive than room checks
 		if (raidStateTracker.getCurrentState().isInLobby())
 		{
-			if (!PickaxeUtil.pickaxeIsInStorage(client) && isEntry(e.getMenuEntry()))
+			if (!PickaxeUtil.pickaxeIsInStorage(client) && MenuEntryUtil.isEntry(e.getMenuEntry()))
 			{
 				e.getMenuEntry().setDeprioritized(true);
 			}
 		}
 		else if (raidStateTracker.getCurrentState().getCurrentRoom() == RaidRoom.HET)
 		{
-			if (isEntry(e.getMenuEntry()) && PickaxeUtil.hasPickaxe(client))
+			if (MenuEntryUtil.isEntry(e.getMenuEntry()) && PickaxeUtil.hasPickaxe(client))
 			{
 				e.getMenuEntry().setDeprioritized(true);
 			}
 		}
 	}
 
-	private static boolean isEntry(MenuEntry menuEntry)
-	{
-		return menuEntry.getOption().contains("Enter") &&
-			menuEntry.getTarget().contains("Entry");
-	}
 }
