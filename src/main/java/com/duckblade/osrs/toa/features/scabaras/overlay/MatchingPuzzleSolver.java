@@ -19,13 +19,13 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GroundObjectSpawned;
 import net.runelite.api.gameval.ObjectID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class MatchingPuzzleSolver implements PluginLifecycleComponent
+public class MatchingPuzzleSolver
+	implements PluginLifecycleComponent
 {
 
 	private static final Map<Integer, String> TILE_NAMES = ImmutableMap.<Integer, String>builder()
@@ -77,8 +77,6 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 		.put(ObjectID.TOA_SCABARAS_FX12, ObjectID.TOA_SCABARAS_MEMORYGAME_TILE9) // boot
 		.build();
 
-	private final EventBus eventBus;
-
 	@Getter
 	private final Map<LocalPoint, MatchingTile> discoveredTiles = new HashMap<>(18);
 
@@ -91,14 +89,7 @@ public class MatchingPuzzleSolver implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
 		discoveredTiles.clear();
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

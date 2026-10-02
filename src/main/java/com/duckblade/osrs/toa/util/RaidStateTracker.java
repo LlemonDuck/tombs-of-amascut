@@ -17,7 +17,8 @@ import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class RaidStateTracker implements PluginLifecycleComponent
+public class RaidStateTracker
+	implements PluginLifecycleComponent
 {
 
 	private static final int REGION_LOBBY = 13454;
@@ -34,18 +35,6 @@ public class RaidStateTracker implements PluginLifecycleComponent
 
 	// delay inRaid = false by 3 ticks to alleviate any unexpected delays between rooms
 	private int raidLeaveTicks = 0;
-
-	@Override
-	public void startUp()
-	{
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
-	}
 
 	@Subscribe(priority = 5)
 	public void onGameTick(GameTick e)

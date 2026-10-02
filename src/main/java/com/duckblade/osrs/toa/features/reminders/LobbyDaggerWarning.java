@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.gameval.ItemID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
@@ -47,7 +46,6 @@ public class LobbyDaggerWarning
 	private static final Color WARNING_COLOR = new Color(0x9A3535);
 	private static final String WARNING_TEXT = "You are missing a dragon/abyssal dagger.";
 
-	private final EventBus eventBus;
 	private final Client client;
 
 	@Override
@@ -55,18 +53,6 @@ public class LobbyDaggerWarning
 	{
 		// todo split
 		return config.daggerWarning();
-	}
-
-	@Override
-	public void startUp()
-	{
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Override

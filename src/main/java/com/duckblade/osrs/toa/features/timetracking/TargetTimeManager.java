@@ -18,13 +18,13 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetUtil;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.util.Text;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class TargetTimeManager implements PluginLifecycleComponent
+public class TargetTimeManager
+	implements PluginLifecycleComponent
 {
 
 	static final int SCRIPT_TOA_TIME_UPDATE_TIMER = 6581;
@@ -34,7 +34,6 @@ public class TargetTimeManager implements PluginLifecycleComponent
 	private static final String TARGET_TIME_PREFIX = "Overall time to beat:";
 	private static final Pattern TARGET_TIME_PATTERN = Pattern.compile("Overall time to beat: (\\d\\d):\\d\\d(?:\\.\\d\\d)?");
 
-	private final EventBus eventBus;
 	private final Client client;
 
 	private int mins;
@@ -48,8 +47,6 @@ public class TargetTimeManager implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
-
 		// scan for target time in history
 		ChatLineBuffer gameMessages = client.getChatLineMap().get(ChatMessageType.GAMEMESSAGE.getType());
 		if (gameMessages != null)
@@ -68,12 +65,6 @@ public class TargetTimeManager implements PluginLifecycleComponent
 				}
 			}
 		}
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

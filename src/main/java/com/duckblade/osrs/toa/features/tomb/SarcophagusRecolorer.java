@@ -48,13 +48,13 @@ import net.runelite.api.WallObject;
 import net.runelite.api.events.WallObjectDespawned;
 import net.runelite.api.events.WallObjectSpawned;
 import net.runelite.client.callback.ClientThread;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 
 @Slf4j
 @Singleton
-public class SarcophagusRecolorer implements PluginLifecycleComponent
+public class SarcophagusRecolorer
+	implements PluginLifecycleComponent
 {
 
 	private static final Set<String> CONFIG_KEYS = ImmutableSet.of(
@@ -74,8 +74,6 @@ public class SarcophagusRecolorer implements PluginLifecycleComponent
 	private static final int VARBIT_ID_SARCOPHAGUS = 14373;
 	private static final int WALL_OBJECT_ID_SARCOPHAGUS = 46221;
 
-	@Inject
-	private EventBus eventBus;
 	@Inject
 	private Client client;
 	@Inject
@@ -104,14 +102,11 @@ public class SarcophagusRecolorer implements PluginLifecycleComponent
 			parseVarbits();
 			recolor(wallObjects);
 		});
-
-		eventBus.register(this);
 	}
 
 	@Override
 	public void shutDown()
 	{
-		eventBus.unregister(this);
 		wallObjects.clear();
 		sarcophagusIsPurple = false;
 		purpleIsMine = true;

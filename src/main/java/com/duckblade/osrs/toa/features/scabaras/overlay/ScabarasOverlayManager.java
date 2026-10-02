@@ -8,15 +8,14 @@ import com.duckblade.osrs.toa.util.RaidState;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.ui.overlay.OverlayManager;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class ScabarasOverlayManager implements PluginLifecycleComponent
+public class ScabarasOverlayManager
+	implements PluginLifecycleComponent
 {
 
-	private final EventBus eventBus;
 	private final OverlayManager overlayManager;
 	private final ScabarasOverlay scabarasOverlay;
 
@@ -30,14 +29,12 @@ public class ScabarasOverlayManager implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
 		installOverlay();
 	}
 
 	@Override
 	public void shutDown()
 	{
-		eventBus.unregister(this);
 		removeOverlay();
 	}
 

@@ -35,18 +35,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.client.audio.AudioPlayer;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class SarcophagusOpeningSoundPlayer implements PluginLifecycleComponent
+public class SarcophagusOpeningSoundPlayer
+	implements PluginLifecycleComponent
 {
 	private static final int SARCOPHAGUS_ID = 44934;
 
-	private final EventBus eventBus;
 	private final TombsOfAmascutConfig config;
 
 	private final AudioPlayer audioPlayer;
@@ -55,18 +54,6 @@ public class SarcophagusOpeningSoundPlayer implements PluginLifecycleComponent
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
 		return config.chestAudioEnable();
-	}
-
-	@Override
-	public void startUp()
-	{
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

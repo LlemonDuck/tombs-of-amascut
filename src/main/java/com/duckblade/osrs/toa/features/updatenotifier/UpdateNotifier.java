@@ -16,7 +16,8 @@ import net.runelite.client.util.ImageUtil;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class UpdateNotifier implements PluginLifecycleComponent
+public class UpdateNotifier
+	implements PluginLifecycleComponent
 {
 
 	public static final int TARGET_VERSION = 18;

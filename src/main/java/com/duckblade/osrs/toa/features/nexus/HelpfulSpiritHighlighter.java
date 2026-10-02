@@ -18,24 +18,22 @@ import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.widgets.Widget;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
 @Singleton
 @Slf4j
-public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycleComponent
+public class HelpfulSpiritHighlighter
+	extends Overlay
+	implements PluginLifecycleComponent
 {
 	private static final int SOUND_EFFECT_DENIED = 2277;
 	private static final String ACTION_NO_BUNDLE_SELECT = "ToA Plugin Info";
 
-	private final EventBus eventBus;
 	private final Client client;
 	private final TombsOfAmascutConfig config;
-	private final OverlayManager overlayManager;
 	private final RaidCompletionTracker raidCompletionTracker;
 
 	private boolean enableHighlightBundles;
@@ -43,17 +41,13 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
 
 	@Inject
 	public HelpfulSpiritHighlighter(
-		EventBus eventBus,
 		Client client,
 		TombsOfAmascutConfig config,
-		OverlayManager overlayManager,
 		RaidCompletionTracker raidCompletionTracker
 	)
 	{
-		this.eventBus = eventBus;
 		this.client = client;
 		this.config = config;
-		this.overlayManager = overlayManager;
 		this.raidCompletionTracker = raidCompletionTracker;
 
 		setPosition(OverlayPosition.DYNAMIC);
@@ -68,20 +62,6 @@ public class HelpfulSpiritHighlighter extends Overlay implements PluginLifecycle
 
 		return (this.enableHighlightBundles || this.deprioritizeOtherBundles) &&
 			raidState.getCurrentRoom() == RaidRoom.NEXUS;
-	}
-
-	@Override
-	public void startUp()
-	{
-		eventBus.register(this);
-		overlayManager.add(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
-		overlayManager.remove(this);
 	}
 
 	/**

@@ -10,8 +10,6 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.gameval.AnimationID;
 import net.runelite.api.gameval.NpcID;
-import net.runelite.client.eventbus.EventBus;
-import net.runelite.client.ui.overlay.OverlayManager;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -20,7 +18,7 @@ class VolatileBaboonCountdownTest
 {
 
 	private final Client client = mock(Client.class);
-	private final VolatileBaboonCountdown overlay = new VolatileBaboonCountdown(client, mock(OverlayManager.class), mock(EventBus.class));
+	private final VolatileBaboonCountdown overlay = new VolatileBaboonCountdown(client);
 
 	@Test
 	void countsDownFromObservedAnimationWithoutRestartingOnDuplicateEvents()

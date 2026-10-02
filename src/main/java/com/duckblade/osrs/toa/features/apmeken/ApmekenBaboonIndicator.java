@@ -17,15 +17,13 @@ import net.runelite.api.events.ActorDeath;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.gameval.NpcID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class ApmekenBaboonIndicator implements PluginLifecycleComponent
+public class ApmekenBaboonIndicator
+	implements PluginLifecycleComponent
 {
-	private final EventBus eventBus;
-
 	@Getter(AccessLevel.PACKAGE)
 	private final List<NPC> volatileBaboons = new ArrayList<>();
 
@@ -39,15 +37,8 @@ public class ApmekenBaboonIndicator implements PluginLifecycleComponent
 	}
 
 	@Override
-	public void startUp()
-	{
-		eventBus.register(this);
-	}
-
-	@Override
 	public void shutDown()
 	{
-		eventBus.unregister(this);
 		volatileBaboons.clear();
 		baboons.clear();
 	}

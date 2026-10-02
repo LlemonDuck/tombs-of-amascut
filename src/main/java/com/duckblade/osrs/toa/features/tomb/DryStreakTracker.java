@@ -15,16 +15,15 @@ import net.runelite.api.gameval.InterfaceID;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class DryStreakTracker implements PluginLifecycleComponent
+public class DryStreakTracker
+	implements PluginLifecycleComponent
 {
 	private static final int VARBIT_ID_SARCOPHAGUS = 14373;
 
-	private final EventBus eventBus;
 	private final Client client;
 	private final ClientThread clientThread;
 	private final TombsOfAmascutConfig config;
@@ -44,8 +43,6 @@ public class DryStreakTracker implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
-
 		// TODO: prevent arbitrarily increasing counter by toggling config option
 		if (raidStateTracker.getCurrentState().getCurrentRoom() == RaidRoom.TOMB)
 		{
@@ -57,12 +54,6 @@ public class DryStreakTracker implements PluginLifecycleComponent
 				config.setPurpleDryStreakCount(purple ? 0 : previousCount + 1);
 			});
 		}
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

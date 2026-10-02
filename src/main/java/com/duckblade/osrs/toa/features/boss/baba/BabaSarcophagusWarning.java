@@ -24,11 +24,9 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.gameval.NpcID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
 @Singleton
@@ -49,9 +47,6 @@ public class BabaSarcophagusWarning
 		int healthScale;
 	}
 
-	private final OverlayManager overlayManager;
-	private final EventBus eventBus;
-
 	private final Client client;
 	private final TombsOfAmascutConfig config;
 
@@ -61,13 +56,9 @@ public class BabaSarcophagusWarning
 	@Inject
 	public BabaSarcophagusWarning(
 		Client client,
-		OverlayManager overlayManager,
-		EventBus eventBus,
 		TombsOfAmascutConfig config
 	)
 	{
-		this.overlayManager = overlayManager;
-		this.eventBus = eventBus;
 		this.client = client;
 		this.config = config;
 
@@ -84,18 +75,8 @@ public class BabaSarcophagusWarning
 	}
 
 	@Override
-	public void startUp()
-	{
-		overlayManager.add(this);
-		eventBus.register(this);
-	}
-
-	@Override
 	public void shutDown()
 	{
-		overlayManager.remove(this);
-		eventBus.unregister(this);
-
 		// make sure we don't hold onto stale NPC references
 		states.clear();
 		sarcophagiNpcs.clear();

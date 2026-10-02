@@ -11,15 +11,14 @@ import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;
 import net.runelite.api.events.MenuEntryAdded;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class DepositPickaxePreventEntry implements PluginLifecycleComponent
+public class DepositPickaxePreventEntry
+	implements PluginLifecycleComponent
 {
 
-	private final EventBus eventBus;
 	private final Client client;
 	private final RaidStateTracker raidStateTracker;
 
@@ -28,18 +27,6 @@ public class DepositPickaxePreventEntry implements PluginLifecycleComponent
 	{
 		return (currentState.getCurrentRoom() == RaidRoom.HET && config.hetPickaxePreventExit()) ||
 			(currentState.isInLobby() && config.hetPickaxePreventRaidStart());
-	}
-
-	@Override
-	public void startUp()
-	{
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

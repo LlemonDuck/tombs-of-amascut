@@ -34,14 +34,14 @@ import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 @Slf4j
-public class InvocationPresetsManager implements PluginLifecycleComponent
+public class InvocationPresetsManager
+	implements PluginLifecycleComponent
 {
 
 	public static final int WIDGET_ID_INVOCATIONS_PARENT = 774;
@@ -51,7 +51,6 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	public static final int SCRIPT_ID_TOA_PARTY_TOGGLE_REWARD_PANEL = 6732;
 	private static final String CONFIG_KEY_PRESETS = "presets";
 
-	private final EventBus eventBus;
 	private final ConfigManager configManager;
 
 	private final Client client;
@@ -78,14 +77,7 @@ public class InvocationPresetsManager implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
 		loadPresets();
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

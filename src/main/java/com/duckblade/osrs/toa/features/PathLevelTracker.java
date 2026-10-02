@@ -13,15 +13,14 @@ import net.runelite.api.Client;
 import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class PathLevelTracker implements PluginLifecycleComponent
+public class PathLevelTracker
+	implements PluginLifecycleComponent
 {
 
-	private final EventBus eventBus;
 	private final Client client;
 	private final RaidStateTracker raidStateTracker;
 
@@ -43,14 +42,7 @@ public class PathLevelTracker implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
 		readPathLevels();
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

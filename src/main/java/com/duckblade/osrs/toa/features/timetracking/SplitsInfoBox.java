@@ -16,7 +16,6 @@ import net.runelite.api.Client;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.SpriteManager;
 import net.runelite.client.ui.overlay.infobox.InfoBox;
@@ -29,7 +28,6 @@ public class SplitsInfoBox
 	implements PluginLifecycleComponent
 {
 
-	private final EventBus eventBus;
 	private final InfoBoxManager infoBoxManager;
 	private final SpriteManager spriteManager;
 
@@ -44,7 +42,6 @@ public class SplitsInfoBox
 	@Inject
 	public SplitsInfoBox(
 		TombsOfAmascutPlugin plugin,
-		EventBus eventBus,
 		InfoBoxManager infoBoxManager,
 		SpriteManager spriteManager,
 		Client client,
@@ -54,7 +51,6 @@ public class SplitsInfoBox
 	{
 		super(null, plugin);
 
-		this.eventBus = eventBus;
 		this.infoBoxManager = infoBoxManager;
 		this.spriteManager = spriteManager;
 		this.client = client;
@@ -75,7 +71,6 @@ public class SplitsInfoBox
 		currentTime = null;
 		timerSpriteId = 0;
 		infoBoxManager.addInfoBox(this);
-		eventBus.register(this);
 	}
 
 	@Override
@@ -84,7 +79,6 @@ public class SplitsInfoBox
 		currentTime = null;
 		timerSpriteId = 0;
 		infoBoxManager.removeInfoBox(this);
-		eventBus.unregister(this);
 	}
 
 	@Override

@@ -6,7 +6,6 @@ import net.runelite.api.Client;
 import net.runelite.api.Skill;
 import net.runelite.api.gameval.ItemID;
 import net.runelite.api.gameval.VarPlayerID;
-import net.runelite.client.ui.overlay.OverlayManager;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -19,7 +18,7 @@ public class ToaInventoryOverlayTest
 {
 	private final Client client = mock(Client.class);
 	private final TombsOfAmascutConfig config = mock(TombsOfAmascutConfig.class);
-	private final ToaInventoryOverlay overlay = new ToaInventoryOverlay(client, config, mock(OverlayManager.class));
+	private final ToaInventoryOverlay overlay = new ToaInventoryOverlay(client, config);
 
 	private void player(int prayerPoints, int specEnergy)
 	{

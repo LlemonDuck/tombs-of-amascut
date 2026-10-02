@@ -21,16 +21,15 @@ import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.gameval.NpcID;
 import net.runelite.api.gameval.VarbitID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class AkkhaShadowHealth implements PluginLifecycleComponent
+public class AkkhaShadowHealth
+	implements PluginLifecycleComponent
 {
 	private static final int BASE_HP_AKKHAS_SHADOW = 70;
 
-	private final EventBus eventBus;
 	private final Client client;
 	private final PathLevelTracker pathLevelTracker;
 	private final RaidStateTracker raidStateTracker;
@@ -50,14 +49,12 @@ public class AkkhaShadowHealth implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
 		updateAkkhasShadowMaxHp();
 	}
 
 	@Override
 	public void shutDown()
 	{
-		eventBus.unregister(this);
 		reset();
 	}
 

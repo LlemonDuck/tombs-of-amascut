@@ -10,12 +10,12 @@ import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetUtil;
 import net.runelite.client.callback.ClientThread;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.OverlayManager;
 
 @Singleton
-public class HpOrbManager implements PluginLifecycleComponent
+public class HpOrbManager
+	implements PluginLifecycleComponent
 {
 
 	private static final int BUILD_ORBS_WIDGET_SCRIPT_ID = 6579;
@@ -26,9 +26,6 @@ public class HpOrbManager implements PluginLifecycleComponent
 
 	@Inject
 	private ClientThread clientThread;
-
-	@Inject
-	private EventBus eventBus;
 
 	@Inject
 	private OverlayManager overlayManager;
@@ -45,7 +42,6 @@ public class HpOrbManager implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
 		clientThread.invokeLater(this::hideOrbs);
 		overlayManager.add(healthBarsOverlay);
 	}
@@ -53,7 +49,6 @@ public class HpOrbManager implements PluginLifecycleComponent
 	@Override
 	public void shutDown()
 	{
-		eventBus.unregister(this);
 		overlayManager.remove(healthBarsOverlay);
 	}
 

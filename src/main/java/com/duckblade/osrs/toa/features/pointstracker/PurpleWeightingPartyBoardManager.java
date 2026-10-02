@@ -15,18 +15,16 @@ import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetTextAlignment;
 import net.runelite.api.widgets.WidgetType;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class PurpleWeightingPartyBoardManager implements PluginLifecycleComponent
+public class PurpleWeightingPartyBoardManager
+	implements PluginLifecycleComponent
 {
 
 	private static final int SCRIPT_INIT_LOOT_REWARDS = 6770;
-
-	private final EventBus eventBus;
 
 	private final Client client;
 	private final PurpleWeightingManager weightingManager;
@@ -42,14 +40,12 @@ public class PurpleWeightingPartyBoardManager implements PluginLifecycleComponen
 	public void startUp()
 	{
 		installToWidget();
-		eventBus.register(this);
 	}
 
 	@Override
 	public void shutDown()
 	{
 		widgetUninstall();
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

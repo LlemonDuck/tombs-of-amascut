@@ -17,14 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.events.ChatMessage;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.util.ColorUtil;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class SplitsTracker implements PluginLifecycleComponent
+public class SplitsTracker
+	implements PluginLifecycleComponent
 {
 
 	private static final String ROOM_COMPLETE_PREFIX = "Challenge complete";
@@ -32,8 +32,6 @@ public class SplitsTracker implements PluginLifecycleComponent
 		Pattern.compile("Challenge complete: (?:Path of )?([A-Za-z-]+).*Total:.*?([0-9]+:[.0-9]+).*");
 	private static final Pattern WARDENS_COMPLETE_PATTERN =
 		Pattern.compile("Challenge complete: The (Wardens).*?completion time:.*?([0-9]+:[.0-9]+).*");
-
-	private final EventBus eventBus;
 
 	private final TombsOfAmascutConfig config;
 	private final Client client;
@@ -51,13 +49,6 @@ public class SplitsTracker implements PluginLifecycleComponent
 	public void startUp()
 	{
 		splits.clear();
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

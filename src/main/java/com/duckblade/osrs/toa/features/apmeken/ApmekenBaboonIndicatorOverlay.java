@@ -18,17 +18,17 @@ import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.gameval.NpcID;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
 @Singleton
-public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLifecycleComponent
+public class ApmekenBaboonIndicatorOverlay
+	extends Overlay
+	implements PluginLifecycleComponent
 {
 
 	private static final int AREA_SIZE_3X3 = 3;
 
-	private final OverlayManager overlayManager;
 	private final ModelOutlineRenderer modelOutlineRenderer;
 	private final Client client;
 	private final TombsOfAmascutConfig config;
@@ -36,14 +36,12 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 
 	@Inject
 	public ApmekenBaboonIndicatorOverlay(
-		final OverlayManager overlayManager,
 		final ModelOutlineRenderer modelOutlineRenderer,
 		final Client client,
 		final TombsOfAmascutConfig config,
 		final ApmekenBaboonIndicator apmekenBaboonIndicator
 	)
 	{
-		this.overlayManager = overlayManager;
 		this.modelOutlineRenderer = modelOutlineRenderer;
 		this.client = client;
 		this.config = config;
@@ -59,18 +57,6 @@ public class ApmekenBaboonIndicatorOverlay extends Overlay implements PluginLife
 	{
 		return (config.apmekenBaboonOutline() != HighlightMode.OFF || config.apmekenVolatileBaboonTiles()) &&
 			apmekenBaboonIndicator.isEnabled(config, raidState);
-	}
-
-	@Override
-	public void startUp()
-	{
-		overlayManager.add(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		overlayManager.remove(this);
 	}
 
 	@Override

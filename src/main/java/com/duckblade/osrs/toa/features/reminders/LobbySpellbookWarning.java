@@ -30,16 +30,6 @@ public class LobbySpellbookWarning
 	}
 
 	@Override
-	public void startUp()
-	{
-	}
-
-	@Override
-	public void shutDown()
-	{
-	}
-
-	@Override
 	public boolean isTriggered()
 	{
 		return enabled;

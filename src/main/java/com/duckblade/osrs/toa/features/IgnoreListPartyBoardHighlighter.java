@@ -13,7 +13,6 @@ import net.runelite.api.events.ClientTick;
 import net.runelite.api.events.ScriptPostFired;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.util.Text;
 
@@ -26,7 +25,6 @@ public class IgnoreListPartyBoardHighlighter
 	private static final int SCRIPT_ID_TOA_PARTYDETAILS_ADDMEMBER = 6722;
 	private static final int SCRIPT_ID_TOA_PARTYLIST_ADDLINE = 6601;
 
-	private final EventBus eventBus;
 	private final Client client;
 	private boolean needScanPartyMembers;
 	private boolean needScanPartyList;
@@ -41,16 +39,8 @@ public class IgnoreListPartyBoardHighlighter
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
-
 		needScanPartyMembers = true;
 		needScanPartyList = true;
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

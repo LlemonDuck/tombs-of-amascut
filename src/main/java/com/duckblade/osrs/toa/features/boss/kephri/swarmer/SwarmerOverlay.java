@@ -29,16 +29,16 @@ import net.runelite.api.Point;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.NpcSpawned;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
 @Slf4j
 @Singleton
-public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
+public class SwarmerOverlay
+	extends Overlay
+	implements PluginLifecycleComponent
 {
 	private static final int ANIMATION_KEPHRI_DOWN = 9579;
 	private static final int ANIMATION_KEPHRI_UP = 9581;
@@ -49,8 +49,6 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	private static final String ROOM_FAIL_MESSAGE = "Your party failed to complete";
 
 	private final Client client;
-	private final EventBus eventBus;
-	private final OverlayManager overlayManager;
 	private final TombsOfAmascutConfig config;
 	private final SwarmerDataManager swarmerDataManager;
 	private final SwarmerPanel swarmerPanel;
@@ -66,11 +64,9 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	private int kephriNpcIndex = -1;
 
 	@Inject
-	public SwarmerOverlay(Client client, EventBus eventBus, OverlayManager overlayManager, TombsOfAmascutConfig config, SwarmerDataManager swarmerDataManager, SwarmerPanel swarmerPanel)
+	public SwarmerOverlay(Client client, TombsOfAmascutConfig config, SwarmerDataManager swarmerDataManager, SwarmerPanel swarmerPanel)
 	{
 		this.client = client;
-		this.eventBus = eventBus;
-		this.overlayManager = overlayManager;
 		this.config = config;
 		this.swarmerDataManager = swarmerDataManager;
 		this.swarmerPanel = swarmerPanel;
@@ -90,16 +86,12 @@ public class SwarmerOverlay extends Overlay implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
-		overlayManager.add(this);
 		reset();
 	}
 
 	@Override
 	public void shutDown()
 	{
-		eventBus.unregister(this);
-		overlayManager.remove(this);
 		reset();
 	}
 

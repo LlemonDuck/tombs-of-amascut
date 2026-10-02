@@ -33,14 +33,14 @@ import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.gameval.ObjectID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.util.Text;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class AdditionPuzzleSolver implements PluginLifecycleComponent
+public class AdditionPuzzleSolver
+	implements PluginLifecycleComponent
 {
 
 	@RequiredArgsConstructor
@@ -105,7 +105,6 @@ public class AdditionPuzzleSolver implements PluginLifecycleComponent
 
 	private static final Pattern TARGET_NUMBER_PATTERN = Pattern.compile("The number @.*@(\\d+) has been hastily chipped into the stone.");
 
-	private final EventBus eventBus;
 	private final Client client;
 
 	private boolean solved;
@@ -125,16 +124,8 @@ public class AdditionPuzzleSolver implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
-
 		this.targetNumber = 0;
 		solved = false;
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

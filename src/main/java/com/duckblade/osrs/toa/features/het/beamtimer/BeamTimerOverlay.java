@@ -14,22 +14,21 @@ import net.runelite.api.Perspective;
 import net.runelite.api.Point;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.ProgressPieComponent;
 
 @Singleton
-public class BeamTimerOverlay extends Overlay implements PluginLifecycleComponent
+public class BeamTimerOverlay
+	extends Overlay
+	implements PluginLifecycleComponent
 {
 
-	private final OverlayManager overlayManager;
 	private final Client client;
 	private final BeamTimerTracker beamTimerTracker;
 
 	@Inject
-	public BeamTimerOverlay(OverlayManager overlayManager, Client client, BeamTimerTracker beamTimerTracker)
+	public BeamTimerOverlay(Client client, BeamTimerTracker beamTimerTracker)
 	{
-		this.overlayManager = overlayManager;
 		this.client = client;
 		this.beamTimerTracker = beamTimerTracker;
 		setLayer(OverlayLayer.ABOVE_SCENE);
@@ -40,18 +39,6 @@ public class BeamTimerOverlay extends Overlay implements PluginLifecycleComponen
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
 		return beamTimerTracker.isEnabled(config, raidState);
-	}
-
-	@Override
-	public void startUp()
-	{
-		overlayManager.add(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		overlayManager.remove(this);
 	}
 
 	@Override

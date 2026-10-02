@@ -16,16 +16,14 @@ import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.NpcChanged;
 import net.runelite.api.gameval.NpcID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class ObeliskPuzzleSolver implements PluginLifecycleComponent
+public class ObeliskPuzzleSolver
+	implements PluginLifecycleComponent
 {
-
-	private final EventBus eventBus;
 
 	@Getter
 	private int activeObelisks = 0;
@@ -43,15 +41,8 @@ public class ObeliskPuzzleSolver implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
 		activeObelisks = 0;
 		obeliskOrder.clear();
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

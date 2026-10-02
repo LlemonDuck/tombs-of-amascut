@@ -10,15 +10,14 @@ import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.events.MenuEntryAdded;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class DepositPickaxeSwap implements PluginLifecycleComponent
+public class DepositPickaxeSwap
+	implements PluginLifecycleComponent
 {
 
-	private final EventBus eventBus;
 	private final Client client;
 
 	@Override
@@ -26,18 +25,6 @@ public class DepositPickaxeSwap implements PluginLifecycleComponent
 	{
 		return (currentState.getCurrentRoom() == RaidRoom.HET || currentState.isInLobby()) &&
 			config.hetPickaxeMenuSwap();
-	}
-
-	@Override
-	public void startUp()
-	{
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

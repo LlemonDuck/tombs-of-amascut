@@ -25,13 +25,13 @@ import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.gameval.ObjectID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class LightPuzzleSolver implements PluginLifecycleComponent
+public class LightPuzzleSolver
+	implements PluginLifecycleComponent
 {
 
 	private static final int GAME_OBJECT_LIGHT_ENABLED = ObjectID.TOA_SCABARAS_FX01;
@@ -54,7 +54,6 @@ public class LightPuzzleSolver implements PluginLifecycleComponent
 		0B10101110,
 	};
 
-	private final EventBus eventBus;
 	private final Client client;
 
 	private boolean solved;
@@ -73,16 +72,8 @@ public class LightPuzzleSolver implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
-
 		solved = false;
 		solve();
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

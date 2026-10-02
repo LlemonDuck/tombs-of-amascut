@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
+import net.runelite.client.ui.overlay.Overlay;
+import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.GameEventManager;
 
 /**
@@ -29,6 +31,7 @@ public class ComponentManager
 {
 
 	private final EventBus eventBus;
+	private final OverlayManager overlayManager;
 	private final GameEventManager gameEventManager;
 	private final TombsOfAmascutConfig config;
 	private final RaidStateTracker raidStateTracker;
@@ -105,6 +108,12 @@ public class ComponentManager
 
 		try
 		{
+			eventBus.register(component);
+			if (component instanceof Overlay)
+			{
+				overlayManager.add((Overlay) component);
+			}
+
 			component.startUp();
 			gameEventManager.simulateGameEvents(component);
 			states.put(component, true);
@@ -138,6 +147,12 @@ public class ComponentManager
 		finally
 		{
 			states.put(component, false);
+		}
+
+		eventBus.unregister(component);
+		if (component instanceof Overlay)
+		{
+			overlayManager.remove((Overlay) component);
 		}
 	}
 

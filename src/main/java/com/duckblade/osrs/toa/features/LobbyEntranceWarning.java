@@ -15,12 +15,10 @@ import net.runelite.api.Point;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.gameval.ObjectID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
@@ -46,21 +44,15 @@ public class LobbyEntranceWarning
 		Color getColor();
 	}
 
-	private final OverlayManager overlayManager;
-	private final EventBus eventBus;
 	private final Set<Check> checks;
 
 	private GameObject entrance;
 
 	@Inject
 	LobbyEntranceWarning(
-		OverlayManager overlayManager,
-		EventBus eventBus,
 		Set<Check> checks
 	)
 	{
-		this.overlayManager = overlayManager;
-		this.eventBus = eventBus;
 		this.checks = checks;
 
 		setLayer(OverlayLayer.ABOVE_SCENE);
@@ -71,20 +63,6 @@ public class LobbyEntranceWarning
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
 		return raidState.isInLobby();
-	}
-
-	@Override
-	public void startUp()
-	{
-		overlayManager.add(this);
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		overlayManager.remove(this);
-		eventBus.unregister(this);
 	}
 
 	@Override

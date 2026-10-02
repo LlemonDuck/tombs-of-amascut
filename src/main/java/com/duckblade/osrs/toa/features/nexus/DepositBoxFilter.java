@@ -19,7 +19,6 @@ import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.gameval.InterfaceID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.util.Text;
 import net.runelite.client.util.WildcardMatcher;
@@ -27,7 +26,8 @@ import net.runelite.client.util.WildcardMatcher;
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class DepositBoxFilter implements PluginLifecycleComponent
+public class DepositBoxFilter
+	implements PluginLifecycleComponent
 {
 
 	private static final int SOUND_EFFECT_DENIED = 2277;
@@ -48,8 +48,6 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 		InterfaceID.BankDepositbox.SLOT13,
 		InterfaceID.BankDepositbox.EXTRA_QUIVER_AMMO
 	);
-
-	private final EventBus eventBus;
 
 	private final Client client;
 	private final RaidCompletionTracker raidCompletionTracker;
@@ -78,18 +76,6 @@ public class DepositBoxFilter implements PluginLifecycleComponent
 		}
 
 		return false;
-	}
-
-	@Override
-	public void startUp()
-	{
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

@@ -9,15 +9,13 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.gameval.NpcID;
-import net.runelite.client.eventbus.EventBus;
-import net.runelite.client.ui.overlay.OverlayManager;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
 class ZebakWaveOverlayTest
 {
 
-	private final ZebakWaveOverlay overlay = new ZebakWaveOverlay(mock(OverlayManager.class), mock(EventBus.class), mock(Client.class));
+	private final ZebakWaveOverlay overlay = new ZebakWaveOverlay(mock(Client.class));
 
 	@Test
 	void tracksBothWaveVariantsAndClearsOnDespawn()

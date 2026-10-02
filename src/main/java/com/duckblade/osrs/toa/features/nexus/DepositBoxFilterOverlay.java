@@ -16,26 +16,23 @@ import net.runelite.api.gameval.ItemID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.util.ColorUtil;
 
 @Singleton
-public class DepositBoxFilterOverlay extends Overlay implements PluginLifecycleComponent
+public class DepositBoxFilterOverlay
+	extends Overlay
+	implements PluginLifecycleComponent
 {
-	private final OverlayManager overlayManager;
-
 	private final Client client;
 	private final DepositBoxFilter depositBoxFilter;
 
 	@Inject
 	public DepositBoxFilterOverlay(
-		final OverlayManager overlayManager,
 		final Client client,
 		final DepositBoxFilter depositBoxFilter
 	)
 	{
-		this.overlayManager = overlayManager;
 		this.client = client;
 		this.depositBoxFilter = depositBoxFilter;
 
@@ -49,18 +46,6 @@ public class DepositBoxFilterOverlay extends Overlay implements PluginLifecycleC
 	{
 		return currentState.getCurrentRoom() == RaidRoom.NEXUS &&
 			config.depositBoxInterfaceOverlay();
-	}
-
-	@Override
-	public void startUp()
-	{
-		overlayManager.add(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		overlayManager.remove(this);
 	}
 
 	@Override

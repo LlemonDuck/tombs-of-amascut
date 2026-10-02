@@ -51,7 +51,6 @@ import net.runelite.api.widgets.WidgetType;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatColorType;
 import net.runelite.client.chat.ChatMessageBuilder;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.ui.FontManager;
@@ -62,7 +61,8 @@ import net.runelite.client.util.Text;
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class InvocationScreenshot implements PluginLifecycleComponent
+public class InvocationScreenshot
+	implements PluginLifecycleComponent
 {
 	private static final int INVOCATION_GROUP_ID = 774;
 	private static final int INVOCATION_TITLE_CHILD_ID = 3;
@@ -79,7 +79,6 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	private static final int CAMERA_OVERRIDE_SPRITE_IDX = -420;
 	private static final int CAMERA_HOVER_OVERRIDE_SPRITE_IDX = -421;
 
-	private final EventBus eventBus;
 	private final Client client;
 	private final TombsOfAmascutConfig config;
 	private final ClientThread clientThread;
@@ -97,14 +96,12 @@ public class InvocationScreenshot implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
 		clientThread.invokeLater(this::createButton);
 	}
 
 	@Override
 	public void shutDown()
 	{
-		eventBus.unregister(this);
 		button = null;
 		removeCameraIconOverride();
 	}

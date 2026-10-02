@@ -13,7 +13,6 @@ import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.widgets.Widget;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.LineComponent;
@@ -21,10 +20,10 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 
 @Slf4j
 @Singleton
-public class SplitsOverlay extends OverlayPanel implements PluginLifecycleComponent
+public class SplitsOverlay
+	extends OverlayPanel
+	implements PluginLifecycleComponent
 {
-
-	private final OverlayManager overlayManager;
 
 	private final TargetTimeManager targetTimeManager;
 	private final SplitsTracker splitsTracker;
@@ -34,9 +33,8 @@ public class SplitsOverlay extends OverlayPanel implements PluginLifecycleCompon
 	private SplitsMode splitsMode;
 
 	@Inject
-	public SplitsOverlay(OverlayManager overlayManager, TargetTimeManager targetTimeManager, SplitsTracker splitsTracker, RaidStateTracker raidStateTracker, Client client)
+	public SplitsOverlay(TargetTimeManager targetTimeManager, SplitsTracker splitsTracker, RaidStateTracker raidStateTracker, Client client)
 	{
-		this.overlayManager = overlayManager;
 		this.targetTimeManager = targetTimeManager;
 		this.splitsTracker = splitsTracker;
 		this.raidStateTracker = raidStateTracker;
@@ -50,18 +48,6 @@ public class SplitsOverlay extends OverlayPanel implements PluginLifecycleCompon
 	{
 		this.splitsMode = config.splitsOverlay();
 		return splitsMode != SplitsMode.OFF && raidState.isInRaid();
-	}
-
-	@Override
-	public void startUp()
-	{
-		overlayManager.add(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		overlayManager.remove(this);
 	}
 
 	@Override

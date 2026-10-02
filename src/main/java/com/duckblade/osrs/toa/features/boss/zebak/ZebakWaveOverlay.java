@@ -20,28 +20,24 @@ import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.gameval.NpcID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
 @Singleton
-public class ZebakWaveOverlay extends Overlay implements PluginLifecycleComponent
+public class ZebakWaveOverlay
+	extends Overlay
+	implements PluginLifecycleComponent
 {
 
-	private final OverlayManager overlayManager;
-	private final EventBus eventBus;
 	private final Client client;
 	private final Set<NPC> waves = new HashSet<>();
 
 	@Inject
-	public ZebakWaveOverlay(OverlayManager overlayManager, EventBus eventBus, Client client)
+	public ZebakWaveOverlay(Client client)
 	{
-		this.overlayManager = overlayManager;
-		this.eventBus = eventBus;
 		this.client = client;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
@@ -54,17 +50,8 @@ public class ZebakWaveOverlay extends Overlay implements PluginLifecycleComponen
 	}
 
 	@Override
-	public void startUp()
-	{
-		overlayManager.add(this);
-		eventBus.register(this);
-	}
-
-	@Override
 	public void shutDown()
 	{
-		overlayManager.remove(this);
-		eventBus.unregister(this);
 		waves.clear();
 	}
 

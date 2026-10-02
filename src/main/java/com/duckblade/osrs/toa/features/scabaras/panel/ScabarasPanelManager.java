@@ -16,7 +16,8 @@ import net.runelite.client.util.ImageUtil;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class ScabarasPanelManager implements PluginLifecycleComponent
+public class ScabarasPanelManager
+	implements PluginLifecycleComponent
 {
 
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(ScabarasPanelManager.class, "icon.png");

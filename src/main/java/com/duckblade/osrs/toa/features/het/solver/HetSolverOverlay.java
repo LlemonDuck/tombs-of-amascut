@@ -23,13 +23,14 @@ import net.runelite.api.WorldView;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.util.ColorUtil;
 
 @Singleton
-public class HetSolverOverlay extends Overlay implements PluginLifecycleComponent
+public class HetSolverOverlay
+	extends Overlay
+	implements PluginLifecycleComponent
 {
 
 	private static final Polygon PREMOVE_ARROW = new Polygon(
@@ -76,16 +77,14 @@ public class HetSolverOverlay extends Overlay implements PluginLifecycleComponen
 		COMPACT,
 	}
 
-	private final OverlayManager overlayManager;
 	private final Client client;
 	private final HetSolver hetSolver;
 
 	private PremoveMode premoveMode;
 
 	@Inject
-	public HetSolverOverlay(OverlayManager overlayManager, Client client, HetSolver hetSolver)
+	public HetSolverOverlay(Client client, HetSolver hetSolver)
 	{
-		this.overlayManager = overlayManager;
 		this.client = client;
 		this.hetSolver = hetSolver;
 
@@ -99,18 +98,6 @@ public class HetSolverOverlay extends Overlay implements PluginLifecycleComponen
 		this.premoveMode = config.hetSolverPremoveMode();
 
 		return config.hetSolverEnable() && raidState.getCurrentRoom() == RaidRoom.HET;
-	}
-
-	@Override
-	public void startUp()
-	{
-		overlayManager.add(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		overlayManager.remove(this);
 	}
 
 	@Override

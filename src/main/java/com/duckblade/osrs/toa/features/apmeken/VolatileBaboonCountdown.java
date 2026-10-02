@@ -18,11 +18,9 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.gameval.AnimationID;
 import net.runelite.api.gameval.NpcID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
@@ -33,16 +31,14 @@ public class VolatileBaboonCountdown
 {
 
 	private final Client client;
-	private final OverlayManager overlayManager;
-	private final EventBus eventBus;
 	private final Map<NPC, Integer> explosionTicks = new HashMap<>();
 
 	@Inject
-	public VolatileBaboonCountdown(Client client, OverlayManager overlayManager, EventBus eventBus)
+	public VolatileBaboonCountdown(
+		Client client
+	)
 	{
 		this.client = client;
-		this.overlayManager = overlayManager;
-		this.eventBus = eventBus;
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_SCENE);
 	}
@@ -54,17 +50,8 @@ public class VolatileBaboonCountdown
 	}
 
 	@Override
-	public void startUp()
-	{
-		overlayManager.add(this);
-		eventBus.register(this);
-	}
-
-	@Override
 	public void shutDown()
 	{
-		overlayManager.remove(this);
-		eventBus.unregister(this);
 		explosionTicks.clear();
 	}
 

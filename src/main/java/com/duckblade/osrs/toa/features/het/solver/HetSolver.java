@@ -20,18 +20,17 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.callback.ClientThread;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class HetSolver implements PluginLifecycleComponent
+public class HetSolver
+	implements PluginLifecycleComponent
 {
 
 	private static final int STATUE_SHIELDED = ObjectID.SHIELDED_STATUE;
 
-	private final EventBus eventBus;
 	private final ClientThread clientThread;
 
 	@Getter
@@ -63,14 +62,12 @@ public class HetSolver implements PluginLifecycleComponent
 	{
 		clearSolve();
 		puzzleBase = null;
-		eventBus.register(this);
 	}
 
 	@Override
 	public void shutDown()
 	{
 		clearSolve();
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

@@ -14,16 +14,15 @@ import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.callback.ClientThread;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class AdrenalineCooldown implements PluginLifecycleComponent
+public class AdrenalineCooldown
+	implements PluginLifecycleComponent
 {
 
-	private final EventBus eventBus;
 	private final Client client;
 	private final ClientThread clientThread;
 	private final TombsOfAmascutConfig config;
@@ -44,14 +43,7 @@ public class AdrenalineCooldown implements PluginLifecycleComponent
 	{
 		clickConsumeQueued = false;
 		lastAdrenaline = 0;
-		eventBus.register(this);
 		clientThread.invoke(() -> lastAdrenalineVarb = client.getVarbitValue(VarbitID.TOA_MIDRAIDLOOT_ENERGY_ACTIVE));
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

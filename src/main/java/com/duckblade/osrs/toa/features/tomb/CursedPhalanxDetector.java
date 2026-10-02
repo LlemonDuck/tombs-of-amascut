@@ -19,12 +19,12 @@ import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.ItemID;
 import net.runelite.api.gameval.VarbitID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class CursedPhalanxDetector implements PluginLifecycleComponent
+public class CursedPhalanxDetector
+	implements PluginLifecycleComponent
 {
 	private static final Set<Integer> CURSED_PHALANX_ITEM_IDS = ImmutableSet.of(
 		ItemID.OSMUMTENS_FANG_ORNAMENT_KIT,
@@ -33,7 +33,6 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 
 	private boolean isEligibleForKit = true;
 
-	private final EventBus eventBus;
 	private final Client client;
 	private final RaidStateTracker raidStateTracker;
 
@@ -48,13 +47,6 @@ public class CursedPhalanxDetector implements PluginLifecycleComponent
 	public void startUp()
 	{
 		isEligibleForKit = true;
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

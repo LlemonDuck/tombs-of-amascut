@@ -27,7 +27,8 @@ import lombok.RequiredArgsConstructor;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class SwarmerDataManager implements PluginLifecycleComponent
+public class SwarmerDataManager
+	implements PluginLifecycleComponent
 {
 
 	private static final int MAX_RECENT_RAIDS = 10;

@@ -16,7 +16,6 @@ import net.runelite.api.Skill;
 import net.runelite.api.gameval.ItemID;
 import net.runelite.api.gameval.VarPlayerID;
 import net.runelite.api.widgets.WidgetItem;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.WidgetItemOverlay;
 
 @Singleton
@@ -34,15 +33,13 @@ public class ToaInventoryOverlay
 
 	private static final long FLASH_PERIOD_MS = 1_000L;
 
-	private final OverlayManager overlayManager;
 	private final Client client;
 	private final TombsOfAmascutConfig config;
 
 	@Inject
-	public ToaInventoryOverlay(Client client, TombsOfAmascutConfig config, OverlayManager overlayManager)
+	public ToaInventoryOverlay(Client client, TombsOfAmascutConfig config)
 	{
 		this.client = client;
-		this.overlayManager = overlayManager;
 		this.config = config;
 		showOnInventory();
 	}
@@ -52,18 +49,6 @@ public class ToaInventoryOverlay
 	{
 		return raidState.isInRaid() &&
 			(config.flashKeris() || config.flashAmbrosia());
-	}
-
-	@Override
-	public void startUp()
-	{
-		overlayManager.add(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		overlayManager.remove(this);
 	}
 
 	@Override

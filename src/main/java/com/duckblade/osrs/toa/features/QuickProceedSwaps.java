@@ -15,13 +15,13 @@ import net.runelite.api.MenuEntry;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.gameval.NpcID;
 import net.runelite.api.gameval.ObjectID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class QuickProceedSwaps implements PluginLifecycleComponent
+public class QuickProceedSwaps
+	implements PluginLifecycleComponent
 {
 
 	public enum QuickProceedEnableMode
@@ -55,7 +55,6 @@ public class QuickProceedSwaps implements PluginLifecycleComponent
 		ObjectID.TOA_NEXUS_WARDENS_DOOR_OPEN // wardens
 	);
 
-	private final EventBus eventBus;
 	private final TombsOfAmascutConfig config;
 	private final RaidStateTracker raidStateTracker;
 
@@ -63,18 +62,6 @@ public class QuickProceedSwaps implements PluginLifecycleComponent
 	public boolean isEnabled(TombsOfAmascutConfig config, RaidState raidState)
 	{
 		return raidState.isInRaid() && config.quickProceedEnableMode() != QuickProceedEnableMode.NONE;
-	}
-
-	@Override
-	public void startUp()
-	{
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

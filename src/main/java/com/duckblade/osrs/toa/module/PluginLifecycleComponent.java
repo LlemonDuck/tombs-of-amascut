@@ -11,8 +11,12 @@ public interface PluginLifecycleComponent
 		return true;
 	}
 
-	void startUp();
+	default void startUp()
+	{
+	}
 
-	void shutDown();
+	default void shutDown()
+	{
+	}
 
 }

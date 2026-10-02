@@ -14,7 +14,8 @@ import net.runelite.client.util.ImageUtil;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class SwarmerPanelManager implements PluginLifecycleComponent
+public class SwarmerPanelManager
+	implements PluginLifecycleComponent
 {
 
 	public enum PanelMode

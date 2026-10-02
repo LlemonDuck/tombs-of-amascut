@@ -15,7 +15,8 @@ import net.runelite.client.util.ImageUtil;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class ApmekenWaveInstaller implements PluginLifecycleComponent
+public class ApmekenWaveInstaller
+	implements PluginLifecycleComponent
 {
 
 	private static final BufferedImage PANEL_ICON = ImageUtil.loadImageResource(ApmekenWaveInstaller.class, "icon.png");

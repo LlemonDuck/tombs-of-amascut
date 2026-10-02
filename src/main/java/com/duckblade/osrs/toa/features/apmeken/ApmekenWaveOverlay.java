@@ -15,10 +15,8 @@ import net.runelite.api.Point;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcSpawned;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.LineComponent;
@@ -39,23 +37,14 @@ public class ApmekenWaveOverlay
 		new Point(40, 24)
 	);
 
-	private final EventBus eventBus;
-	private final OverlayManager overlayManager;
-
 	private int wave = 0;
 	private boolean queueWaveProgress = false;
 
 	@Inject
-	public ApmekenWaveOverlay(
-		EventBus eventBus,
-		OverlayManager overlayManager
-	)
+	public ApmekenWaveOverlay()
 	{
 		setLayer(OverlayLayer.ALWAYS_ON_TOP);
 		setPreferredPosition(OverlayPosition.TOP_LEFT);
-
-		this.eventBus = eventBus;
-		this.overlayManager = overlayManager;
 	}
 
 	@Override
@@ -68,18 +57,8 @@ public class ApmekenWaveOverlay
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
-		overlayManager.add(this);
-
 		queueWaveProgress = false;
 		wave = 0;
-	}
-
-	@Override
-	public void shutDown()
-	{
-		overlayManager.remove(this);
-		eventBus.unregister(this);
 	}
 
 	@Override

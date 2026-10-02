@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.PartyChanged;
 import net.runelite.client.party.PartyService;
@@ -23,11 +22,11 @@ import net.runelite.client.party.events.UserPart;
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class PartyPointsTracker implements PluginLifecycleComponent
+public class PartyPointsTracker
+	implements PluginLifecycleComponent
 {
 
 	private final WSClient wsClient;
-	private final EventBus eventBus;
 	private final PartyService partyService;
 	private final ScheduledExecutorService partySendEs;
 
@@ -47,7 +46,6 @@ public class PartyPointsTracker implements PluginLifecycleComponent
 	public void startUp()
 	{
 		wsClient.registerMessage(PointsMessage.class);
-		eventBus.register(this);
 		this.clearPartyPointsMap();
 	}
 
@@ -55,7 +53,6 @@ public class PartyPointsTracker implements PluginLifecycleComponent
 	public void shutDown()
 	{
 		wsClient.unregisterMessage(PointsMessage.class);
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

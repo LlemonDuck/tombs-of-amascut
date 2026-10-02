@@ -41,7 +41,8 @@ import net.runelite.client.util.ColorUtil;
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class PointsTracker implements PluginLifecycleComponent
+public class PointsTracker
+	implements PluginLifecycleComponent
 {
 
 	// todo puzzles:
@@ -171,15 +172,7 @@ public class PointsTracker implements PluginLifecycleComponent
 	@Override
 	public void startUp()
 	{
-		eventBus.register(this);
-
 		reset();
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

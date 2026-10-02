@@ -3,34 +3,19 @@ package com.duckblade.osrs.toa.features;
 import com.duckblade.osrs.toa.TombsOfAmascutConfig;
 import com.duckblade.osrs.toa.module.PluginLifecycleComponent;
 import com.duckblade.osrs.toa.util.RaidState;
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.events.ScriptPreFired;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
-public class FadeDisabler implements PluginLifecycleComponent
+public class FadeDisabler
+	implements PluginLifecycleComponent
 {
-	@Inject
-	private EventBus eventBus;
 
 	@Override
 	public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
 	{
 		return config.hideFadeTransition() && (raidState.isInLobby() || raidState.isInRaid());
-	}
-
-	@Override
-	public void startUp()
-	{
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

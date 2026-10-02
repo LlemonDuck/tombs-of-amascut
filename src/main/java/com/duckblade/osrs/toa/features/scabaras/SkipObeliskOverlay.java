@@ -24,16 +24,16 @@ import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.gameval.NpcID;
 import net.runelite.api.gameval.ObjectID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.Overlay;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class SkipObeliskOverlay extends Overlay implements PluginLifecycleComponent
+public class SkipObeliskOverlay
+	extends Overlay
+	implements PluginLifecycleComponent
 {
 
 	public enum EnableMode
@@ -64,8 +64,6 @@ public class SkipObeliskOverlay extends Overlay implements PluginLifecycleCompon
 	private static final Point FLAME_UPPER_HALF_LOC = new Point(28, 54);
 	private static final Point FLAME_LOWER_HALF_LOC = new Point(28, 42);
 
-	private final EventBus eventBus;
-	private final OverlayManager overlayManager;
 	private final ModelOutlineRenderer modelOutlineRenderer;
 
 	private State state = State.UNKNOWN;
@@ -95,16 +93,12 @@ public class SkipObeliskOverlay extends Overlay implements PluginLifecycleCompon
 	public void startUp()
 	{
 		reset();
-		eventBus.register(this);
-		overlayManager.add(this);
 	}
 
 	@Override
 	public void shutDown()
 	{
 		reset();
-		eventBus.unregister(this);
-		overlayManager.remove(this);
 	}
 
 	private void reset()

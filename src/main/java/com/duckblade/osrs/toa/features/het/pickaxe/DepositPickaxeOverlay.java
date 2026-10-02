@@ -21,11 +21,9 @@ import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.gameval.ObjectID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
 
@@ -38,8 +36,6 @@ public class DepositPickaxeOverlay
 	private static final Color OVERLAY_COLOR = new Color(225, 163, 12);
 	private static final String WARNING_TEXT = "Deposit a pickaxe.";
 
-	private final EventBus eventBus;
-	private final OverlayManager overlayManager;
 	private final Client client;
 	private final RaidStateTracker raidStateTracker;
 
@@ -49,14 +45,10 @@ public class DepositPickaxeOverlay
 
 	@Inject
 	public DepositPickaxeOverlay(
-		EventBus eventBus,
-		OverlayManager overlayManager,
 		Client client,
 		RaidStateTracker raidStateTracker
 	)
 	{
-		this.eventBus = eventBus;
-		this.overlayManager = overlayManager;
 		this.client = client;
 		this.raidStateTracker = raidStateTracker;
 
@@ -77,15 +69,6 @@ public class DepositPickaxeOverlay
 		entry = null;
 		highlightObjects = new IdentityHashMap<>();
 		roomComplete = false;
-		eventBus.register(this);
-		overlayManager.add(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
-		overlayManager.remove(this);
 	}
 
 	@Override

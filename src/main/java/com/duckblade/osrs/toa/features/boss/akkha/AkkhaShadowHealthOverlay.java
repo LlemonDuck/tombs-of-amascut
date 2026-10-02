@@ -12,25 +12,23 @@ import javax.inject.Singleton;
 import net.runelite.api.Point;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
 @Singleton
-public class AkkhaShadowHealthOverlay extends Overlay implements PluginLifecycleComponent
+public class AkkhaShadowHealthOverlay
+	extends Overlay
+	implements PluginLifecycleComponent
 {
 	private final TombsOfAmascutConfig config;
-	private final OverlayManager overlayManager;
 	private final AkkhaShadowHealth akkhaShadowHealth;
 
 	@Inject
 	protected AkkhaShadowHealthOverlay(
 		final TombsOfAmascutConfig config,
-		final OverlayManager overlayManager,
 		final AkkhaShadowHealth akkhaShadowHealth
 	)
 	{
 		this.config = config;
-		this.overlayManager = overlayManager;
 		this.akkhaShadowHealth = akkhaShadowHealth;
 
 		setPriority(Overlay.PRIORITY_HIGH);
@@ -42,18 +40,6 @@ public class AkkhaShadowHealthOverlay extends Overlay implements PluginLifecycle
 	public boolean isEnabled(final TombsOfAmascutConfig config, final RaidState raidState)
 	{
 		return akkhaShadowHealth.isEnabled(config, raidState) && config.akkhaShadowHpOverlay();
-	}
-
-	@Override
-	public void startUp()
-	{
-		overlayManager.add(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		overlayManager.remove(this);
 	}
 
 	@Override

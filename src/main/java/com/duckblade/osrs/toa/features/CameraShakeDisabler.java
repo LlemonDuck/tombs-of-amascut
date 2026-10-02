@@ -11,7 +11,8 @@ import net.runelite.api.Client;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class CameraShakeDisabler implements PluginLifecycleComponent
+public class CameraShakeDisabler
+	implements PluginLifecycleComponent
 {
 
 	private final Client client;

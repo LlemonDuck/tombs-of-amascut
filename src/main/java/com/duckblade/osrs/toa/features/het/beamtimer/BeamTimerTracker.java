@@ -19,12 +19,12 @@ import net.runelite.api.events.GraphicsObjectCreated;
 import net.runelite.api.events.NpcChanged;
 import net.runelite.api.gameval.NpcID;
 import net.runelite.api.gameval.ObjectID;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class BeamTimerTracker implements PluginLifecycleComponent
+public class BeamTimerTracker
+	implements PluginLifecycleComponent
 {
 
 	private static final String CHALLENGE_START_MESSAGE = "Challenge started: Path of Het.";
@@ -40,7 +40,6 @@ public class BeamTimerTracker implements PluginLifecycleComponent
 		2120 // crash (into an object)
 	);
 
-	private final EventBus eventBus;
 	private final Client client;
 
 	@Getter
@@ -53,18 +52,6 @@ public class BeamTimerTracker implements PluginLifecycleComponent
 	{
 		return config.hetBeamTimerEnable() &&
 			raidState.getCurrentRoom() == RaidRoom.HET;
-	}
-
-	@Override
-	public void startUp()
-	{
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe

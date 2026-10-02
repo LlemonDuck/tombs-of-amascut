@@ -8,17 +8,17 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
 
 @Singleton
-public class PointsOverlay extends OverlayPanel implements PluginLifecycleComponent
+public class PointsOverlay
+	extends OverlayPanel
+	implements PluginLifecycleComponent
 {
 
-	private final OverlayManager overlayManager;
 	private final PointsTracker pointsTracker;
 	private final PartyPointsTracker partyPointsTracker;
 	private final PurpleWeightingManager weightingManager;
@@ -26,14 +26,12 @@ public class PointsOverlay extends OverlayPanel implements PluginLifecycleCompon
 
 	@Inject
 	public PointsOverlay(
-		OverlayManager overlayManager,
 		PointsTracker pointsTracker,
 		PartyPointsTracker partyPointsTracker,
 		PurpleWeightingManager weightingManager,
 		TombsOfAmascutConfig config
 	)
 	{
-		this.overlayManager = overlayManager;
 		this.pointsTracker = pointsTracker;
 		this.partyPointsTracker = partyPointsTracker;
 		this.weightingManager = weightingManager;
@@ -56,18 +54,6 @@ public class PointsOverlay extends OverlayPanel implements PluginLifecycleCompon
 			default:
 				return false;
 		}
-	}
-
-	@Override
-	public void startUp()
-	{
-		this.overlayManager.add(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		this.overlayManager.remove(this);
 	}
 
 	@Override

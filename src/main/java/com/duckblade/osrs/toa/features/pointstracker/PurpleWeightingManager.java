@@ -23,7 +23,8 @@ import net.runelite.client.eventbus.Subscribe;
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class PurpleWeightingManager implements PluginLifecycleComponent
+public class PurpleWeightingManager
+	implements PluginLifecycleComponent
 {
 
 	private static final Map<Purple, Integer> BASE_WEIGHTS = new EnumMap<>(Map.of(
@@ -66,18 +67,6 @@ public class PurpleWeightingManager implements PluginLifecycleComponent
 	{
 		// always on so we can detect raid level from party board, even if the overlays are currently off
 		return true;
-	}
-
-	@Override
-	public void startUp()
-	{
-		eventBus.register(this);
-	}
-
-	@Override
-	public void shutDown()
-	{
-		eventBus.unregister(this);
 	}
 
 	@Subscribe
