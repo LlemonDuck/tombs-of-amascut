@@ -1,6 +1,7 @@
 package com.duckblade.osrs.toa.util;
 
 import net.runelite.api.Client;
+import net.runelite.api.gameval.VarbitID;
 
 public enum TimerMode
 {
@@ -9,12 +10,10 @@ public enum TimerMode
 	LAX,
 	;
 
-	private static final int VARBIT_PRECISE_TIMING = 11866;
-
 	public static TimerMode fromClient(Client c)
 	{
 		assert c.isClientThread();
-		return c.getVarbitValue(VARBIT_PRECISE_TIMING) == 1 ? PRECISE : LAX;
+		return c.getVarbitValue(VarbitID.OPTION_PRECISE_TIMING) == 1 ? PRECISE : LAX;
 	}
 
 }
